@@ -1,0 +1,21 @@
+.DS_Store
+
+# NPM modules directory 
+node_modules/
+
+# dotenv
+.env
+
+# dist
+dist
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
