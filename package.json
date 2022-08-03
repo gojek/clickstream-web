@@ -1,0 +1,41 @@
+{
+  "name": "clickstream-web",
+  "version": "0.0.1",
+  "description": "A Modern, Fast, and Lightweight Event Ingestion library for Web",
+  "type": "module",
+  "exports": "./index.js",
+  "scripts": {
+    "lint": "npx eslint lib --ignore-path .gitignore",
+    "test": "ava",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gojekfarm/clickstream-web.git"
+  },
+  "keywords": [
+    "Clickstream",
+    "Clickstream-web",
+    "Event",
+    "ingestion",
+    "library"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gojekfarm/clickstream-web/issues"
+  },
+  "homepage": "https://github.com/gojekfarm/clickstream-web#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
+    "ava": "^4.3.1",
+    "eslint": "^8.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
+    "prettier": "2.7.1",
+    "pretty-quick": "^3.1.3"
+  }
+}
