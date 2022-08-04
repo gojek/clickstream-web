@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "npx eslint lib --ignore-path .gitignore",
     "test": "ava",
-    "build": "rollup --config",
+    "build": "rollup --config --environment PRODUCTION",
     "prepare": "husky install"
   },
   "repository": {
@@ -16,10 +16,8 @@
   },
   "keywords": [
     "Clickstream",
-    "Clickstream-web",
-    "Event",
-    "ingestion",
-    "library"
+    "Clickstream web",
+    "Event ingention library"
   ],
   "author": "",
   "license": "ISC",
@@ -28,9 +26,14 @@
   },
   "homepage": "https://github.com/gojekfarm/clickstream-web#readme",
   "devDependencies": {
+    "@babel/core": "^7.18.10",
+    "@babel/plugin-transform-runtime": "^7.18.10",
+    "@babel/preset-env": "^7.18.10",
     "@commitlint/cli": "^17.0.3",
     "@commitlint/config-conventional": "^17.0.3",
+    "@rollup/plugin-babel": "^5.3.1",
     "ava": "^4.3.1",
+    "babel-preset-es2015": "^6.24.1",
     "eslint": "^8.21.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
@@ -38,6 +41,10 @@
     "lint-staged": "^13.0.3",
     "prettier": "2.7.1",
     "pretty-quick": "^3.1.3",
-    "rollup": "^2.77.2"
+    "rollup": "^2.77.2",
+    "rollup-plugin-terser": "^7.0.2"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.18.9"
   }
 }
