@@ -1,28 +1,30 @@
 import babel from "@rollup/plugin-babel";
+import eslint from "@rollup/plugin-eslint";
 import { terser } from "rollup-plugin-terser";
-
-// const devMode = process.env.NODE_ENV === "development";
 
 export default {
   input: "./index.js",
-  output: {
-    file: "./dist/index.js",
-    format: "esm",
-    exports: "named",
-    sourcemap: "inline",
-    plugins: [
-      terser({
-        ecma: 2020,
-        mangle: { toplevel: true },
-        compress: {
-          module: true,
-          toplevel: true,
-          unsafe_arrows: true,
-          drop_console: true,
-          drop_debugger: true,
-        },
-        output: { quote_style: 1 },
-      }),
-    ],
-  },
+  output: [
+    {
+      name: "clickstream",
+      file: "./dist/clickstream.js",
+      format: "esm",
+      sourcemap: true,
+    },
+    {
+      name: "clickstream",
+      file: "./dist/clickstream.min.js",
+      format: "esm",
+      plugins: [terser()],
+    },
+  ],
+  plugins: [
+    eslint({
+      fix: true,
+      throwOnError: true,
+    }),
+    babel({
+      babelHelpers: "bundled",
+    }),
+  ],
 };
