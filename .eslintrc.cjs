@@ -9,5 +9,4 @@ module.exports = {
     sourceType: "module",
   },
   rules: {},
-  parser: "@babel/eslint-parser",
 };
