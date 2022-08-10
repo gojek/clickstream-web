@@ -1,9 +1,8 @@
-import babel from "@rollup/plugin-babel";
-import eslint from "@rollup/plugin-eslint";
-import { terser } from "rollup-plugin-terser";
+import babel from "@rollup/plugin-babel"
+import { terser } from "rollup-plugin-terser"
 
 export default {
-  input: "./index.js",
+  input: "src/index.js",
   output: [
     {
       name: "clickstream",
@@ -19,12 +18,8 @@ export default {
     },
   ],
   plugins: [
-    eslint({
-      fix: true,
-      throwOnError: true,
-    }),
     babel({
       babelHelpers: "bundled",
     }),
   ],
-};
+}
