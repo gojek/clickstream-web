@@ -1,33 +1,51 @@
-import Network from "./network"
-import Processor from "./processor"
-import Scheduler from "./scheduler"
+import Network from "./network.js"
+import Processor from "./processor.js"
+import Scheduler from "./scheduler.js"
+import { EVENT_TYPE } from "./constants/index.js"
 
 export default class Clickstream {
   #tracking = true
-  constructor({ event, batch, network }) {
-    this.processor = new Processor({
+  #processor = null
+  #scheduler = null
+  #network = null
+  constructor({ event, batch, network } = {}) {
+    this.#processor = new Processor({
       config: event,
     })
 
-    this.scheduler = new Scheduler({
+    this.#scheduler = new Scheduler({
       config: batch,
     })
 
-    this.processor = new Network({
+    this.#network = new Network({
       config: network,
     })
   }
 
-  track() {
-    return new Promise(() => {})
+  track(proto) {
+    if (!this.#tracking) {
+      return
+    }
+
+    return new Promise((resolve) => {
+      const { type, event } = this.#processor.process(proto)
+
+      if (type === EVENT_TYPE.INSTANT) {
+        this.#scheduler.ingest(event)
+      } else {
+        // noop
+      }
+
+      resolve("success")
+    })
   }
 
   stop() {
-    this.status.tracking = false
+    this.#tracking = false
   }
 
   start() {
-    this.status.tracking = false
+    this.#tracking = true
   }
 
   destroy() {}
