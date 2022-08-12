@@ -1,15 +1,33 @@
 import { uuidv4 } from "./helpers/index.js"
-import { SendEventRequest, SendEventResponse, Event } from "./protos/raccoon.js"
+import {
+  SendEventRequest,
+  SendEventResponse,
+  Event,
+  google,
+} from "./protos/raccoon.js"
 
 export default class Network {
+  #config
   constructor({ config }) {
-    this.config = config
+    this.#config = config
   }
 
   #createRequest(batch) {
     const reqGuid = uuidv4()
+
+    const date = new Date()
+    const seconds = Math.floor(date.getTime() / 1000)
+    const fraction = date.toISOString().split(".")[1]
+    const nanos = fraction.slice(0, fraction.length - 1)
+
+    const timestamp = google.protobuf.Timestamp.create({
+      seconds,
+      nanos,
+    })
+
+    const sentTime = google.protobuf.Timestamp.encode(timestamp).finish()
+
     const encodedBatch = batch.map((payload) => {
-      console.log(payload, payload.constructor)
       const PayloadConstructor = payload.constructor
       const encodedEvent = PayloadConstructor.encode(payload).finish()
 
@@ -17,11 +35,8 @@ export default class Network {
     })
 
     const request = SendEventRequest.create({
-      reqGuid: reqGuid,
-      sentTime: {
-        seconds: 1638154927,
-        nanos: 376499000,
-      },
+      reqGuid,
+      sentTime,
       events: [...encodedBatch],
     })
 
@@ -29,13 +44,11 @@ export default class Network {
   }
 
   #makeRequest(request) {
-    return fetch("https://raccoon-integration.gojekapi.com/api/v1/events", {
+    this.#config.headers.append("Content-Type", "application/proto")
+    const { url, headers } = this.#config
+    fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/proto",
-        Authorization:
-          "Basic Z29qZWtfY29uc3VtZXJfYXBwX2ludGVncmF0aW9uX2NsaWVudDo0MDE5MDViNi04MjdlLTRjN2UtYWIyMi0xMTE4NzJmZDdjMGU=",
-      },
+      headers: headers,
       body: request,
     })
       .then((data) => {
@@ -54,8 +67,7 @@ export default class Network {
 
   send(batch) {
     const request = this.#createRequest(batch)
+    console.log(SendEventRequest.decode(request))
     this.#makeRequest(request)
   }
-
-  recieve() {}
 }
