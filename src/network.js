@@ -1,4 +1,4 @@
-import { uuidv4 } from "./helpers/index.js"
+import Id from "./id.js"
 import {
   SendEventRequest,
   SendEventResponse,
@@ -8,12 +8,14 @@ import {
 
 export default class Network {
   #config
+  #id
   constructor({ config }) {
     this.#config = config
+    this.#id = new Id()
   }
 
   #createRequest(batch) {
-    const reqGuid = uuidv4()
+    const reqGuid = this.#id.uuidv4()
 
     const date = new Date()
     const seconds = Math.floor(date.getTime() / 1000)
