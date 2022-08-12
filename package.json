@@ -1,9 +1,21 @@
 {
-  "name": "clickstream-web",
+  "name": "@gojek/clickstream-web",
   "version": "0.0.1",
   "description": "A Modern, Fast, and Lightweight Event Ingestion library for Web",
   "type": "module",
-  "exports": "./dist/index.js",
+  "main": "./dist/index.cjs",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./types/index.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
   "scripts": {
     "lint": "npx eslint src --ignore-path .gitignore",
     "test": "ava",
@@ -16,12 +28,11 @@
     "url": "git+https://github.com/gojekfarm/clickstream-web.git"
   },
   "keywords": [
-    "Clickstream",
-    "Clickstream web",
-    "Event ingention library"
+    "clickstream",
+    "analytics"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "Ashish Mishra <b.s.ashish26@gmail.com>",
+  "license": "apache-2.0",
   "bugs": {
     "url": "https://github.com/gojekfarm/clickstream-web/issues"
   },
@@ -35,6 +46,7 @@
     "@commitlint/config-conventional": "^17.0.3",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-eslint": "^8.0.2",
+    "@rollup/plugin-node-resolve": "^13.3.0",
     "ava": "^4.3.1",
     "babel-preset-es2015": "^6.24.1",
     "eslint": "^8.21.0",
