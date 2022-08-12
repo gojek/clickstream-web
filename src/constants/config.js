@@ -1,4 +1,4 @@
-export const config = {
+export const defaultConfig = {
   event: {
     classification: {
       instant: [],
@@ -17,7 +17,7 @@ export const config = {
   batch: {
     // max interval time between two batches, in seconds
     maxTimeBetweenTwoBatches: 10,
-    // max size of batch, in kb
+    // max size of batch, in bytes
     maxBatchSize: 50000,
   },
   network: {

@@ -1,7 +1,4 @@
-import { CUSTOM_EVENT } from "./constants/index.js"
-import { sizeOfArrayInBytes } from "./helpers/index.js"
-
-const TICK = 1000
+import { CUSTOM_EVENT, TICK_TIME } from "./constants/index.js"
 
 export default class Scheduler {
   #intervalId
@@ -43,6 +40,10 @@ export default class Scheduler {
     this.#intervalId = 0
   }
 
+  #batchSize(batch) {
+    return new Blob([JSON.stringify(batch)]).size
+  }
+
   #emit() {
     if (this.#batch.length) {
       this.#eventBus.emit(CUSTOM_EVENT.NEW_BATCH, { batch: this.#batch })
@@ -66,12 +67,12 @@ export default class Scheduler {
 
       this.#waitTime += 1
       this.#fill()
-      console.log(this.#batch, this.#waitTime)
-      if (sizeOfArrayInBytes(this.#batch) >= 5000) {
+      console.log("Batch:", this.#batch, "Periodic Time:", this.#waitTime)
+      if (this.#batchSize(this.#batch) >= this.#config.maxBatchSize) {
         this.#emit()
-      } else if (this.#waitTime >= 10) {
+      } else if (this.#waitTime >= this.#config.maxTimeBetweenTwoBatches) {
         this.#emit()
       }
-    }, TICK)
+    }, TICK_TIME)
   }
 }
