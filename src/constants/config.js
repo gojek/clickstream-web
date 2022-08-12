@@ -1,4 +1,18 @@
 export const defaultConfig = {
+  /**
+   * @typedef {Object} Classification - Event classification
+   * @property {string[]} instant - array of intant event names
+   */
+  /**
+   * @typedef {Object} Priorities - Event priorities
+   * @property {{identifier: string, priority: number}[]} instant - array of intant event names
+   */
+  /**
+   * @typedef {Object} Event - Event config
+   * @property {instant: string[]} classification - event classification
+   * * @property {Priorities} classification - event priorities
+   *
+   */
   event: {
     classification: {
       instant: [],
@@ -20,12 +34,13 @@ export const defaultConfig = {
     // max size of batch, in bytes
     maxBatchSize: 50000,
   },
+  /**
+   * @typedef {Object} Network - Network config
+   * @property {string} url - base url
+   * @property {Map} headers - request headers
+   */
   network: {
-    // url for clickstream backend service, URL instance
-    url: null,
-    // headers for the request, Headers instance
-    headers: null,
-    maxConnectionRetries: 30,
-    maxConnectionRetryInterval: 30,
+    url: "",
+    headers: {},
   },
 }

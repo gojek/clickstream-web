@@ -14,6 +14,9 @@ logs
 *.log
 npm-debug.log*
 
+#coverage
+coverage
+
 # Runtime data
 pids
 *.pid

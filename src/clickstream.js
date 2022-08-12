@@ -1,3 +1,4 @@
+// @ts-check
 import Network from "./network.js"
 import Processor from "./processor.js"
 import Scheduler from "./scheduler.js"
@@ -11,7 +12,7 @@ export default class Clickstream {
   #scheduler
   #network
   #eventBus
-  constructor({ event, batch, network } = {}) {
+  constructor({ event, batch, network } = defaultConfig) {
     if (!network.url) {
       throw new Error("Clickstream: Provide url in network config")
     }
@@ -51,13 +52,18 @@ export default class Clickstream {
     })
   }
 
-  track(proto) {
+  /**
+   * Dipatch the event
+   * @param payload - payload object
+   * @returns Promise
+   */
+  track(payload) {
     if (!this.#tracking) {
       return
     }
 
     return new Promise((resolve) => {
-      const { type, event } = this.#processor.process(proto)
+      const { type, event } = this.#processor.process(payload)
 
       if (type === EVENT_TYPE.INSTANT) {
         this.#scheduler.ingest(event)
@@ -67,13 +73,22 @@ export default class Clickstream {
     })
   }
 
+  /**
+   * Gracefully stops the tracking
+   */
   stop() {
     this.#tracking = false
   }
 
+  /**
+   * Resumes the tracking
+   */
   start() {
     this.#tracking = true
   }
 
+  /**
+   * Release all the resources used
+   */
   destroy() {}
 }

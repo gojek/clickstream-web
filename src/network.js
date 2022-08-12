@@ -1,10 +1,6 @@
+// @ts-check
 import Id from "./id.js"
-import {
-  SendEventRequest,
-  SendEventResponse,
-  Event,
-  google,
-} from "./protos/raccoon.js"
+import { SendEventRequest, SendEventResponse, Event } from "./protos/raccoon.js"
 
 export default class Network {
   #config
@@ -22,12 +18,12 @@ export default class Network {
     const fraction = date.toISOString().split(".")[1]
     const nanos = fraction.slice(0, fraction.length - 1)
 
-    const timestamp = google.protobuf.Timestamp.create({
-      seconds,
-      nanos,
-    })
+    // const timestamp = google.protobuf.Timestamp.create({
+    //   seconds,
+    //   nanos,
+    // })
 
-    const sentTime = google.protobuf.Timestamp.encode(timestamp).finish()
+    // const sentTime = google.protobuf.Timestamp.encode(timestamp).finish()
 
     const encodedBatch = batch.map((payload) => {
       const PayloadConstructor = payload.constructor
@@ -38,7 +34,10 @@ export default class Network {
 
     const request = SendEventRequest.create({
       reqGuid,
-      sentTime,
+      sentTime: {
+        seconds,
+        nanos,
+      },
       events: [...encodedBatch],
     })
 
@@ -69,7 +68,6 @@ export default class Network {
 
   send(batch) {
     const request = this.#createRequest(batch)
-    console.log(SendEventRequest.decode(request))
     this.#makeRequest(request)
   }
 }

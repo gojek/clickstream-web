@@ -103,7 +103,7 @@ export const SendEventRequest = ($root.SendEventRequest = (() => {
    * @exports ISendEventRequest
    * @interface ISendEventRequest
    * @property {string|null} [reqGuid] SendEventRequest reqGuid
-   * @property {google.protobuf.ITimestamp|null} [sentTime] SendEventRequest sentTime
+   * @property {ITimestamp|null} [sentTime] SendEventRequest sentTime
    * @property {Array.<IEvent>|null} [events] SendEventRequest events
    */
 
@@ -132,7 +132,7 @@ export const SendEventRequest = ($root.SendEventRequest = (() => {
 
   /**
    * SendEventRequest sentTime.
-   * @member {google.protobuf.ITimestamp|null|undefined} sentTime
+   * @member {ITimestamp|null|undefined} sentTime
    * @memberof SendEventRequest
    * @instance
    */
@@ -178,7 +178,7 @@ export const SendEventRequest = ($root.SendEventRequest = (() => {
       message.sentTime != null &&
       Object.hasOwnProperty.call(message, "sentTime")
     )
-      $root.google.protobuf.Timestamp.encode(
+      $root.Timestamp.encode(
         message.sentTime,
         writer.uint32(/* id 2, wireType 2 =*/ 18).fork()
       ).ldelim()
@@ -214,10 +214,7 @@ export const SendEventRequest = ($root.SendEventRequest = (() => {
           break
         }
         case 2: {
-          message.sentTime = $root.google.protobuf.Timestamp.decode(
-            reader,
-            reader.uint32()
-          )
+          message.sentTime = $root.Timestamp.decode(reader, reader.uint32())
           break
         }
         case 3: {
@@ -247,7 +244,7 @@ export const SendEventRequest = ($root.SendEventRequest = (() => {
     if (message.reqGuid != null && message.hasOwnProperty("reqGuid"))
       if (!$util.isString(message.reqGuid)) return "reqGuid: string expected"
     if (message.sentTime != null && message.hasOwnProperty("sentTime")) {
-      let error = $root.google.protobuf.Timestamp.verify(message.sentTime)
+      let error = $root.Timestamp.verify(message.sentTime)
       if (error) return "sentTime." + error
     }
     if (message.events != null && message.hasOwnProperty("events")) {
@@ -276,6 +273,158 @@ export const SendEventRequest = ($root.SendEventRequest = (() => {
   }
 
   return SendEventRequest
+})())
+
+export const Timestamp = ($root.Timestamp = (() => {
+  /**
+   * Properties of a Timestamp.
+   * @exports ITimestamp
+   * @interface ITimestamp
+   * @property {number|Long|null} [seconds] Timestamp seconds
+   * @property {number|null} [nanos] Timestamp nanos
+   */
+
+  /**
+   * Constructs a new Timestamp.
+   * @exports Timestamp
+   * @classdesc Represents a Timestamp.
+   * @implements ITimestamp
+   * @constructor
+   * @param {ITimestamp=} [properties] Properties to set
+   */
+  function Timestamp(properties) {
+    if (properties)
+      for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+        if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]]
+  }
+
+  /**
+   * Timestamp seconds.
+   * @member {number|Long} seconds
+   * @memberof Timestamp
+   * @instance
+   */
+  Timestamp.prototype.seconds = $util.Long
+    ? $util.Long.fromBits(0, 0, false)
+    : 0
+
+  /**
+   * Timestamp nanos.
+   * @member {number} nanos
+   * @memberof Timestamp
+   * @instance
+   */
+  Timestamp.prototype.nanos = 0
+
+  /**
+   * Creates a new Timestamp instance using the specified properties.
+   * @function create
+   * @memberof Timestamp
+   * @static
+   * @param {ITimestamp=} [properties] Properties to set
+   * @returns {Timestamp} Timestamp instance
+   */
+  Timestamp.create = function create(properties) {
+    return new Timestamp(properties)
+  }
+
+  /**
+   * Encodes the specified Timestamp message. Does not implicitly {@link Timestamp.verify|verify} messages.
+   * @function encode
+   * @memberof Timestamp
+   * @static
+   * @param {ITimestamp} message Timestamp message or plain object to encode
+   * @param {$protobuf.Writer} [writer] Writer to encode to
+   * @returns {$protobuf.Writer} Writer
+   */
+  Timestamp.encode = function encode(message, writer) {
+    if (!writer) writer = $Writer.create()
+    if (
+      message.seconds != null &&
+      Object.hasOwnProperty.call(message, "seconds")
+    )
+      writer.uint32(/* id 1, wireType 0 =*/ 8).int64(message.seconds)
+    if (message.nanos != null && Object.hasOwnProperty.call(message, "nanos"))
+      writer.uint32(/* id 2, wireType 0 =*/ 16).int32(message.nanos)
+    return writer
+  }
+
+  /**
+   * Decodes a Timestamp message from the specified reader or buffer.
+   * @function decode
+   * @memberof Timestamp
+   * @static
+   * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+   * @param {number} [length] Message length if known beforehand
+   * @returns {Timestamp} Timestamp
+   * @throws {Error} If the payload is not a reader or valid buffer
+   * @throws {$protobuf.util.ProtocolError} If required fields are missing
+   */
+  Timestamp.decode = function decode(reader, length) {
+    if (!(reader instanceof $Reader)) reader = $Reader.create(reader)
+    let end = length === undefined ? reader.len : reader.pos + length,
+      message = new $root.Timestamp()
+    while (reader.pos < end) {
+      let tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1: {
+          message.seconds = reader.int64()
+          break
+        }
+        case 2: {
+          message.nanos = reader.int32()
+          break
+        }
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  }
+
+  /**
+   * Verifies a Timestamp message.
+   * @function verify
+   * @memberof Timestamp
+   * @static
+   * @param {Object.<string,*>} message Plain object to verify
+   * @returns {string|null} `null` if valid, otherwise the reason why it is not
+   */
+  Timestamp.verify = function verify(message) {
+    if (typeof message !== "object" || message === null)
+      return "object expected"
+    if (message.seconds != null && message.hasOwnProperty("seconds"))
+      if (
+        !$util.isInteger(message.seconds) &&
+        !(
+          message.seconds &&
+          $util.isInteger(message.seconds.low) &&
+          $util.isInteger(message.seconds.high)
+        )
+      )
+        return "seconds: integer|Long expected"
+    if (message.nanos != null && message.hasOwnProperty("nanos"))
+      if (!$util.isInteger(message.nanos)) return "nanos: integer expected"
+    return null
+  }
+
+  /**
+   * Gets the default type url for Timestamp
+   * @function getTypeUrl
+   * @memberof Timestamp
+   * @static
+   * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
+   * @returns {string} The default type url
+   */
+  Timestamp.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
+    if (typeUrlPrefix === undefined) {
+      typeUrlPrefix = "type.googleapis.com"
+    }
+    return typeUrlPrefix + "/Timestamp"
+  }
+
+  return Timestamp
 })())
 
 export const Event = ($root.Event = (() => {
@@ -719,183 +868,6 @@ export const Code = ($root.Code = (() => {
   values[(valuesById[4] = "CODE_MAX_CONNECTION_LIMIT_REACHED")] = 4
   values[(valuesById[5] = "CODE_MAX_USER_LIMIT_REACHED")] = 5
   return values
-})())
-
-export const google = ($root.google = (() => {
-  /**
-   * Namespace google.
-   * @exports google
-   * @namespace
-   */
-  const google = {}
-
-  google.protobuf = (function () {
-    /**
-     * Namespace protobuf.
-     * @memberof google
-     * @namespace
-     */
-    const protobuf = {}
-
-    protobuf.Timestamp = (function () {
-      /**
-       * Properties of a Timestamp.
-       * @memberof google.protobuf
-       * @interface ITimestamp
-       * @property {number|Long|null} [seconds] Timestamp seconds
-       * @property {number|null} [nanos] Timestamp nanos
-       */
-
-      /**
-       * Constructs a new Timestamp.
-       * @memberof google.protobuf
-       * @classdesc Represents a Timestamp.
-       * @implements ITimestamp
-       * @constructor
-       * @param {google.protobuf.ITimestamp=} [properties] Properties to set
-       */
-      function Timestamp(properties) {
-        if (properties)
-          for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-            if (properties[keys[i]] != null) this[keys[i]] = properties[keys[i]]
-      }
-
-      /**
-       * Timestamp seconds.
-       * @member {number|Long} seconds
-       * @memberof google.protobuf.Timestamp
-       * @instance
-       */
-      Timestamp.prototype.seconds = $util.Long
-        ? $util.Long.fromBits(0, 0, false)
-        : 0
-
-      /**
-       * Timestamp nanos.
-       * @member {number} nanos
-       * @memberof google.protobuf.Timestamp
-       * @instance
-       */
-      Timestamp.prototype.nanos = 0
-
-      /**
-       * Creates a new Timestamp instance using the specified properties.
-       * @function create
-       * @memberof google.protobuf.Timestamp
-       * @static
-       * @param {google.protobuf.ITimestamp=} [properties] Properties to set
-       * @returns {google.protobuf.Timestamp} Timestamp instance
-       */
-      Timestamp.create = function create(properties) {
-        return new Timestamp(properties)
-      }
-
-      /**
-       * Encodes the specified Timestamp message. Does not implicitly {@link google.protobuf.Timestamp.verify|verify} messages.
-       * @function encode
-       * @memberof google.protobuf.Timestamp
-       * @static
-       * @param {google.protobuf.ITimestamp} message Timestamp message or plain object to encode
-       * @param {$protobuf.Writer} [writer] Writer to encode to
-       * @returns {$protobuf.Writer} Writer
-       */
-      Timestamp.encode = function encode(message, writer) {
-        if (!writer) writer = $Writer.create()
-        if (
-          message.seconds != null &&
-          Object.hasOwnProperty.call(message, "seconds")
-        )
-          writer.uint32(/* id 1, wireType 0 =*/ 8).int64(message.seconds)
-        if (
-          message.nanos != null &&
-          Object.hasOwnProperty.call(message, "nanos")
-        )
-          writer.uint32(/* id 2, wireType 0 =*/ 16).int32(message.nanos)
-        return writer
-      }
-
-      /**
-       * Decodes a Timestamp message from the specified reader or buffer.
-       * @function decode
-       * @memberof google.protobuf.Timestamp
-       * @static
-       * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-       * @param {number} [length] Message length if known beforehand
-       * @returns {google.protobuf.Timestamp} Timestamp
-       * @throws {Error} If the payload is not a reader or valid buffer
-       * @throws {$protobuf.util.ProtocolError} If required fields are missing
-       */
-      Timestamp.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader)) reader = $Reader.create(reader)
-        let end = length === undefined ? reader.len : reader.pos + length,
-          message = new $root.google.protobuf.Timestamp()
-        while (reader.pos < end) {
-          let tag = reader.uint32()
-          switch (tag >>> 3) {
-            case 1: {
-              message.seconds = reader.int64()
-              break
-            }
-            case 2: {
-              message.nanos = reader.int32()
-              break
-            }
-            default:
-              reader.skipType(tag & 7)
-              break
-          }
-        }
-        return message
-      }
-
-      /**
-       * Verifies a Timestamp message.
-       * @function verify
-       * @memberof google.protobuf.Timestamp
-       * @static
-       * @param {Object.<string,*>} message Plain object to verify
-       * @returns {string|null} `null` if valid, otherwise the reason why it is not
-       */
-      Timestamp.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-          return "object expected"
-        if (message.seconds != null && message.hasOwnProperty("seconds"))
-          if (
-            !$util.isInteger(message.seconds) &&
-            !(
-              message.seconds &&
-              $util.isInteger(message.seconds.low) &&
-              $util.isInteger(message.seconds.high)
-            )
-          )
-            return "seconds: integer|Long expected"
-        if (message.nanos != null && message.hasOwnProperty("nanos"))
-          if (!$util.isInteger(message.nanos)) return "nanos: integer expected"
-        return null
-      }
-
-      /**
-       * Gets the default type url for Timestamp
-       * @function getTypeUrl
-       * @memberof google.protobuf.Timestamp
-       * @static
-       * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-       * @returns {string} The default type url
-       */
-      Timestamp.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-        if (typeUrlPrefix === undefined) {
-          typeUrlPrefix = "type.googleapis.com"
-        }
-        return typeUrlPrefix + "/google.protobuf.Timestamp"
-      }
-
-      return Timestamp
-    })()
-
-    return protobuf
-  })()
-
-  return google
 })())
 
 export { $root as default }

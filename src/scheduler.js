@@ -1,6 +1,7 @@
+// @ts-check
 import { CUSTOM_EVENT, TICK_TIME } from "./constants/index.js"
-
 export default class Scheduler {
+  /** @type { number | undefined } */
   #intervalId
   #waitTime
   #batching
@@ -11,33 +12,51 @@ export default class Scheduler {
   constructor({ config, eventBus }) {
     this.#config = config
     this.#eventBus = eventBus
-    this.#intervalId = 0
+    this.#intervalId = undefined
     this.#waitTime = 0
     this.#batching = false
     this.#batch = []
     this.#instantEvents = []
   }
 
+  /**
+   * Ingest an event
+   * @param event event
+   */
   ingest(event) {
     this.#instantEvents.push(event)
   }
 
+  /**
+   * Start the scheduler
+   */
   start() {
     this.#batching = true
     this.#run()
   }
 
+  /**
+   * Stop the scheduler
+   */
+  stop() {
+    if (this.#intervalId !== undefined) {
+      clearInterval(this.#intervalId)
+      this.#intervalId = undefined
+    }
+  }
+
+  /**
+   * Pause the scheduler
+   */
   pause() {
     this.#batching = false
   }
 
+  /**
+   * Resume the scheduler
+   */
   resume() {
     this.#batching = true
-  }
-
-  stop() {
-    clearInterval(this.#intervalId)
-    this.#intervalId = 0
   }
 
   #batchSize(batch) {
@@ -60,14 +79,18 @@ export default class Scheduler {
   }
 
   #run() {
-    this.#intervalId = setInterval(() => {
+    if (this.#intervalId !== undefined) {
+      clearInterval(this.#intervalId)
+      this.#intervalId = undefined
+    }
+
+    this.#intervalId = window.setInterval(() => {
       if (!this.#batching) {
         return
       }
 
       this.#waitTime += 1
       this.#fill()
-      console.log("Batch:", this.#batch, "Periodic Time:", this.#waitTime)
       if (this.#batchSize(this.#batch) >= this.#config.maxBatchSize) {
         this.#emit()
       } else if (this.#waitTime >= this.#config.maxTimeBetweenTwoBatches) {
