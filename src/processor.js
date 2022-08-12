@@ -1,17 +1,18 @@
 import { EVENT_TYPE } from "./constants/index.js"
 
 export default class Processor {
+  #config
   constructor({ config }) {
-    this.config = config
+    this.#config = config
   }
 
-  type() {
+  #type() {
     return EVENT_TYPE.INSTANT
   }
 
   process(proto) {
     return {
-      type: this.type(),
+      type: this.#type(),
       event: proto,
     }
   }
