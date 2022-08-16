@@ -122,6 +122,7 @@ The contrsuctor takes a options object as parameter which has `event`, `batch` &
 ```
 {
   event: {
+    // instant array contains names of all the intant events.
     classification: {
       instant: [],
     },
@@ -137,9 +138,9 @@ The contrsuctor takes a options object as parameter which has `event`, `batch` &
     ],
   },
   batch: {
-    // max interval time between two batches, in seconds
+    // max interval time between two batches, in seconds.
     maxTimeBetweenTwoBatches: 10,
-    // max size of batch, in bytes
+    // max size of batch, in bytes.
     maxBatchSize: 50000,
   },
   network: {
