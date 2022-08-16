@@ -1,19 +1,11 @@
 export const defaultConfig = {
   /**
-   * @typedef {Object} Classification - Event classification
-   * @property {string[]} instant - array of intant event names
-   */
-  /**
-   * @typedef {Object} Priorities - Event priorities
-   * @property {{identifier: string, priority: number}[]} instant - array of intant event names
-   */
-  /**
-   * @typedef {Object} Event - Event config
-   * @property {instant: string[]} classification - event classification
-   * * @property {Priorities} classification - event priorities
-   *
+   * @typedef {Object} Event - Event configuration
+   * @property {{instant: string[]}} classification - event classification
+   * @property {{identifier: string, priority: number}[]} classification - event priorities
    */
   event: {
+    /** @type {{instant: string[]}}  */
     classification: {
       instant: [],
     },
@@ -28,6 +20,11 @@ export const defaultConfig = {
       },
     ],
   },
+  /**
+   * @typedef {Object} Batch - Batch configuration
+   * @property {number} maxTimeBetweenTwoBatches - Maximum wait time betweeen two batches
+   * @property {number} maxBatchSize - Maximum size of a batch
+   */
   batch: {
     // max interval time between two batches, in seconds
     maxTimeBetweenTwoBatches: 10,
@@ -35,9 +32,9 @@ export const defaultConfig = {
     maxBatchSize: 50000,
   },
   /**
-   * @typedef {Object} Network - Network config
+   * @typedef {Object} Network - Network configuration
    * @property {string} url - base url
-   * @property {Map} headers - request headers
+   * @property {object} headers - request headers
    */
   network: {
     url: "",

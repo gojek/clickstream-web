@@ -1,4 +1,8 @@
 export default class Clickstream {
+  /**
+   * @constructor
+   * @param options Configuration options
+   */
   constructor({
     event,
     batch,
@@ -6,7 +10,7 @@ export default class Clickstream {
   }?: {
     event: {
       classification: {
-        instant: any[]
+        instant: string[]
       }
       priorities: {
         identifier: string
@@ -23,21 +27,22 @@ export default class Clickstream {
     }
   })
   /**
-   * Dipatch the event
-   * @param payload - payload object
-   * @returns Promise
+   * Dipatches a new event.
+   * @param payload - JavaScript proto instance
+   * @returns Promise to get the status of the event track call
    */
-  track(payload: any): Promise<any>
+  track(payload: object): Promise<any>
   /**
-   * Gracefully stops the tracking
+   * Stops the tracking.
+   * Track function call is ignored, existing events are processed.
    */
   stop(): void
   /**
-   * Resumes the tracking
+   * Resumes the tracking.
    */
   start(): void
   /**
-   * Release all the resources used
+   * Releases all the resources used.
    */
   destroy(): void
   #private

@@ -1,7 +1,7 @@
 export namespace defaultConfig {
   namespace event {
-    namespace classification {
-      const instant: any[]
+    const classification: {
+      instant: string[]
     }
     const priorities: {
       identifier: string

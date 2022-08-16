@@ -1,3 +1,4 @@
+export * from "./config.js"
 export namespace EVENT_TYPE {
   const INSTANT: string
   const REALTIME: string

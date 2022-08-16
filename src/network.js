@@ -1,6 +1,6 @@
 // @ts-check
 import Id from "./id.js"
-import { SendEventRequest, SendEventResponse, Event } from "./protos/raccoon.js"
+import { SendEventRequest, Event } from "./protos/raccoon.js"
 
 export default class Network {
   #config
@@ -18,18 +18,13 @@ export default class Network {
     const fraction = date.toISOString().split(".")[1]
     const nanos = fraction.slice(0, fraction.length - 1)
 
-    // const timestamp = google.protobuf.Timestamp.create({
-    //   seconds,
-    //   nanos,
-    // })
-
-    // const sentTime = google.protobuf.Timestamp.encode(timestamp).finish()
-
     const encodedBatch = batch.map((payload) => {
       const PayloadConstructor = payload.constructor
       const encodedEvent = PayloadConstructor.encode(payload).finish()
+      const typeUrl = PayloadConstructor.getTypeUrl("").split(".")
+      const type = typeUrl[typeUrl.length - 1].toLowerCase()
 
-      return Event.encode({ eventBytes: encodedEvent, type: "web-test" })
+      return Event.encode({ eventBytes: encodedEvent, type })
     })
 
     const request = SendEventRequest.create({
@@ -55,11 +50,10 @@ export default class Network {
       .then((data) => {
         return data.blob()
       })
-      .then(async (blob) => {
-        const resBuffer = await blob.arrayBuffer()
-        const uInt = new Uint8Array(resBuffer)
-        const res = SendEventResponse.decode(uInt)
-        console.log(res)
+      .then(async () => {
+        // const resBuffer = await blob.arrayBuffer()
+        // const uInt = new Uint8Array(resBuffer)
+        // const res = SendEventResponse.decode(uInt)
       })
       .catch((error) => {
         console.error("Error:", error)

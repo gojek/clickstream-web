@@ -1,10 +1,9 @@
 // @ts-check
-import Network from "./network.js"
+import NetworkManager from "./network.js"
 import Processor from "./processor.js"
 import Scheduler from "./scheduler.js"
-import { CUSTOM_EVENT, EVENT_TYPE } from "./constants/index.js"
 import EventBus from "./event.js"
-import { defaultConfig } from "./constants/config.js"
+import { CUSTOM_EVENT, EVENT_TYPE, defaultConfig } from "./constants/index.js"
 
 export default class Clickstream {
   #tracking
@@ -12,6 +11,10 @@ export default class Clickstream {
   #scheduler
   #network
   #eventBus
+  /**
+   * @constructor
+   * @param options Configuration options
+   */
   constructor({ event, batch, network } = defaultConfig) {
     if (!network.url) {
       throw new Error("Clickstream: Provide url in network config")
@@ -34,7 +37,7 @@ export default class Clickstream {
       eventBus: this.#eventBus,
     })
 
-    this.#network = new Network({
+    this.#network = new NetworkManager({
       config: Object.assign(defaultConfig.network, network),
     })
 
@@ -53,11 +56,11 @@ export default class Clickstream {
   }
 
   /**
-   * Dipatch the event
-   * @param payload - payload object
-   * @returns Promise
+   * Dipatches a new event.
+   * @param payload - JavaScript proto instance
+   * @returns Promise to get the status of the event track call
    */
-  track(payload) {
+  track(/** @type {object} */ payload) {
     if (!this.#tracking) {
       return
     }
@@ -74,21 +77,22 @@ export default class Clickstream {
   }
 
   /**
-   * Gracefully stops the tracking
+   * Stops the tracking.
+   * Track function call is ignored, existing events are processed.
    */
   stop() {
     this.#tracking = false
   }
 
   /**
-   * Resumes the tracking
+   * Resumes the tracking.
    */
   start() {
     this.#tracking = true
   }
 
   /**
-   * Release all the resources used
+   * Releases all the resources used.
    */
   destroy() {}
 }
