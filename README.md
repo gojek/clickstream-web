@@ -4,17 +4,11 @@ Clickstream Web is a Modern, Fast, and Lightweight Event Ingestion library, adhe
 
 ## Installation
 
-Clickstream Web is available as a [npm package](https://www.npmjs.com/package/@gojek/clickstream-web) over npm public registry.
-
-### npm
-
-```
+```sh
+# npm
 npm install @gojek/clickstream-web
-```
 
-### yarn
-
-```
+# yarn
 yarn add @gojek/clickstream-web
 ```
 
@@ -22,26 +16,25 @@ yarn add @gojek/clickstream-web
 
 1. Import `Clickstream` from the package.
 
-```
-import { Clickstream } from @gojek/clickstream-web
+```js
+import { Clickstream } from "@gojek/clickstream-web"
 ```
 
 2. Initialise Clickstream
 
-Clickstream accepts options to override the default behaviour of the system. It supports `event`, `batch` & `network` configurations.
+Clickstream accepts options to override the default behaviour. It supports `event`, `batch` & `network` configurations.
 
-```
-import { Clickstream } from @gojek/clickstream-web
+```js
+import { Clickstream } from "@gojek/clickstream-web"
 
 const clckstrm = new Clickstream({
   network: {
-    url: new URL({HostUrl}),
+    url: new URL("https://example.org"),
     headers: new Headers({
-      Authorization:
-        "Basic {secretKey}",
+      Authorization: "Basic <secret-key>",
     }),
   },
-});
+})
 ```
 
 Following network options are mandatory to pass while initialising -
@@ -51,47 +44,47 @@ Following network options are mandatory to pass while initialising -
 
 3. Dispatch an event
 
-```
-import { Clickstream } from @gojek/clickstream-web
+```js
+import { Clickstream } from "@gojek/clickstream-web"
 
-// import the proto
-import { gobiz } from "./proto/gobiz-ct.js";
+// import the proto from a package that contains your protos.
+import { proto } from "protobufjs-package"
 
 // fill in the data as per proto definition
-const payload = gobiz.clickstream.web.CT.create({
-  label: "test",
+const payload = proto.create({
+  label: "test-event",
   properties: {
     test: 1,
   },
-});
+})
 
 // initialise
 const clckstrm = new Clickstream({
   network: {
-    url: new URL({HostUrl}),
+    url: new URL("https://example.org"),
     headers: new Headers({
-      Authorization:
-        "Basic {secretKey}",
+      Authorization: "Basic <secret-key>",
     }),
   },
-});
+})
 
 // call on some event like user click.
-// return a promise, which can be used to get the status of the call, provides error handling.
-clckstrm.track(payload);
+document.querySelector("#some-button").addEventListener("click", () => {
+  clckstrm.track(payload)
+})
 ```
 
 ### Methods
 
 #### track
 
-Dispatched a new event, returns a promise, which can be used to get the status of the call, provides error handling.
+Dispatched a new event. Returns a promise, which can be used to get the status of the track call, use for error handling.
 
 ```
 clckstrm.track(payload);
 ```
 
-#### Stop
+#### stop
 
 Gracefully stops the tracking, new track function calls are ignored, existing events are still processed.
 
@@ -99,20 +92,12 @@ Gracefully stops the tracking, new track function calls are ignored, existing ev
 clckstrm.stop();
 ```
 
-#### Start
+#### start
 
 Resumes the tracking, use only when tracking is stopped currently.
 
 ```
-clckstrm.strat();
-```
-
-#### Destroy
-
-Releases all the resources used by the SDK, make sure to call before app close/demount.
-
-```
-clckstrm.destroy();
+clckstrm.start();
 ```
 
 ### Options
@@ -122,20 +107,10 @@ The contrsuctor takes a options object as parameter which has `event`, `batch` &
 ```
 {
   event: {
-    // instant array contains names of all the intant events.
+    // contains names of all the intant events, used to differentiate QoS0 and QoS1 events.
     classification: {
       instant: [],
     },
-    priorities: [
-      {
-        identifier: "realTime",
-        priority: 0,
-      },
-      {
-        identifier: "instant",
-        priority: 1,
-      },
-    ],
   },
   batch: {
     // max interval time between two batches, in seconds.
@@ -144,9 +119,9 @@ The contrsuctor takes a options object as parameter which has `event`, `batch` &
     maxBatchSize: 50000,
   },
   network: {
-    // base url
+    // Raccoon host URL
     url: "",
-    // headers
+    // Request headers
     headers: {},
   },
 }
