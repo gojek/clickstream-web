@@ -1,6 +1,6 @@
 {
   "name": "@gojek/clickstream-web",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A Modern, Fast, and Lightweight Event Ingestion library for Web",
   "type": "module",
   "main": "./dist/index.cjs",
