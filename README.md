@@ -14,13 +14,13 @@ yarn add @gojek/clickstream-web
 
 ## Usage
 
-1. Import `Clickstream` from the package.
+1. **Import `Clickstream` from the package.**
 
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
 ```
 
-2. Initialise Clickstream
+2. **Initialise Clickstream**
 
 Clickstream accepts options to override the default behaviour. It supports `event`, `batch` & `network` configurations.
 
@@ -42,7 +42,7 @@ Following network options are mandatory to pass while initialising -
 - `url` - [Raccoon](https://odpf.github.io/raccoon/) host url, instance of [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL).
 - `headers` - Request headers, instance of [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Headers).
 
-3. Dispatch an event
+3. **Dispatch an event**
 
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
@@ -78,7 +78,7 @@ document.querySelector("#some-button").addEventListener("click", () => {
 
 #### track
 
-Dispatched a new event. Returns a promise, which can be used to get the status of the track call, use for error handling.
+Dispatches a new event. Returns a promise, which can be used to get the status of the track call, use for error handling.
 
 ```
 clckstrm.track(payload);
@@ -102,7 +102,7 @@ clckstrm.start();
 
 ### Options
 
-The contrsuctor takes a options object as parameter which has `event`, `batch` & `network` options as property.
+The contrsuctor takes an options object as parameter which has `event`, `batch` & `network` options as property.
 
 ```
 {
