@@ -40,9 +40,10 @@ export default class Network {
   }
 
   #makeRequest(request) {
-    this.#config.headers.append("Content-Type", "application/proto")
-    const { url, headers } = this.#config
-    fetch(url, {
+    const headers = new Headers(this.#config.headers)
+    headers.append("Content-Type", "application/proto")
+
+    fetch(this.#config.url, {
       method: "POST",
       headers: headers,
       body: request,
