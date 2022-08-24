@@ -2,7 +2,7 @@
 import Id from "./id.js"
 import { SendEventRequest, Event } from "./protos/raccoon.js"
 
-export default class Network {
+export default class Transport {
   #config
   #id
   constructor({ config }) {

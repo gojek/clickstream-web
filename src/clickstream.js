@@ -1,5 +1,5 @@
 // @ts-check
-import NetworkManager from "./network.js"
+import Transport from "./transport.js"
 import Processor from "./processor.js"
 import Scheduler from "./scheduler.js"
 import EventBus from "./event.js"
@@ -9,7 +9,7 @@ export default class Clickstream {
   #tracking
   #processor
   #scheduler
-  #network
+  #transport
   #eventBus
   /**
    * @constructor
@@ -37,7 +37,7 @@ export default class Clickstream {
       eventBus: this.#eventBus,
     })
 
-    this.#network = new NetworkManager({
+    this.#transport = new Transport({
       config: Object.assign(defaultConfig.network, network),
     })
 
@@ -51,7 +51,7 @@ export default class Clickstream {
 
   #listeners() {
     this.#eventBus.on(CUSTOM_EVENT.NEW_BATCH, (e) => {
-      this.#network.send(e.detail.batch)
+      this.#transport.send(e.detail.batch)
     })
   }
 
