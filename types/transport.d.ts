@@ -1,6 +1,6 @@
-export default class Network {
+export default class Transport {
   constructor({ config }: { config: any })
   send(batch: any): void
   #private
 }
-//# sourceMappingURL=network.d.ts.map
+//# sourceMappingURL=transport.d.ts.map
