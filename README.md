@@ -86,7 +86,7 @@ clckstrm.track(payload);
 
 #### stop
 
-Gracefully stops the tracking, new track function calls are ignored, existing events are still processed.
+Gracefully stops the tracking, new track function calls are ignored, previously tracked events will be processed.
 
 ```
 clckstrm.stop();
@@ -94,7 +94,7 @@ clckstrm.stop();
 
 #### start
 
-Resumes the tracking, use only when tracking is stopped currently.
+Resumes the tracking, have no effect when called with tracking on.
 
 ```
 clckstrm.start();
