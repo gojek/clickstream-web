@@ -102,12 +102,12 @@ clckstrm.start();
 
 ### Options
 
-The contrsuctor takes an options object as parameter which has `event`, `batch` & `network` options as property.
+The constrsuctor takes an options object as parameter which has `event`, `batch` & `network` options as property.
 
 ```
 {
   event: {
-    // contains names of all the intant events, used to differentiate QoS0 and QoS1 events.
+    // contains names of all the instant events, used to differentiate QoS0 and QoS1 events.
     classification: {
       instant: [],
     },
