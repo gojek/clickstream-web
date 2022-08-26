@@ -16,6 +16,7 @@ export default class Clickstream {
         identifier: string
         priority: number
       }[]
+      group: string
     }
     batch: {
       maxTimeBetweenTwoBatches: number

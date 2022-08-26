@@ -7,6 +7,7 @@ export namespace defaultConfig {
       identifier: string
       priority: number
     }[]
+    const group: string
   }
   namespace batch {
     const maxTimeBetweenTwoBatches: number
