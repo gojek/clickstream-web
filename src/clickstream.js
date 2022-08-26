@@ -38,7 +38,9 @@ export default class Clickstream {
     })
 
     this.#transport = new Transport({
-      config: Object.assign(defaultConfig.network, network),
+      config: Object.assign(defaultConfig.network, network, {
+        group: event?.group,
+      }),
     })
 
     this.#init()

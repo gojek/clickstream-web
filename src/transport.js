@@ -23,8 +23,10 @@ export default class Transport {
       const encodedEvent = PayloadConstructor.encode(payload).finish()
       const typeUrl = PayloadConstructor.getTypeUrl("").split(".")
       const type = typeUrl[typeUrl.length - 1].toLowerCase()
-
-      return Event.encode({ eventBytes: encodedEvent, type })
+      return Event.create({
+        eventBytes: encodedEvent,
+        type: this.#config.group ? `${this.#config.group}-${type}` : type,
+      })
     })
 
     const request = SendEventRequest.create({
@@ -35,7 +37,6 @@ export default class Transport {
       },
       events: [...encodedBatch],
     })
-
     return SendEventRequest.encode(request).finish()
   }
 
@@ -55,6 +56,7 @@ export default class Transport {
         // const resBuffer = await blob.arrayBuffer()
         // const uInt = new Uint8Array(resBuffer)
         // const res = SendEventResponse.decode(uInt)
+        // console.log(res)
       })
       .catch((error) => {
         console.error("Error:", error)

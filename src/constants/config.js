@@ -2,7 +2,8 @@ export const defaultConfig = {
   /**
    * @typedef {Object} Event - Event configuration
    * @property {{instant: string[]}} classification - event classification
-   * @property {{identifier: string, priority: number}[]} classification - event priorities
+   * @property {{identifier: string, priority: number}[]} priorities - event priorities
+   * @property {string} group - product group name
    */
   event: {
     /** @type {{instant: string[]}}  */
@@ -19,6 +20,7 @@ export const defaultConfig = {
         priority: 1,
       },
     ],
+    group: "",
   },
   /**
    * @typedef {Object} Batch - Batch configuration
