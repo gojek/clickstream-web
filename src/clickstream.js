@@ -61,11 +61,11 @@ export default class Clickstream {
    * @returns Promise to get the status of the event track call
    */
   track(/** @type {object} */ payload) {
-    if (!this.#tracking) {
-      return
-    }
+    return new Promise((resolve, reject) => {
+      if (!this.#tracking) {
+        reject("Tracking is stopped")
+      }
 
-    return new Promise((resolve) => {
       const { type, event } = this.#processor.process(payload)
 
       if (type === EVENT_TYPE.INSTANT) {
