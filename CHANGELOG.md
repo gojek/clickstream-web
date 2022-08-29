@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/gojekfarm/clickstream-web/compare/v0.0.4...v0.0.5) (2022-08-29)
+
+### Bug Fixes
+
+- event proto encoding ([884d6ed](https://github.com/gojekfarm/clickstream-web/commit/884d6ed41b02dce24f2dadbb50bf99d3b3464afd))
+
 ### 0.0.4 (2022-08-17)
 
 ### Features
