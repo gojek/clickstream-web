@@ -111,6 +111,8 @@ The constrsuctor takes an options object as parameter which has `event`, `batch`
     classification: {
       instant: [],
     },
+    // group name, prefix for event type
+    group: ""
   },
   batch: {
     // max interval time between two batches, in seconds.
