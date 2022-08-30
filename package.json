@@ -38,6 +38,15 @@
     "url": "https://github.com/gojekfarm/clickstream-web/issues"
   },
   "homepage": "https://github.com/gojekfarm/clickstream-web#readme",
+  "ava": {
+    "files": [
+      "test/**/*",
+      "!./test/protos"
+    ],
+    "require": [
+      "./node_modules/protobufjs/minimal.js"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.18.10",
     "@babel/eslint-parser": "^7.18.9",
