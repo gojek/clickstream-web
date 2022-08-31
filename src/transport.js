@@ -46,27 +46,25 @@ export default class Transport {
     return SendEventRequest.encode(request).finish()
   }
 
-  #makeRequest(request) {
+  async #makeRequest(request) {
     const headers = new Headers(this.#config.headers)
     headers.append("Content-Type", "application/proto")
 
-    fetch(this.#config.url, {
-      method: "POST",
-      headers,
-      body: request,
-    })
-      .then((data) => {
-        return data.blob()
+    try {
+      fetch(this.#config.url, {
+        method: "POST",
+        headers,
+        body: request,
       })
-      .then(async () => {
-        // const resBuffer = await blob.arrayBuffer()
-        // const uInt = new Uint8Array(resBuffer)
-        // const res = SendEventResponse.decode(uInt)
-        // console.log(res)
-      })
-      .catch((error) => {
-        console.error("Error:", error)
-      })
+
+      // const blob = await data.blob()
+      // const resBuffer = await blob.arrayBuffer()
+      // const uInt = new Uint8Array(resBuffer)
+      // const res = SendEventResponse.decode(uInt)
+      // console.log(res)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   send(batch) {
