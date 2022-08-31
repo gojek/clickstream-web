@@ -39,10 +39,7 @@ export default class Scheduler {
    * Stop the scheduler
    */
   stop() {
-    if (this.#intervalId !== undefined) {
-      clearInterval(this.#intervalId)
-      this.#intervalId = undefined
-    }
+    this.#clearInterval()
   }
 
   /**
@@ -57,6 +54,13 @@ export default class Scheduler {
    */
   resume() {
     this.#batching = true
+  }
+
+  #clearInterval() {
+    if (this.#intervalId !== undefined) {
+      clearInterval(this.#intervalId)
+      this.#intervalId = undefined
+    }
   }
 
   #batchSize(batch) {
@@ -79,17 +83,14 @@ export default class Scheduler {
   }
 
   #run() {
-    if (this.#intervalId !== undefined) {
-      clearInterval(this.#intervalId)
-      this.#intervalId = undefined
-    }
-
+    this.#clearInterval()
     this.#intervalId = window.setInterval(() => {
       if (!this.#batching) {
         return
       }
 
       this.#waitTime += 1
+      console.log(this.#waitTime)
       this.#fill()
       if (this.#batchSize(this.#batch) >= this.#config.maxBatchSize) {
         this.#emit()
