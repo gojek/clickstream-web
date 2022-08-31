@@ -17,13 +17,11 @@ export default class Clickstream {
    */
   constructor({ event, batch, network } = defaultConfig) {
     if (!network.url) {
-      throw new Error("Clickstream: Provide url in network config")
+      throw new Error("Provide url in network config")
     }
 
     if (!network.headers.get("Authorization")) {
-      throw new Error(
-        "Clickstream: Provide Authorization header in network config"
-      )
+      throw new Error("Provide Authorization header in network config")
     }
 
     this.#tracking = true
