@@ -5,6 +5,9 @@ export default class EventBus {
   }
   /**
    * Event emitter
+   *
+   * emit the event on EventTarget
+   *
    * @param type name of the event
    * @param payload data to attach in event
    */
@@ -15,6 +18,9 @@ export default class EventBus {
 
   /**
    * Event listener
+   *
+   * Subscribes to the given event on the same EventTarget
+   *
    * @param type name of the event
    * @param callback callback function
    */

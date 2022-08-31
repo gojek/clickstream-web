@@ -13,6 +13,7 @@ export default class Processor {
 
   /**
    * Processes an event
+   *
    * @param proto - event proto
    * @returns type and event
    */
