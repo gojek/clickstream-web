@@ -20,7 +20,7 @@ export default class Clickstream {
       throw new Error("Provide url in network config")
     }
 
-    if (!network.headers.get("Authorization")) {
+    if (!network.headers?.get("Authorization")) {
       throw new Error("Provide Authorization header in network config")
     }
 
