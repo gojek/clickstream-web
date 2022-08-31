@@ -2,6 +2,15 @@
 import Id from "./id.js"
 import { SendEventRequest, Event } from "./protos/raccoon.js"
 
+const getTimestamp = () => {
+  const date = new Date()
+  const seconds = Math.floor(date.getTime() / 1000)
+  const fraction = date.toISOString().split(".")[1]
+  const nanos = fraction.slice(0, fraction.length - 1)
+
+  return { seconds, nanos }
+}
+
 export default class Transport {
   #config
   #id
@@ -12,17 +21,14 @@ export default class Transport {
 
   #createRequest(batch) {
     const reqGuid = this.#id.uuidv4()
-
-    const date = new Date()
-    const seconds = Math.floor(date.getTime() / 1000)
-    const fraction = date.toISOString().split(".")[1]
-    const nanos = fraction.slice(0, fraction.length - 1)
+    const { seconds, nanos } = getTimestamp()
 
     const encodedBatch = batch.map((payload) => {
       const PayloadConstructor = payload.constructor
       const encodedEvent = PayloadConstructor.encode(payload).finish()
       const typeUrl = PayloadConstructor.getTypeUrl("").split(".")
       const type = typeUrl[typeUrl.length - 1].toLowerCase()
+
       return Event.create({
         eventBytes: encodedEvent,
         type: this.#config.group ? `${this.#config.group}-${type}` : type,
@@ -46,7 +52,7 @@ export default class Transport {
 
     fetch(this.#config.url, {
       method: "POST",
-      headers: headers,
+      headers,
       body: request,
     })
       .then((data) => {
