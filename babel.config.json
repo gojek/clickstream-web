@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": "defaults, not ie 11, maintained node versions",
+        // Converts modern syntax that is broken in some browsers to the closest equivalent syntax that is not broken in those browsers
+        // more info - https://web.dev/serve-modern-code-to-modern-browsers/#enable-modern-bugfixes
+        "bugfixes": true
+      }
+    ]
+  ]
+}
