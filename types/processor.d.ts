@@ -2,6 +2,7 @@ export default class Processor {
   constructor({ config }: { config: any })
   /**
    * Processes an event
+   *
    * @param proto - event proto
    * @returns type and event
    */

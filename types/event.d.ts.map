@@ -1,1 +1,1 @@
-{"version":3,"file":"event.d.ts","sourceRoot":"","sources":["../src/event.js"],"names":[],"mappings":"AACA;IAEI,yBAAoC;IAEtC;;;;OAIG;IACH,oCAGC;IAED;;;;OAIG;IACH,mCAEC;CACF"}
+{"version":3,"file":"event.d.ts","sourceRoot":"","sources":["../src/event.js"],"names":[],"mappings":"AACA;IAEI,sBAA2B;IAE7B;;;;;;;OAOG;IACH,oCAGC;IAED;;;;;;;OAOG;IACH,mCAEC;CACF"}
