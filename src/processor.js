@@ -7,8 +7,12 @@ export default class Processor {
     this.#config = config
   }
 
-  #type() {
-    return EVENT_TYPE.INSTANT
+  #type(proto) {
+    if (this.#config.classification.instant.includes(proto["event_name"])) {
+      return EVENT_TYPE.INSTANT
+    }
+
+    return EVENT_TYPE.REALTIME
   }
 
   /**
@@ -19,7 +23,7 @@ export default class Processor {
    */
   process(proto) {
     return {
-      type: this.#type(),
+      type: this.#type(proto),
       event: proto,
     }
   }
