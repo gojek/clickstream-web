@@ -7,11 +7,13 @@ export default class Scheduler {
   #batching
   #config
   #eventBus
+  #store
   #batch
   #instantEvents
-  constructor({ config, eventBus }) {
+  constructor({ config, eventBus, store }) {
     this.#config = config
     this.#eventBus = eventBus
+    this.#store = store
     this.#intervalId = undefined
     this.#waitTime = 0
     this.#batching = false
@@ -76,9 +78,48 @@ export default class Scheduler {
     this.#batch = []
   }
 
-  #fill() {
+  #splitBySize(events) {
+    const unitSize = this.#batchSize([events[0]])
+    const batchSize = this.#batchSize(this.#batch)
+    const remSize = this.#config.maxBatchSize - batchSize
+
+    return events.splice(0, Math.floor(remSize / unitSize))
+  }
+
+  async getRealTimeEvents() {
+    if (!this.#store.isOpen) {
+      return []
+    }
+    try {
+      let events = await this.#store.read()
+
+      // filter out existing events in batch
+      events = events.filter((event) => {
+        return !this.#batch.some((data) => {
+          return data.eventGuid === event.eventGuid
+        })
+      })
+
+      const eventsBySize = this.#splitBySize(events)
+
+      try {
+        await this.#store.write(events)
+        return eventsBySize
+      } catch (error) {
+        console.log(error)
+      }
+    } catch (error) {
+      console.error(error)
+      return []
+    }
+  }
+
+  async #fill() {
     if (this.#instantEvents.length) {
       this.#batch.push(...this.#instantEvents.splice(0))
+    } else {
+      const realTimeEvents = await this.getRealTimeEvents()
+      this.#batch.push(...realTimeEvents)
     }
   }
 
@@ -90,8 +131,8 @@ export default class Scheduler {
       }
 
       this.#waitTime += 1
-      console.log(this.#waitTime)
       this.#fill()
+      console.log(this.#waitTime, this.#batch)
       if (this.#batchSize(this.#batch) >= this.#config.maxBatchSize) {
         this.#emit()
       } else if (this.#waitTime >= this.#config.maxTimeBetweenTwoBatches) {
