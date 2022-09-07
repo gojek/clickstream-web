@@ -54,6 +54,29 @@ export default class Store {
     })
   }
 
+  readByReqGuid(reqGuid) {
+    return new Promise((resolve) => {
+      const events = []
+      const objectStore = this.#db
+        .transaction([STORE], "readwrite")
+        .objectStore(STORE)
+
+      const index = objectStore.index("reqGuid")
+
+      index.openCursor().onsuccess = (event) => {
+        const cursor = event.target.result
+        if (cursor) {
+          if (cursor.value.reqGuid === reqGuid) {
+            events.push(cursor.value)
+          }
+          cursor.continue()
+        } else {
+          resolve(events)
+        }
+      }
+    })
+  }
+
   write(events) {
     return new Promise((resolve, reject) => {
       if (!Array.isArray(events)) {
@@ -77,15 +100,33 @@ export default class Store {
     })
   }
 
-  update() {}
-
-  remove(events) {
+  update(events, key, val) {
     const objectStore = this.#db
       .transaction([STORE], "readwrite")
       .objectStore(STORE)
 
     events.forEach((event) => {
-      objectStore.delete(event.eventGuid)
+      event[key] = val
+      objectStore.put(event)
+    })
+  }
+
+  remove(events) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.#db.transaction([STORE], "readwrite")
+      const objectStore = transaction.objectStore(STORE)
+
+      transaction.oncomplete = () => {
+        resolve("success")
+      }
+
+      transaction.onerror = (event) => {
+        reject(event.target.errorCode)
+      }
+
+      events.forEach((event) => {
+        objectStore.delete(event.eventGuid)
+      })
     })
   }
 }
