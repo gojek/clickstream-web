@@ -1,6 +1,7 @@
 // @ts-check
+import { CUSTOM_EVENT, EVENT_TYPE } from "./constants/index.js"
 import Id from "./id.js"
-import { SendEventRequest, Event } from "./protos/raccoon.js"
+import { SendEventRequest, SendEventResponse, Event } from "./protos/raccoon.js"
 
 const getTimestamp = () => {
   const date = new Date()
@@ -13,9 +14,13 @@ const getTimestamp = () => {
 
 export default class Transport {
   #config
+  #store
+  #eventBus
   #id
-  constructor({ config }) {
+  constructor({ config, eventBus, store }) {
     this.#config = config
+    this.#eventBus = eventBus
+    this.#store = store
     this.#id = new Id()
   }
 
@@ -23,15 +28,17 @@ export default class Transport {
     const reqGuid = this.#id.uuidv4()
     const { seconds, nanos } = getTimestamp()
 
-    const encodedBatch = batch.map((payload) => {
-      const PayloadConstructor = payload.constructor
-      const encodedEvent = PayloadConstructor.encode(payload).finish()
-      const typeUrl = PayloadConstructor.getTypeUrl("").split(".")
-      const type = typeUrl[typeUrl.length - 1].toLowerCase()
+    // update QoS1 events in store
+    const realTimeBatch = batch.filter((event) => {
+      return event.eventType === EVENT_TYPE.REALTIME
+    })
+    this.#store.update(realTimeBatch, "reqGuid", reqGuid)
 
+    const encodedBatch = batch.map((payload) => {
+      const { data, type } = payload
       return Event.create({
-        eventBytes: encodedEvent,
-        type: this.#config.group ? `${this.#config.group}-${type}` : type,
+        eventBytes: data,
+        type,
       })
     })
 
@@ -43,7 +50,10 @@ export default class Transport {
       },
       events: [...encodedBatch],
     })
-    return SendEventRequest.encode(request).finish()
+    return {
+      reqGuid,
+      body: SendEventRequest.encode(request).finish(),
+    }
   }
 
   async #makeRequest(request) {
@@ -51,18 +61,24 @@ export default class Transport {
     headers.append("Content-Type", "application/proto")
 
     try {
-      fetch(this.#config.url, {
+      const data = await fetch(this.#config.url, {
         method: "POST",
         headers,
-        body: request,
+        body: request.body,
       })
 
-      // const blob = await data.blob()
-      // const resBuffer = await blob.arrayBuffer()
-      // const uInt = new Uint8Array(resBuffer)
-      // const res = SendEventResponse.decode(uInt)
-      // console.log(res)
+      const blob = await data.blob()
+      const resBuffer = await blob.arrayBuffer()
+      const uInt = new Uint8Array(resBuffer)
+      const res = SendEventResponse.decode(uInt)
+
+      const events = await this.#store.readByReqGuid(res.data["req_guid"])
+      this.#store.remove(events)
     } catch (error) {
+      this.#eventBus.emit(CUSTOM_EVENT.BATCH_FAILED, {
+        reqGuid: request.reqGuid,
+      })
+
       console.error(error)
     }
   }

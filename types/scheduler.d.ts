@@ -1,5 +1,13 @@
 export default class Scheduler {
-  constructor({ config, eventBus }: { config: any; eventBus: any })
+  constructor({
+    config,
+    eventBus,
+    store,
+  }: {
+    config: any
+    eventBus: any
+    store: any
+  })
   /**
    * Ingest an event
    * @param event event
@@ -21,6 +29,7 @@ export default class Scheduler {
    * Resume the scheduler
    */
   resume(): void
+  getRealTimeEvents(): Promise<any>
   #private
 }
 //# sourceMappingURL=scheduler.d.ts.map

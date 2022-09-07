@@ -1,5 +1,13 @@
 export default class Transport {
-  constructor({ config }: { config: any })
+  constructor({
+    config,
+    eventBus,
+    store,
+  }: {
+    config: any
+    eventBus: any
+    store: any
+  })
   send(batch: any): void
   #private
 }

@@ -6,7 +6,8 @@ export const EVENT_TYPE = {
 }
 
 export const CUSTOM_EVENT = {
-  NEW_BATCH: "newBatch",
+  BATCH_CREATED: "batchCreated",
+  BATCH_FAILED: "batchFailed",
 }
 
 export const TICK_TIME = 1000

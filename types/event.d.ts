@@ -1,5 +1,5 @@
 export default class EventBus {
-  eventTarget: Document
+  eventTarget: EventTarget
   /**
    * Event emitter
    *

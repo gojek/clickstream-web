@@ -8,7 +8,11 @@ export default class Processor {
    */
   process(proto: any): {
     type: string
-    event: any
+    event: {
+      data: any
+      eventType: any
+      type: any
+    }
   }
   #private
 }

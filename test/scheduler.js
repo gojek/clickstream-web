@@ -35,7 +35,7 @@ test("emits the ingested event", async (t) => {
     //   t.fail()
     //   resolve()
     // }, 10)
-    eventBus.on(CUSTOM_EVENT.NEW_BATCH, (e) => {
+    eventBus.on(CUSTOM_EVENT.BATCH_CREATED, (e) => {
       t.is(e.detail.batch, [payload])
       resolve()
     })

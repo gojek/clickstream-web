@@ -50,6 +50,7 @@ export default class Clickstream {
 
     this.#transport = new Transport({
       config: this.#networkConfig,
+      eventBus: this.#eventBus,
       store: this.#store,
     })
 
@@ -62,7 +63,7 @@ export default class Clickstream {
   }
 
   #listeners() {
-    this.#eventBus.on(CUSTOM_EVENT.NEW_BATCH, (e) => {
+    this.#eventBus.on(CUSTOM_EVENT.BATCH_CREATED, (e) => {
       this.#transport.send(e.detail.batch)
     })
   }
