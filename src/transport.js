@@ -80,6 +80,7 @@ export default class Transport {
         this.#store.remove(events)
       }
     } catch (error) {
+      console.log("retyry")
       this.#eventBus.emit(CUSTOM_EVENT.BATCH_FAILED, {
         reqGuid: request.reqGuid,
       })

@@ -37,6 +37,7 @@ export default class Scheduler {
   start() {
     this.#batching = true
     this.#run()
+    this.#listeners()
   }
 
   /**
@@ -79,7 +80,9 @@ export default class Scheduler {
 
   #listeners() {
     this.#eventBus.on(CUSTOM_EVENT.BATCH_FAILED, async (e) => {
+      console.log("batch failed")
       const events = await this.#store.readByReqGuid(e.detail.reqGuid)
+      console.log(events)
       this.#eventBus.emit(CUSTOM_EVENT.BATCH_CREATED, { batch: events })
     })
   }
@@ -95,11 +98,7 @@ export default class Scheduler {
     const batchSize = this.#batchSize(this.#batch)
     const remSize = this.#config.maxBatchSize - batchSize
 
-    console.log("measures", unitSize, batchSize, remSize)
-
-    const data = events.splice(0, Math.ceil(remSize / unitSize) + 1)
-    // console.log(data)
-    return data
+    return events.splice(0, Math.ceil(remSize / unitSize) + 1)
   }
 
   async getRealTimeEvents() {
@@ -121,7 +120,6 @@ export default class Scheduler {
       }
 
       const eventsBySize = this.#splitBySize(events)
-      console.log("finalsize", eventsBySize, "rem", events)
 
       return eventsBySize
     } catch (error) {
@@ -133,16 +131,12 @@ export default class Scheduler {
   async #fill() {
     if (this.#instantEvents.length) {
       const eventsBySize = this.#splitBySize(this.#instantEvents)
-      console.log(
-        "instant - finalsize",
-        eventsBySize,
-        "rem",
-        this.#instantEvents
-      )
       this.#batch.push(...eventsBySize)
     } else {
       const realTimeEvents = await this.getRealTimeEvents()
-      this.#batch.push(...realTimeEvents)
+      if (realTimeEvents.length) {
+        this.#batch.push(...realTimeEvents)
+      }
     }
   }
 
@@ -155,12 +149,9 @@ export default class Scheduler {
 
       this.#waitTime += 1
       this.#fill()
-      console.log(
-        this.#waitTime,
-        this.#batch,
-        "batch size - ",
-        this.#batchSize(this.#batch)
-      )
+
+      console.log(this.#batch)
+
       if (this.#batchSize(this.#batch) >= this.#config.maxBatchSize) {
         this.#emit()
       } else if (this.#waitTime >= this.#config.maxTimeBetweenTwoBatches) {

@@ -129,8 +129,10 @@ export default class Clickstream {
   async destroy() {
     try {
       await this.#store.delete()
+      return Promise.resolve("success")
     } catch (error) {
       console.error(error)
+      return Promise.reject(error)
     }
   }
 }
