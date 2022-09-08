@@ -9,6 +9,7 @@ export default class Scheduler {
   #eventBus
   #store
   #batch
+  #lastBatch
   #instantEvents
   constructor({ config, eventBus, store }) {
     this.#config = config
@@ -18,6 +19,7 @@ export default class Scheduler {
     this.#waitTime = 0
     this.#batching = false
     this.#batch = []
+    this.#lastBatch = []
     this.#instantEvents = []
   }
 
@@ -65,16 +67,13 @@ export default class Scheduler {
     }
   }
 
-  #batchSize(batch) {
-    return new Blob([JSON.stringify(batch)]).size
-  }
-
   #emit() {
     if (this.#batch.length) {
       this.#eventBus.emit(CUSTOM_EVENT.BATCH_CREATED, { batch: this.#batch })
     }
 
     this.#waitTime = 0
+    this.#lastBatch = this.#batch
     this.#batch = []
   }
 
@@ -85,12 +84,22 @@ export default class Scheduler {
     })
   }
 
+  #batchSize(batch) {
+    return batch.reduce((prev, curr) => {
+      return prev + new Blob(curr.data).size
+    }, 0)
+  }
+
   #splitBySize(events) {
     const unitSize = this.#batchSize([events[0]])
     const batchSize = this.#batchSize(this.#batch)
     const remSize = this.#config.maxBatchSize - batchSize
 
-    return events.splice(0, Math.floor(remSize / unitSize))
+    console.log("measures", unitSize, batchSize, remSize)
+
+    const data = events.splice(0, Math.ceil(remSize / unitSize) + 1)
+    // console.log(data)
+    return data
   }
 
   async getRealTimeEvents() {
@@ -100,21 +109,21 @@ export default class Scheduler {
     try {
       let events = await this.#store.read()
 
-      // filter out existing events in batch
+      // filter out existing events in batch and last batch
       events = events.filter((event) => {
-        return !this.#batch.some((data) => {
+        return ![...this.#batch, ...this.#lastBatch].some((data) => {
           return data.eventGuid === event.eventGuid
         })
       })
 
-      const eventsBySize = this.#splitBySize(events)
-
-      try {
-        await this.#store.write(events)
-        return eventsBySize
-      } catch (error) {
-        console.log(error)
+      if (!events.length) {
+        return []
       }
+
+      const eventsBySize = this.#splitBySize(events)
+      console.log("finalsize", eventsBySize, "rem", events)
+
+      return eventsBySize
     } catch (error) {
       console.error(error)
       return []
@@ -123,7 +132,14 @@ export default class Scheduler {
 
   async #fill() {
     if (this.#instantEvents.length) {
-      this.#batch.push(...this.#instantEvents.splice(0))
+      const eventsBySize = this.#splitBySize(this.#instantEvents)
+      console.log(
+        "instant - finalsize",
+        eventsBySize,
+        "rem",
+        this.#instantEvents
+      )
+      this.#batch.push(...eventsBySize)
     } else {
       const realTimeEvents = await this.getRealTimeEvents()
       this.#batch.push(...realTimeEvents)
@@ -139,7 +155,12 @@ export default class Scheduler {
 
       this.#waitTime += 1
       this.#fill()
-      console.log(this.#waitTime, this.#batch)
+      console.log(
+        this.#waitTime,
+        this.#batch,
+        "batch size - ",
+        this.#batchSize(this.#batch)
+      )
       if (this.#batchSize(this.#batch) >= this.#config.maxBatchSize) {
         this.#emit()
       } else if (this.#waitTime >= this.#config.maxTimeBetweenTwoBatches) {
