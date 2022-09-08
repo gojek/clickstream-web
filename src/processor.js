@@ -4,14 +4,21 @@ import Id from "./id.js"
 
 export default class Processor {
   #config
+  #store
   #id
-  constructor({ config }) {
+  constructor({ config, store }) {
     this.#config = config
+    this.#store = store
     this.#id = new Id()
   }
 
   #type(proto) {
-    if (this.#config.classification.instant.includes(proto["event_name"])) {
+    if (this.#config?.classification?.instant?.includes(proto["event_name"])) {
+      return EVENT_TYPE.INSTANT
+    }
+
+    // if the storage is not available, event is treated as instant event
+    if (!this.#store.isOpen) {
       return EVENT_TYPE.INSTANT
     }
 

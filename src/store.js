@@ -14,10 +14,20 @@ export default class Store {
 
   open() {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open(this.#name, this.#version)
+      const request = window.indexedDB.open(this.#name, this.#version)
+
+      request.onblocked = (event) => {
+        // If some other tab is loaded with the database, then it needs to be closed
+        // before we can proceed.
+        console.log(
+          "Clickstream: Please close all other tabs with this site open!"
+        )
+        reject(event.target.error)
+      }
 
       request.onerror = (event) => {
-        reject(event.target.errorCode)
+        console.log("errorcodeaskdjhaskd", event.target.error)
+        reject(event.target.error)
       }
 
       request.onsuccess = (event) => {
@@ -36,6 +46,15 @@ export default class Store {
         objectStore.createIndex("reqGuid", "reqGuid", { unique: false })
 
         objectStore.createIndex("eventGuid", "eventGuid", { unique: true })
+
+        this.#db.onversionchange = (event) => {
+          this.#db.close()
+          this.isOpen = false
+          console.log(
+            "Clickstream: A new version of this page is ready. Please reload or close this tab!"
+          )
+          reject(event.target.error)
+        }
       }
     })
   }
@@ -49,7 +68,7 @@ export default class Store {
       }
 
       objectStore.getAll().onerror = (event) => {
-        reject(event.target.errorCode)
+        reject(event.target.error)
       }
     })
   }
@@ -91,7 +110,7 @@ export default class Store {
       }
 
       transaction.onerror = (event) => {
-        reject(event.target.errorCode)
+        reject(event.target.error)
       }
 
       events.forEach((event) => {
@@ -121,12 +140,28 @@ export default class Store {
       }
 
       transaction.onerror = (event) => {
-        reject(event.target.errorCode)
+        reject(event.target.error)
       }
 
       events.forEach((event) => {
         objectStore.delete(event.eventGuid)
       })
+    })
+  }
+
+  delete() {
+    new Promise((resolve, reject) => {
+      let request = window.indexedDB.deleteDatabase(this.#name)
+
+      request.onerror = (event) => {
+        reject(event.target.error)
+      }
+
+      request.onsuccess = (event) => {
+        this.#db = null
+        this.isOpen = false
+        resolve(event.target.result)
+      }
     })
   }
 }

@@ -40,6 +40,7 @@ export default class Clickstream {
 
     this.#processor = new Processor({
       config: this.#eventConfig,
+      store: this.#store,
     })
 
     this.#scheduler = new Scheduler({
@@ -93,10 +94,10 @@ export default class Clickstream {
       try {
         const { type, event } = this.#processor.process(payload)
 
-        if (type === EVENT_TYPE.INSTANT) {
-          this.#scheduler.ingest(event)
-        } else {
+        if (type === EVENT_TYPE.REALTIME) {
           this.#store.write(event)
+        } else if (type === EVENT_TYPE.INSTANT) {
+          this.#scheduler.ingest(event)
         }
 
         resolve("success")
@@ -125,5 +126,11 @@ export default class Clickstream {
   /**
    * Releases all the resources used.
    */
-  destroy() {}
+  async destroy() {
+    try {
+      await this.#store.delete()
+    } catch (error) {
+      console.error(error)
+    }
+  }
 }

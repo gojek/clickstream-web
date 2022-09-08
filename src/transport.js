@@ -32,7 +32,10 @@ export default class Transport {
     const realTimeBatch = batch.filter((event) => {
       return event.eventType === EVENT_TYPE.REALTIME
     })
-    this.#store.update(realTimeBatch, "reqGuid", reqGuid)
+
+    if (realTimeBatch.length && this.#store.isOpen) {
+      this.#store.update(realTimeBatch, "reqGuid", reqGuid)
+    }
 
     const encodedBatch = batch.map((payload) => {
       const { data, type } = payload
@@ -72,8 +75,10 @@ export default class Transport {
       const uInt = new Uint8Array(resBuffer)
       const res = SendEventResponse.decode(uInt)
 
-      const events = await this.#store.readByReqGuid(res.data["req_guid"])
-      this.#store.remove(events)
+      if (this.#store.isOpen) {
+        const events = await this.#store.readByReqGuid(res.data["req_guid"])
+        this.#store.remove(events)
+      }
     } catch (error) {
       this.#eventBus.emit(CUSTOM_EVENT.BATCH_FAILED, {
         reqGuid: request.reqGuid,
