@@ -26,7 +26,6 @@ export default class Store {
       }
 
       request.onerror = (event) => {
-        console.log("errorcodeaskdjhaskd", event.target.error)
         reject(event.target.error)
       }
 

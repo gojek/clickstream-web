@@ -41,5 +41,11 @@ export const defaultConfig = {
   network: {
     url: "",
     headers: {},
+    // max retry count
+    maxRetryCount: "5",
+    // gap between two reties
+    timeBetweenTwoRetries: "20000",
+    // time to reset retry count to zero
+    timeToResetRetryCount: "5000",
   },
 }

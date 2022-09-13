@@ -80,9 +80,7 @@ export default class Scheduler {
 
   #listeners() {
     this.#eventBus.on(CUSTOM_EVENT.BATCH_FAILED, async (e) => {
-      console.log("batch failed")
       const events = await this.#store.readByReqGuid(e.detail.reqGuid)
-      console.log(events)
       this.#eventBus.emit(CUSTOM_EVENT.BATCH_CREATED, { batch: events })
     })
   }
@@ -149,8 +147,6 @@ export default class Scheduler {
 
       this.#waitTime += 1
       this.#fill()
-
-      console.log(this.#batch)
 
       if (this.#batchSize(this.#batch) >= this.#config.maxBatchSize) {
         this.#emit()

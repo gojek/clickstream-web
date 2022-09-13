@@ -17,10 +17,14 @@ export default class Transport {
   #store
   #eventBus
   #id
+  #retryCount
+  #resetRetryTimeout
   constructor({ config, eventBus, store }) {
     this.#config = config
     this.#eventBus = eventBus
     this.#store = store
+    this.#retryCount = 0
+    this.#resetRetryTimeout = undefined
     this.#id = new Id()
   }
 
@@ -70,6 +74,8 @@ export default class Transport {
         body: request.body,
       })
 
+      this.#retryCount = 0
+
       const blob = await data.blob()
       const resBuffer = await blob.arrayBuffer()
       const uInt = new Uint8Array(resBuffer)
@@ -80,12 +86,28 @@ export default class Transport {
         this.#store.remove(events)
       }
     } catch (error) {
-      console.log("retyry")
-      this.#eventBus.emit(CUSTOM_EVENT.BATCH_FAILED, {
-        reqGuid: request.reqGuid,
-      })
+      const { maxRetryCount, timeBetweenTwoRetries, timeToResetRetryCount } =
+        this.#config
 
-      console.error(error)
+      if (this.#retryCount < maxRetryCount) {
+        if (this.#resetRetryTimeout) {
+          window.clearTimeout(this.#resetRetryTimeout)
+        }
+
+        this.#retryCount += 1
+
+        window.setTimeout(() => {
+          this.#eventBus.emit(CUSTOM_EVENT.BATCH_FAILED, {
+            reqGuid: request.reqGuid,
+          })
+        }, timeBetweenTwoRetries)
+      } else if (this.#retryCount === maxRetryCount) {
+        if (this.#resetRetryTimeout === undefined) {
+          this.#resetRetryTimeout = window.setTimeout(() => {
+            this.#retryCount = 0
+          }, timeToResetRetryCount)
+        }
+      }
     }
   }
 
