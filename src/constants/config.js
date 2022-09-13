@@ -2,7 +2,6 @@ export const defaultConfig = {
   /**
    * @typedef {Object} Event - Event configuration
    * @property {{instant: string[]}} classification - event classification
-   * @property {{identifier: string, priority: number}[]} priorities - event priorities
    * @property {string} group - product group name
    */
   event: {
@@ -10,16 +9,6 @@ export const defaultConfig = {
     classification: {
       instant: [],
     },
-    priorities: [
-      {
-        identifier: "realTime",
-        priority: 0,
-      },
-      {
-        identifier: "instant",
-        priority: 1,
-      },
-    ],
     group: "",
   },
   /**
@@ -41,11 +30,11 @@ export const defaultConfig = {
   network: {
     url: "",
     headers: {},
-    // max retry count
-    maxRetryCount: "5",
-    // gap between two reties
-    timeBetweenTwoRetries: "20000",
-    // time to reset retry count to zero
-    timeToResetRetryCount: "5000",
+    // max number of retries before pausing
+    maxRetries: 5,
+    // gap between two retries
+    timeBetweenTwoRetries: 1000,
+    // time after which retry will resume after hitting max retry count threshold
+    timeToResumeRetries: 20000,
   },
 }

@@ -12,10 +12,6 @@ export default class Clickstream {
       classification: {
         instant: string[]
       }
-      priorities: {
-        identifier: string
-        priority: number
-      }[]
       group: string
     }
     batch: {
@@ -25,9 +21,9 @@ export default class Clickstream {
     network: {
       url: string
       headers: {}
-      maxRetryCount: string
-      timeBetweenTwoRetries: string
-      timeToResetRetryCount: string
+      maxRetries: number
+      timeBetweenTwoRetries: number
+      timeToResumeRetries: number
     }
   })
   /**

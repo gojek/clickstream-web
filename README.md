@@ -125,6 +125,12 @@ The constrsuctor takes an options object as parameter which has `event`, `batch`
     url: "",
     // Request headers
     headers: {},
+    // max number of retries before pausing
+    maxRetries: 5,
+    // gap between two retries
+    timeBetweenTwoRetries: 1000,
+    // time after which retry will resume after hitting max retry count threshold
+    timeToResumeRetries: 20000,
   },
 }
 

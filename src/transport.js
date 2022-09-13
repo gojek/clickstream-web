@@ -86,10 +86,10 @@ export default class Transport {
         this.#store.remove(events)
       }
     } catch (error) {
-      const { maxRetryCount, timeBetweenTwoRetries, timeToResetRetryCount } =
+      const { maxRetries, timeBetweenTwoRetries, timeToResumeRetries } =
         this.#config
 
-      if (this.#retryCount < maxRetryCount) {
+      if (this.#retryCount < maxRetries) {
         if (this.#resetRetryTimeout) {
           window.clearTimeout(this.#resetRetryTimeout)
         }
@@ -101,11 +101,11 @@ export default class Transport {
             reqGuid: request.reqGuid,
           })
         }, timeBetweenTwoRetries)
-      } else if (this.#retryCount === maxRetryCount) {
+      } else if (this.#retryCount === maxRetries) {
         if (this.#resetRetryTimeout === undefined) {
           this.#resetRetryTimeout = window.setTimeout(() => {
             this.#retryCount = 0
-          }, timeToResetRetryCount)
+          }, timeToResumeRetries)
         }
       }
     }

@@ -3,10 +3,6 @@ export namespace defaultConfig {
     const classification: {
       instant: string[]
     }
-    const priorities: {
-      identifier: string
-      priority: number
-    }[]
     const group: string
   }
   namespace batch {
@@ -16,9 +12,9 @@ export namespace defaultConfig {
   namespace network {
     const url: string
     const headers: {}
-    const maxRetryCount: string
-    const timeBetweenTwoRetries: string
-    const timeToResetRetryCount: string
+    const maxRetries: number
+    const timeBetweenTwoRetries: number
+    const timeToResumeRetries: number
   }
 }
 //# sourceMappingURL=config.d.ts.map
