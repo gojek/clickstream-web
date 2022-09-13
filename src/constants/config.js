@@ -32,9 +32,9 @@ export const defaultConfig = {
     headers: {},
     // max number of retries before pausing
     maxRetries: 5,
-    // gap between two retries
+    // gap between two retries (mSec)
     timeBetweenTwoRetries: 1000,
-    // time after which retry will resume after hitting max retry count threshold
+    // time after which retry will resume after hitting max retry count threshold (mSec)
     timeToResumeRetries: 20000,
   },
 }
