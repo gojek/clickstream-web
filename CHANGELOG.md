@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/gojekfarm/clickstream-web/compare/v0.0.6...v0.0.7) (2022-09-13)
+
+### Features
+
+- add automatic retriy for QoS1 events ([0cd4a28](https://github.com/gojekfarm/clickstream-web/commit/0cd4a28698ba6ac8f49d5bf7ad5fa7292421c2a0)), closes [#3](https://github.com/gojekfarm/clickstream-web/issues/3)
+- add classification for events based on config ([d85d5de](https://github.com/gojekfarm/clickstream-web/commit/d85d5de4faf269ca83f05c97440b0ea7b5b9bbd0)), closes [#5](https://github.com/gojekfarm/clickstream-web/issues/5)
+- add storage mechanism for QoS1 events ([8b10f36](https://github.com/gojekfarm/clickstream-web/commit/8b10f36e280c28aec5a84573003857dcb03af83f)), closes [#2](https://github.com/gojekfarm/clickstream-web/issues/2)
+- support QoS1 events ([4e9d636](https://github.com/gojekfarm/clickstream-web/commit/4e9d636ddff5b33e34cc22869f83afd89e29cc26))
+
 ### [0.0.6](https://github.com/gojekfarm/clickstream-web/compare/v0.0.5...v0.0.6) (2022-08-29)
 
 ### [0.0.5](https://github.com/gojekfarm/clickstream-web/compare/v0.0.4...v0.0.5) (2022-08-29)
