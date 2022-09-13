@@ -4,13 +4,19 @@ import Processor from "./processor.js"
 import Scheduler from "./scheduler.js"
 import EventBus from "./event.js"
 import { CUSTOM_EVENT, EVENT_TYPE, defaultConfig } from "./constants/index.js"
+import Store from "./store.js"
 
 export default class Clickstream {
   #tracking
   #processor
   #scheduler
   #transport
+  #store
   #eventBus
+  #eventConfig
+  #batchConfig
+  #networkConfig
+  #id
   /**
    * @constructor
    * @param options Configuration options
@@ -24,21 +30,29 @@ export default class Clickstream {
       throw new Error("Provide Authorization header in network config")
     }
 
+    this.#eventConfig = Object.assign(defaultConfig.event, event)
+    this.#batchConfig = Object.assign(defaultConfig.batch, batch)
+    this.#networkConfig = Object.assign(defaultConfig.network, network)
+
     this.#tracking = true
     this.#eventBus = new EventBus()
+    this.#store = new Store({})
+
     this.#processor = new Processor({
-      config: Object.assign(defaultConfig.event, event),
+      config: this.#eventConfig,
+      store: this.#store,
     })
 
     this.#scheduler = new Scheduler({
-      config: Object.assign(defaultConfig.batch, batch),
+      config: this.#batchConfig,
       eventBus: this.#eventBus,
+      store: this.#store,
     })
 
     this.#transport = new Transport({
-      config: Object.assign(defaultConfig.network, network, {
-        group: event?.group,
-      }),
+      config: this.#networkConfig,
+      eventBus: this.#eventBus,
+      store: this.#store,
     })
 
     this.#init()
@@ -50,7 +64,7 @@ export default class Clickstream {
   }
 
   #listeners() {
-    this.#eventBus.on(CUSTOM_EVENT.NEW_BATCH, (e) => {
+    this.#eventBus.on(CUSTOM_EVENT.BATCH_CREATED, (e) => {
       this.#transport.send(e.detail.batch)
     })
   }
@@ -63,19 +77,33 @@ export default class Clickstream {
    * @param payload - JavaScript proto instance
    * @returns Promise to get the status of the event track call
    */
-  track(/** @type {object} */ payload) {
+  async track(/** @type {object} */ payload) {
+    if (!this.#tracking) {
+      return Promise.reject("Tracking is stopped")
+    }
+
+    if (!this.#store.isOpen) {
+      try {
+        await this.#store.open()
+      } catch (error) {
+        Promise.reject(error)
+      }
+    }
+
     return new Promise((resolve, reject) => {
-      if (!this.#tracking) {
-        reject("Tracking is stopped")
+      try {
+        const { type, event } = this.#processor.process(payload)
+
+        if (type === EVENT_TYPE.REALTIME) {
+          this.#store.write(event)
+        } else if (type === EVENT_TYPE.INSTANT) {
+          this.#scheduler.ingest(event)
+        }
+
+        resolve("success")
+      } catch (error) {
+        reject(error)
       }
-
-      const { type, event } = this.#processor.process(payload)
-
-      if (type === EVENT_TYPE.INSTANT) {
-        this.#scheduler.ingest(event)
-      }
-
-      resolve("success")
     })
   }
 
@@ -98,5 +126,13 @@ export default class Clickstream {
   /**
    * Releases all the resources used.
    */
-  destroy() {}
+  async destroy() {
+    try {
+      await this.#store.delete()
+      return Promise.resolve("success")
+    } catch (error) {
+      console.error(error)
+      return Promise.reject(error)
+    }
+  }
 }

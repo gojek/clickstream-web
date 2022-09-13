@@ -12,10 +12,6 @@ export default class Clickstream {
       classification: {
         instant: string[]
       }
-      priorities: {
-        identifier: string
-        priority: number
-      }[]
       group: string
     }
     batch: {
@@ -25,6 +21,9 @@ export default class Clickstream {
     network: {
       url: string
       headers: {}
+      maxRetries: number
+      timeBetweenTwoRetries: number
+      timeToResumeRetries: number
     }
   })
   /**
@@ -49,7 +48,7 @@ export default class Clickstream {
   /**
    * Releases all the resources used.
    */
-  destroy(): void
+  destroy(): Promise<string>
   #private
 }
 //# sourceMappingURL=clickstream.d.ts.map
