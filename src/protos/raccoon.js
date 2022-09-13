@@ -1,5 +1,11 @@
 /*eslint-disable block-scoped-var, id-length, no-control-regex, no-magic-numbers, no-prototype-builtins, no-redeclare, no-shadow, no-var, sort-vars*/
-import * as $protobuf from "protobufjs/minimal.js"
+import * as $protobuf1 from "protobufjs/minimal.js"
+
+let $protobuf
+
+if ($protobuf1.default) {
+  $protobuf = $protobuf1.default
+}
 
 // Common aliases
 const $Reader = $protobuf.Reader,
