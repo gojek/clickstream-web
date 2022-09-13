@@ -1,5 +1,5 @@
 export default class Processor {
-  constructor({ config }: { config: any })
+  constructor({ config, store }: { config: any; store: any })
   /**
    * Processes an event
    *

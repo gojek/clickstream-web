@@ -25,6 +25,9 @@ export default class Clickstream {
     network: {
       url: string
       headers: {}
+      maxRetryCount: string
+      timeBetweenTwoRetries: string
+      timeToResetRetryCount: string
     }
   })
   /**
@@ -49,7 +52,7 @@ export default class Clickstream {
   /**
    * Releases all the resources used.
    */
-  destroy(): void
+  destroy(): Promise<string>
   #private
 }
 //# sourceMappingURL=clickstream.d.ts.map

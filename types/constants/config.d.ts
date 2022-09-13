@@ -16,6 +16,9 @@ export namespace defaultConfig {
   namespace network {
     const url: string
     const headers: {}
+    const maxRetryCount: string
+    const timeBetweenTwoRetries: string
+    const timeToResetRetryCount: string
   }
 }
 //# sourceMappingURL=config.d.ts.map

@@ -7,6 +7,7 @@ export default class Store {
   write(events: any): Promise<any>
   update(events: any, key: any, val: any): void
   remove(events: any): Promise<any>
+  delete(): void
   #private
 }
 //# sourceMappingURL=store.d.ts.map
