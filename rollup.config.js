@@ -27,28 +27,12 @@ export default {
       format: "cjs",
       plugins: [terser()],
     },
-    // {
-    //   file: "./dist/index.umd.js",
-    //   name: "clickstream",
-    //   format: "umd",
-    //   globals: {
-    //     "protobufjs/minimal.js": "$protobuf",
-    //   },
-    // },
   ],
   external: ["protobufjs/minimal.js"],
   plugins: [
     nodeResolve(),
     babel({
       babelHelpers: "bundled",
-      // presets: [
-      //   [
-      //     "@babel/preset-env",
-      //     {
-      //       targets: "Android 4.4",
-      //     },
-      //   ],
-      // ],
     }),
   ],
 }
