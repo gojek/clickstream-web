@@ -81,7 +81,7 @@ document.querySelector("#some-button").addEventListener("click", () => {
 Dispatches a new event. Returns a promise, which can be used to get the status of the track call, use for error handling.
 
 ```
-clckstrm.track(payload);
+await clckstrm.track(payload);
 ```
 
 #### stop
@@ -98,6 +98,14 @@ Resumes the tracking, have no effect when called with tracking on.
 
 ```
 clckstrm.start();
+```
+
+#### start
+
+Releases all the resources used by the Clickstream instance.
+
+```
+await clckstrm.destroy();
 ```
 
 ### Options

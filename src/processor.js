@@ -33,7 +33,7 @@ export default class Processor {
     const typeUrl = typeUrlSplit[typeUrlSplit.length - 1].toLowerCase()
     const type = this.#config.group
       ? `${this.#config.group}-${typeUrl}`
-      : typeUrlSplit
+      : typeUrl
 
     const event = {
       data: encodedEvent,
