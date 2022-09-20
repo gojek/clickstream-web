@@ -13,7 +13,7 @@ export default class Processor {
   }
 
   #type(proto) {
-    if (this.#config?.classification?.instant?.includes(proto["event_name"])) {
+    if (this.#config?.classification?.instant?.includes(proto.eventName)) {
       return EVENT_TYPE.INSTANT
     }
 
