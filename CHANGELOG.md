@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/gojekfarm/clickstream-web/compare/v0.1.0...v0.1.1) (2022-09-20)
+
+### Bug Fixes
+
+- add module in package.json ([7ce3497](https://github.com/gojekfarm/clickstream-web/commit/7ce3497c0a8aa8358f9a23b7293dc6117650c767))
+- add module in package.json ([0fcc89c](https://github.com/gojekfarm/clickstream-web/commit/0fcc89c358605cdfc2d72bfcc0c5fff6667e7104))
+
 ## [0.1.0](https://github.com/gojekfarm/clickstream-web/compare/v0.0.6...v0.1.0) (2022-09-13)
 
 ### Features
