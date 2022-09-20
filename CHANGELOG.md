@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/gojekfarm/clickstream-web/compare/v0.1.1...v0.1.2) (2022-09-20)
+
+### Bug Fixes
+
+- event type when group is empty ([65040d0](https://github.com/gojekfarm/clickstream-web/commit/65040d0de7b5bda5d13763bc19fe572e1d3f95ae))
+
 ### [0.1.1](https://github.com/gojekfarm/clickstream-web/compare/v0.1.0...v0.1.1) (2022-09-20)
 
 ### Bug Fixes
