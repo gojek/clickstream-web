@@ -123,9 +123,9 @@ The constrsuctor takes an options object as parameter which has `event`, `batch`
     group: ""
   },
   batch: {
-    // max interval time between two batches, in seconds.
+    // max interval time between two batches(sec).
     maxTimeBetweenTwoBatches: 10,
-    // max size of batch, in bytes.
+    // max size of batch(bytes).
     maxBatchSize: 50000,
   },
   network: {
