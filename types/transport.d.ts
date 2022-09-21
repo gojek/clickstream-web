@@ -4,11 +4,11 @@ export default class Transport {
     eventBus,
     store,
   }: {
-    config: any;
-    eventBus: any;
-    store: any;
-  });
-  send(batch: any): void;
-  #private;
+    config: any
+    eventBus: any
+    store: any
+  })
+  send(batch: any): void
+  #private
 }
 //# sourceMappingURL=transport.d.ts.map

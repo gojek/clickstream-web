@@ -1,5 +1,5 @@
 export default class Processor {
-  constructor({ config, store }: { config: any; store: any });
+  constructor({ config, store }: { config: any; store: any })
   /**
    * Processes an event
    *
@@ -7,13 +7,13 @@ export default class Processor {
    * @returns type and event
    */
   process(proto: any): {
-    type: string;
+    type: string
     event: {
-      data: any;
-      eventType: any;
-      type: any;
-    };
-  };
-  #private;
+      data: any
+      eventType: any
+      type: any
+    }
+  }
+  #private
 }
 //# sourceMappingURL=processor.d.ts.map

@@ -1,7 +1,5 @@
 // @ts-check
-
 const STORE = "events"
-
 export default class Store {
   #name
   #version
@@ -22,20 +20,24 @@ export default class Store {
         console.log(
           "Clickstream: Please close all other tabs with this site open!"
         )
+        // @ts-ignore
         reject(event.target.error)
       }
 
       request.onerror = (event) => {
+        // @ts-ignore
         reject(event.target.error)
       }
 
       request.onsuccess = (event) => {
+        // @ts-ignore
         this.#db = event.target.result
         this.isOpen = true
         resolve("success")
       }
 
       request.onupgradeneeded = (event) => {
+        // @ts-ignore
         this.#db = event.target.result
 
         const objectStore = this.#db.createObjectStore(STORE, {
@@ -153,12 +155,14 @@ export default class Store {
       let request = window.indexedDB.deleteDatabase(this.#name)
 
       request.onerror = (event) => {
+        // @ts-ignore
         reject(event.target.error)
       }
 
       request.onsuccess = (event) => {
         this.#db = null
         this.isOpen = false
+        // @ts-ignore
         resolve(event.target.result)
       }
     })

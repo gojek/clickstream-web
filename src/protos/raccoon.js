@@ -15,6 +15,9 @@ const $Reader = $protobuf.Reader,
 // Exported root namespace
 const $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {})
 
+/**
+ * @type Class
+ */
 export const EventService = ($root.EventService = (() => {
   /**
    * Constructs a new EventService service.
@@ -103,6 +106,9 @@ export const EventService = ($root.EventService = (() => {
   return EventService
 })())
 
+/**
+ * @type Class
+ */
 export const SendEventRequest = ($root.SendEventRequest = (() => {
   /**
    * Properties of a SendEventRequest.
@@ -281,6 +287,9 @@ export const SendEventRequest = ($root.SendEventRequest = (() => {
   return SendEventRequest
 })())
 
+/**
+ * @type Class
+ */
 export const Timestamp = ($root.Timestamp = (() => {
   /**
    * Properties of a Timestamp.
@@ -433,6 +442,9 @@ export const Timestamp = ($root.Timestamp = (() => {
   return Timestamp
 })())
 
+/**
+ * @type Class
+ */
 export const Event = ($root.Event = (() => {
   /**
    * Properties of an Event.
@@ -582,6 +594,9 @@ export const Event = ($root.Event = (() => {
   return Event
 })())
 
+/**
+ * @type Class
+ */
 export const SendEventResponse = ($root.SendEventResponse = (() => {
   /**
    * Properties of a SendEventResponse.

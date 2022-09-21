@@ -4,6 +4,6 @@ export default class Id {
    *
    * @returns Unique random uuidv4 string
    */
-  uuidv4(): string;
+  uuidv4(): string
 }
 //# sourceMappingURL=id.d.ts.map
