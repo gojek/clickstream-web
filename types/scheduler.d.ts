@@ -4,32 +4,32 @@ export default class Scheduler {
     eventBus,
     store,
   }: {
-    config: any
-    eventBus: any
-    store: any
-  })
+    config: any;
+    eventBus: any;
+    store: any;
+  });
   /**
    * Ingest an event
    * @param event event
    */
-  ingest(event: any): void
+  ingest(event: any): void;
   /**
    * Start the scheduler
    */
-  start(): void
+  start(): void;
   /**
    * Stop the scheduler
    */
-  stop(): void
+  stop(): void;
   /**
    * Pause the scheduler
    */
-  pause(): void
+  pause(): void;
   /**
    * Resume the scheduler
    */
-  resume(): void
-  getRealTimeEvents(): Promise<any>
-  #private
+  resume(): void;
+  getRealTimeEvents(): Promise<any>;
+  #private;
 }
 //# sourceMappingURL=scheduler.d.ts.map

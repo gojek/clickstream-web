@@ -10,22 +10,22 @@ export default class Clickstream {
   }?: {
     event: {
       classification: {
-        instant: string[]
-      }
-      group: string
-    }
+        instant: string[];
+      };
+      group: string;
+    };
     batch: {
-      maxTimeBetweenTwoBatches: number
-      maxBatchSize: number
-    }
+      maxTimeBetweenTwoBatches: number;
+      maxBatchSize: number;
+    };
     network: {
-      url: string
-      headers: {}
-      maxRetries: number
-      timeBetweenTwoRetries: number
-      timeToResumeRetries: number
-    }
-  })
+      url: string;
+      headers: {};
+      maxRetries: number;
+      timeBetweenTwoRetries: number;
+      timeToResumeRetries: number;
+    };
+  });
   /**
    * Dipatches a new event.
    *
@@ -34,21 +34,21 @@ export default class Clickstream {
    * @param payload - JavaScript proto instance
    * @returns Promise to get the status of the event track call
    */
-  track(payload: object): Promise<any>
+  track(payload: object): Promise<any>;
   /**
    * Stops the tracking.
    *
    * Track function call is ignored, existing events are processed.
    */
-  stop(): void
+  stop(): void;
   /**
    * Resumes the tracking.
    */
-  start(): void
+  start(): void;
   /**
    * Releases all the resources used.
    */
-  destroy(): Promise<string>
-  #private
+  destroy(): Promise<string>;
+  #private;
 }
 //# sourceMappingURL=clickstream.d.ts.map
