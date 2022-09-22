@@ -7,25 +7,7 @@ export default class Clickstream {
     event,
     batch,
     network,
-  }?: {
-    event: {
-      classification: {
-        instant: string[]
-      }
-      group: string
-    }
-    batch: {
-      maxTimeBetweenTwoBatches: number
-      maxBatchSize: number
-    }
-    network: {
-      url: string
-      headers: {}
-      maxRetries: number
-      timeBetweenTwoRetries: number
-      timeToResumeRetries: number
-    }
-  })
+  }?: import("./constants/configtype").Config)
   /**
    * Dipatches a new event.
    *
