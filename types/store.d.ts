@@ -1,8 +1,8 @@
 /**
  * @typedef {object} Event - Event type used in database
  * @property {Uint8Array} data - encoded event data
- * @property {string} eventGuid - eventGuid
- * @property {string} reqGuid - reqGuid
+ * @property {string=} eventGuid - eventGuid
+ * @property {string=} reqGuid - reqGuid
  * @property {string} eventType - event type
  * @property {string} type - type
  */
@@ -61,11 +61,11 @@ export type Event = {
   /**
    * - eventGuid
    */
-  eventGuid: string
+  eventGuid?: string | undefined
   /**
    * - reqGuid
    */
-  reqGuid: string
+  reqGuid?: string | undefined
   /**
    * - event type
    */

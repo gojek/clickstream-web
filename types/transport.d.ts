@@ -13,7 +13,7 @@ export default class Transport {
    *
    * @param batch batch to send
    */
-  send(batch: import("./store.js").Event[]): void
+  send(batch: import("./store.js").Event[], retry?: boolean): void
   #private
 }
 //# sourceMappingURL=transport.d.ts.map
