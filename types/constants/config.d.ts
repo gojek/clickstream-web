@@ -23,75 +23,75 @@
  * @property {NetworkConfig} network - event configurations
  */
 /** @type {Config} } */
-export const defaultConfig: Config
+export const defaultConfig: Config;
 /**
  * - Event configuration
  */
 export type EventConfig = {
-  /**
-   * - event classification
-   */
-  classification: {
-    instant: string[]
-  }
-  /**
-   * - product group name
-   */
-  group?: string | undefined
-}
+    /**
+     * - event classification
+     */
+    classification: {
+        instant: string[];
+    };
+    /**
+     * - product group name
+     */
+    group?: string | undefined;
+};
 /**
  * - Batch configuration
  */
 export type BatchConfig = {
-  /**
-   * - Maximum wait time betweeen two batches
-   */
-  maxTimeBetweenTwoBatches?: number | undefined
-  /**
-   * - Maximum size of a batch
-   */
-  maxBatchSize?: number | undefined
-}
+    /**
+     * - Maximum wait time betweeen two batches
+     */
+    maxTimeBetweenTwoBatches?: number | undefined;
+    /**
+     * - Maximum size of a batch
+     */
+    maxBatchSize?: number | undefined;
+};
 /**
  * - Network configuration
  */
 export type NetworkConfig = {
-  /**
-   * - base url
-   */
-  url: string | URL
-  /**
-   * - request headers
-   */
-  headers: Headers
-  /**
-   * - max retries
-   */
-  maxRetries?: number | undefined
-  /**
-   * - time in seconds between two retries
-   */
-  timeBetweenTwoRetries?: number | undefined
-  /**
-   * - time in seconds to resume retries
-   */
-  timeToResumeRetries?: number | undefined
-}
+    /**
+     * - base url
+     */
+    url: string | URL;
+    /**
+     * - request headers
+     */
+    headers: Headers;
+    /**
+     * - max retries
+     */
+    maxRetries?: number | undefined;
+    /**
+     * - time in seconds between two retries
+     */
+    timeBetweenTwoRetries?: number | undefined;
+    /**
+     * - time in seconds to resume retries
+     */
+    timeToResumeRetries?: number | undefined;
+};
 /**
  * - Configuration
  */
 export type Config = {
-  /**
-   * - event configurations
-   */
-  event?: EventConfig | undefined
-  /**
-   * - event configurations
-   */
-  batch?: BatchConfig | undefined
-  /**
-   * - event configurations
-   */
-  network: NetworkConfig
-}
+    /**
+     * - event configurations
+     */
+    event?: EventConfig | undefined;
+    /**
+     * - event configurations
+     */
+    batch?: BatchConfig | undefined;
+    /**
+     * - event configurations
+     */
+    network: NetworkConfig;
+};
 //# sourceMappingURL=config.d.ts.map
