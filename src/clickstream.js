@@ -16,12 +16,17 @@ export default class Clickstream {
   #eventConfig
   #batchConfig
   #networkConfig
-  #id
   /**
    * @constructor
    * @param options Configuration options
    */
-  constructor({ event, batch, network } = defaultConfig) {
+  constructor(
+    /** @type {import("./constants/configtype").Config } */ {
+      event,
+      batch,
+      network,
+    } = defaultConfig
+  ) {
     if (!network.url) {
       throw new Error("Provide url in network config")
     }
