@@ -70,7 +70,7 @@ export default class Clickstream {
 
   #listeners() {
     this.#eventBus.on(CUSTOM_EVENT.BATCH_CREATED, (e) => {
-      this.#transport.send(e.detail.batch)
+      this.#transport.send(e.detail.batch, true)
     })
   }
 
@@ -102,7 +102,7 @@ export default class Clickstream {
         if (type === EVENT_TYPE.REALTIME) {
           this.#store.write(event)
         } else if (type === EVENT_TYPE.INSTANT) {
-          this.#scheduler.ingest(event)
+          this.#transport.send([event])
         }
 
         resolve("success")

@@ -39,8 +39,6 @@ export default class Processor {
       data: encodedEvent,
       eventType,
       type,
-      eventGuid: "",
-      reqGuid: "",
     }
 
     if (eventType === EVENT_TYPE.REALTIME) {
