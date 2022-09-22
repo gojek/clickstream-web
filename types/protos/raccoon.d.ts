@@ -1,17 +1,17 @@
 /**
- * @type Class
+ * @type {Class}
  */
 export const EventService: Class
 /**
- * @type Class
+ * @type {Class}
  */
 export const SendEventRequest: Class
 /**
- * @type Class
+ * @type {Class}
  */
 export const Timestamp: Class
 /**
- * @type Class
+ * @type {Class}
  */
 export const Event: Class
 /**

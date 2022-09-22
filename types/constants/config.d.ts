@@ -11,7 +11,7 @@
 /**
  * @typedef {object} NetworkConfig - Network configuration
  * @property {string | URL} url - base url
- * @property {object} headers - request headers
+ * @property {Headers} headers - request headers
  * @property {number=} maxRetries - max retries
  * @property {number=} timeBetweenTwoRetries - time in seconds between two retries
  * @property {number=} timeToResumeRetries - time in seconds to resume retries
@@ -63,7 +63,7 @@ export type NetworkConfig = {
   /**
    * - request headers
    */
-  headers: object
+  headers: Headers
   /**
    * - max retries
    */

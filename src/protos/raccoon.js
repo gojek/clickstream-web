@@ -16,7 +16,7 @@ const $Reader = $protobuf.Reader,
 const $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {})
 
 /**
- * @type Class
+ * @type {Class}
  */
 export const EventService = ($root.EventService = (() => {
   /**
@@ -107,7 +107,7 @@ export const EventService = ($root.EventService = (() => {
 })())
 
 /**
- * @type Class
+ * @type {Class}
  */
 export const SendEventRequest = ($root.SendEventRequest = (() => {
   /**
@@ -288,7 +288,7 @@ export const SendEventRequest = ($root.SendEventRequest = (() => {
 })())
 
 /**
- * @type Class
+ * @type {Class}
  */
 export const Timestamp = ($root.Timestamp = (() => {
   /**
@@ -443,7 +443,7 @@ export const Timestamp = ($root.Timestamp = (() => {
 })())
 
 /**
- * @type Class
+ * @type {Class}
  */
 export const Event = ($root.Event = (() => {
   /**
