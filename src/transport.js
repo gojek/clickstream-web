@@ -67,7 +67,7 @@ export default class Transport {
     }
   }
 
-  async #makeRequest(request) {
+  async #makeRequest(request, retry) {
     const headers = new Headers(this.#config.headers)
     headers.append("Content-Type", "application/proto")
 
@@ -90,6 +90,11 @@ export default class Transport {
         this.#store.remove(events)
       }
     } catch (error) {
+      if (!retry) {
+        console.error(error)
+        return
+      }
+
       const { maxRetries, timeBetweenTwoRetries, timeToResumeRetries } =
         this.#config
 
@@ -120,8 +125,8 @@ export default class Transport {
    *
    * @param batch batch to send
    */
-  send(/** @type {import("./store.js").Event[]} */ batch) {
+  send(/** @type {import("./store.js").Event[]} */ batch, retry = false) {
     const request = this.#createRequest(batch)
-    this.#makeRequest(request)
+    this.#makeRequest(request, retry)
   }
 }
