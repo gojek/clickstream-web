@@ -7,7 +7,7 @@ export default class Clickstream {
     event,
     batch,
     network,
-  }?: import("./constants/configtype").Config)
+  }?: import("./constants/config.js").Config)
   /**
    * Dipatches a new event.
    *

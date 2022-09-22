@@ -27,7 +27,7 @@ export default class Scheduler {
    * Ingest an event
    * @param event event
    */
-  ingest(event) {
+  ingest(/** @type {import("./store.js").Event} */ event) {
     this.#instantEvents.push(event)
   }
 
@@ -99,7 +99,7 @@ export default class Scheduler {
     return events.splice(0, Math.ceil(remSize / unitSize) + 1)
   }
 
-  async getRealTimeEvents() {
+  async #getRealTimeEvents() {
     if (!this.#store.isOpen) {
       return []
     }
@@ -131,7 +131,7 @@ export default class Scheduler {
       const eventsBySize = this.#splitBySize(this.#instantEvents)
       this.#batch.push(...eventsBySize)
     } else {
-      const realTimeEvents = await this.getRealTimeEvents()
+      const realTimeEvents = await this.#getRealTimeEvents()
       if (realTimeEvents.length) {
         this.#batch.push(...realTimeEvents)
       }

@@ -6,13 +6,9 @@ export default class Processor {
    * @param proto - event proto
    * @returns type and event
    */
-  process(proto: any): {
+  process(proto: object): {
     type: string
-    event: {
-      data: any
-      eventType: any
-      type: any
-    }
+    event: import("./store.js").Event
   }
   #private
 }

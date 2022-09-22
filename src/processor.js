@@ -1,7 +1,6 @@
 // @ts-check
 import { EVENT_TYPE } from "./constants/index.js"
 import Id from "./id.js"
-
 export default class Processor {
   #config
   #store
@@ -35,10 +34,13 @@ export default class Processor {
       ? `${this.#config.group}-${typeUrl}`
       : typeUrl
 
+    /** @type {import("./store.js").Event} */
     const event = {
       data: encodedEvent,
       eventType,
       type,
+      eventGuid: "",
+      reqGuid: "",
     }
 
     if (eventType === EVENT_TYPE.REALTIME) {
@@ -55,7 +57,7 @@ export default class Processor {
    * @param proto - event proto
    * @returns type and event
    */
-  process(proto) {
+  process(/** @type {object} */ proto) {
     const type = this.#type(proto)
     const event = this.#createEvent(proto, type)
     return {

@@ -21,7 +21,7 @@ export default class Clickstream {
    * @param options Configuration options
    */
   constructor(
-    /** @type {import("./constants/configtype").Config } */ {
+    /** @type {import("./constants/config.js").Config} */ {
       event,
       batch,
       network,
@@ -136,7 +136,6 @@ export default class Clickstream {
       await this.#store.delete()
       return Promise.resolve("success")
     } catch (error) {
-      console.error(error)
       return Promise.reject(error)
     }
   }

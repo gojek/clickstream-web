@@ -3,6 +3,10 @@ import { CUSTOM_EVENT, EVENT_TYPE } from "./constants/index.js"
 import Id from "./id.js"
 import { SendEventRequest, SendEventResponse, Event } from "./protos/raccoon.js"
 
+/**
+ * Gives timestamp object as google timestamp format
+ * @returns timestamp object containing seconds and nanos
+ */
 const getTimestamp = () => {
   const date = new Date()
   const seconds = Math.floor(date.getTime() / 1000)
@@ -111,7 +115,12 @@ export default class Transport {
     }
   }
 
-  send(batch) {
+  /**
+   * Send data over network to clickstream BE
+   *
+   * @param batch batch to send
+   */
+  send(/** @type {import("./store.js").Event[]} */ batch) {
     const request = this.#createRequest(batch)
     this.#makeRequest(request)
   }

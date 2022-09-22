@@ -12,7 +12,7 @@ export default class Scheduler {
    * Ingest an event
    * @param event event
    */
-  ingest(event: any): void
+  ingest(event: import("./store.js").Event): void
   /**
    * Start the scheduler
    */
@@ -29,7 +29,6 @@ export default class Scheduler {
    * Resume the scheduler
    */
   resume(): void
-  getRealTimeEvents(): Promise<any>
   #private
 }
 //# sourceMappingURL=scheduler.d.ts.map

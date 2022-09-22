@@ -11,7 +11,7 @@ export default class EventBus {
    * @param type name of the event
    * @param payload data to attach in event
    */
-  emit(type, payload) {
+  emit(/** @type {string} */ type, /** @type {object} */ payload) {
     const event = new CustomEvent(type, { detail: payload })
     this.eventTarget.dispatchEvent(event)
   }
@@ -24,7 +24,7 @@ export default class EventBus {
    * @param type name of the event
    * @param callback callback function
    */
-  on(type, callback) {
+  on(/** @type {string} */ type, callback) {
     this.eventTarget.addEventListener(type, callback)
   }
 }

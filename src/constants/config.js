@@ -1,4 +1,32 @@
-/** @type {import("./configtype").Config } */
+/**
+ * @typedef {object} EventConfig - Event configuration
+ * @property {{instant: string[]}} classification - event classification
+ * @property {string=} group - product group name
+ */
+
+/**
+ * @typedef {object} BatchConfig - Batch configuration
+ * @property {number=} maxTimeBetweenTwoBatches - Maximum wait time betweeen two batches
+ * @property {number=} maxBatchSize - Maximum size of a batch
+ */
+
+/**
+ * @typedef {object} NetworkConfig - Network configuration
+ * @property {string | URL} url - base url
+ * @property {object} headers - request headers
+ * @property {number=} maxRetries - max retries
+ * @property {number=} timeBetweenTwoRetries - time in seconds between two retries
+ * @property {number=} timeToResumeRetries - time in seconds to resume retries
+ */
+
+/**
+ * @typedef {object} Config - Configuration
+ * @property {EventConfig=} event - event configurations
+ * @property {BatchConfig=} batch - event configurations
+ * @property {NetworkConfig} network - event configurations
+ */
+
+/** @type {Config} } */
 export const defaultConfig = {
   event: {
     classification: {
