@@ -100,7 +100,7 @@ Resumes the tracking, have no effect when called with tracking on.
 clckstrm.start();
 ```
 
-#### start
+#### destroy
 
 Releases all the resources used by the Clickstream instance.
 
@@ -127,6 +127,8 @@ The constrsuctor takes an options object as parameter which has `event`, `batch`
     maxTimeBetweenTwoBatches: 10,
     // max size of batch(bytes).
     maxBatchSize: 50000,
+    // name of the database, must be unique per domain
+    dbName: 'clickstream_db',
   },
   network: {
     // Raccoon host URL

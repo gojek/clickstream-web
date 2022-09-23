@@ -41,7 +41,7 @@ export default class Clickstream {
 
     this.#tracking = true
     this.#eventBus = new EventBus()
-    this.#store = new Store({})
+    this.#store = new Store({ name: this.#batchConfig.dbName })
 
     this.#processor = new Processor({
       config: this.#eventConfig,

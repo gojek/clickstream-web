@@ -53,13 +53,17 @@ export default class Store {
         // @ts-ignore
         this.#db = event.target.result
 
-        const objectStore = this.#db.createObjectStore(STORE, {
-          keyPath: "eventGuid",
-        })
+        switch (event.oldVersion) {
+          case 0: {
+            const objectStore = this.#db.createObjectStore(STORE, {
+              keyPath: "eventGuid",
+            })
 
-        objectStore.createIndex("reqGuid", "reqGuid", { unique: false })
+            objectStore.createIndex("reqGuid", "reqGuid", { unique: false })
 
-        objectStore.createIndex("eventGuid", "eventGuid", { unique: true })
+            objectStore.createIndex("eventGuid", "eventGuid", { unique: true })
+          }
+        }
 
         this.#db.onversionchange = (event) => {
           this.#db.close()

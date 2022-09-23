@@ -8,6 +8,7 @@
  * @typedef {object} BatchConfig - Batch configuration
  * @property {number=} maxTimeBetweenTwoBatches - Maximum wait time betweeen two batches
  * @property {number=} maxBatchSize - Maximum size of a batch
+ * @property {string=} dbName - name for indexedDB
  */
 
 /**
@@ -39,6 +40,8 @@ export const defaultConfig = {
     maxTimeBetweenTwoBatches: 10,
     // max size of batch, in bytes
     maxBatchSize: 50000,
+    // name for indexedDB, must be unique per domain
+    dbName: "clickstream_db",
   },
   network: {
     url: "",
