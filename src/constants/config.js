@@ -22,8 +22,8 @@
 /**
  * @typedef {object} Config - Configuration
  * @property {EventConfig=} event - event configurations
- * @property {BatchConfig=} batch - event configurations
- * @property {NetworkConfig} network - event configurations
+ * @property {BatchConfig=} batch - batch configurations
+ * @property {NetworkConfig} network - network configurations
  * @property {object=} crypto - crypto module instance
  */
 
