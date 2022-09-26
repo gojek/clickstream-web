@@ -59,7 +59,7 @@ import { proto } from "protobufjs-package"
 
 // fill in the data as per proto definition
 const payload = proto.create({
-  label: "test-event",
+  eventName: "test-event",
   properties: {
     test: 1,
   },
@@ -81,15 +81,80 @@ document.querySelector("#some-button").addEventListener("click", () => {
 })
 ```
 
+### Dispatching a QoS0 event
+
+include the event name in the `instant` array inside `classification` property of `event` configuration while initialising clickstream.
+
+```js
+import { Clickstream } from "@gojek/clickstream-web"
+
+// import the proto from a package that contains your protos.
+import { proto } from "protobufjs-package"
+
+// fill in the data as per proto definition
+const payload = proto.create({
+  eventName: 'test-event',
+  properties: {
+    test: 1,
+  },
+})
+
+// initialise
+const clckstrm = new Clickstream({
+  event: {
+    classification: {
+      instant: ['test-event']
+    }
+  }
+  network: {
+    url: new URL("https://example.org"),
+    headers: new Headers({
+      Authorization: "Basic <secret-key>",
+    }),
+  },
+})
+
+clckstrm.track()
+```
+
 ### Usage in Node JS
 
-**Only QoS0 (instant) events** are supported in Node JS runtime.
+**Only QoS0 (instant) events** are supported in Node JS runtime. All the events are treated as QoS0 events by default as browser dependent services/APIs are leveraged for QoS1 events.
 
 You need to provide crypto module object in the constructor while initialising as it is environment specific module.
 
 #### For node version < 18
 
 A fetch polyfill like [node-fetch](https://github.com/node-fetch/node-fetch) has to be initialized globally. Check this out for [reference on how to do it](https://github.com/node-fetch/node-fetch#providing-global-access).
+
+```js
+import { Clickstream } from "@gojek/clickstream-web"
+
+// import the proto from a package that contains your protos.
+import { proto } from "protobufjs-package"
+
+// fill in the data as per proto definition
+const payload = proto.create({
+  label: "test-event",
+  properties: {
+    test: 1,
+  },
+})
+
+// initialise
+const clckstrm = new Clickstream({
+  network: {
+    url: new URL("https://example.org"),
+    headers: new Headers({
+      Authorization: "Basic <secret-key>",
+    }),
+  },
+  // make sure to pass crypto module.
+  crypto: crypto.webcrypto,
+})
+
+clckstrm.track(payload)
+```
 
 ## Methods
 
