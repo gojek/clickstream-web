@@ -1,22 +1,35 @@
 // @ts-check
 import { EVENT_TYPE } from "./constants/index.js"
+
 export default class Processor {
   #config
   #store
   #id
-  constructor({ config, store, id }) {
+  #isRealTimeEventsSupported
+  constructor({ config, store, id, isRealTimeEventsSupported }) {
     this.#config = config
     this.#store = store
     this.#id = id
+    this.#isRealTimeEventsSupported = isRealTimeEventsSupported
   }
 
   #type(proto) {
-    if (this.#config?.classification?.instant?.includes(proto.eventName)) {
+    if (!this.#isRealTimeEventsSupported) {
+      console.log(
+        "Clickstream: Treating event as QoS0 as QoS1 events are not supported"
+      )
       return EVENT_TYPE.INSTANT
     }
 
     // if the storage is not available, event is treated as instant event
     if (!this.#store.isOpen) {
+      console.log(
+        "Clickstream: Treating event as QoS0 as indexedDB is not supported in your browser"
+      )
+      return EVENT_TYPE.INSTANT
+    }
+
+    if (this.#config?.classification?.instant?.includes(proto.eventName)) {
       return EVENT_TYPE.INSTANT
     }
 
