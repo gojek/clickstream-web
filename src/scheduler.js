@@ -10,7 +10,6 @@ export default class Scheduler {
   #store
   #batch
   #lastBatch
-  #instantEvents
   constructor({ config, eventBus, store }) {
     this.#config = config
     this.#eventBus = eventBus
@@ -20,15 +19,6 @@ export default class Scheduler {
     this.#batching = false
     this.#batch = []
     this.#lastBatch = []
-    this.#instantEvents = []
-  }
-
-  /**
-   * Ingest an event
-   * @param event event
-   */
-  ingest(/** @type {import("./store.js").Event} */ event) {
-    this.#instantEvents.push(event)
   }
 
   /**
@@ -127,14 +117,9 @@ export default class Scheduler {
   }
 
   async #fill() {
-    if (this.#instantEvents.length) {
-      const eventsBySize = this.#splitBySize(this.#instantEvents)
-      this.#batch.push(...eventsBySize)
-    } else {
-      const realTimeEvents = await this.#getRealTimeEvents()
-      if (realTimeEvents.length) {
-        this.#batch.push(...realTimeEvents)
-      }
+    const realTimeEvents = await this.#getRealTimeEvents()
+    if (realTimeEvents.length) {
+      this.#batch.push(...realTimeEvents)
     }
   }
 
