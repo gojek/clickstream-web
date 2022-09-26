@@ -14,6 +14,13 @@ yarn add @gojek/clickstream-web
 
 ## Usage
 
+Two types of events can be sent using clickstream
+
+- QoS0 events - These events are `instant and fire & forget` in nature.
+- QoS1 events - These are `real time` and sent `at least once`.
+
+Every event is treated as QoS1 event by default and one can classify the QoS0 events using `classification` config.
+
 1. **Import `Clickstream` from the package.**
 
 ```js
@@ -22,7 +29,7 @@ import { Clickstream } from "@gojek/clickstream-web"
 
 2. **Initialise Clickstream**
 
-Clickstream accepts options to override the default behaviour. It supports `event`, `batch` & `network` configurations.
+Clickstream accepts options to override the default behaviour. It supports `event`, `batch`, `network` & `crypto` configurations.
 
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
@@ -68,23 +75,33 @@ const clckstrm = new Clickstream({
   },
 })
 
-// call on some event like user click.
+// call on some event such as user click.
 document.querySelector("#some-button").addEventListener("click", () => {
   clckstrm.track(payload)
 })
 ```
 
-### Methods
+### Usage in Node JS
 
-#### track
+**Only QoS0 (instant) events** are supported in Node JS runtime.
 
-Dispatches a new event. Returns a promise, which can be used to get the status of the track call, use for error handling.
+You need to provide crypto module object in the constructor while initialising as it is environment specific module.
+
+#### For node version < 18
+
+A fetch polyfill like [node-fetch](https://github.com/node-fetch/node-fetch) has to be initialized globally. Check this out for [reference on how to do it](https://github.com/node-fetch/node-fetch#providing-global-access).
+
+## Methods
+
+### track
+
+Dispatches a new event. Returns a promise, which can be used to get the status of the track call, cab be used for error handling.
 
 ```
 await clckstrm.track(payload);
 ```
 
-#### stop
+### stop
 
 Gracefully stops the tracking, new track function calls are ignored, previously tracked events will be processed.
 
@@ -92,7 +109,7 @@ Gracefully stops the tracking, new track function calls are ignored, previously 
 clckstrm.stop();
 ```
 
-#### start
+### start
 
 Resumes the tracking, have no effect when called with tracking on.
 
@@ -100,7 +117,7 @@ Resumes the tracking, have no effect when called with tracking on.
 clckstrm.start();
 ```
 
-#### start
+### destroy
 
 Releases all the resources used by the Clickstream instance.
 
@@ -108,7 +125,7 @@ Releases all the resources used by the Clickstream instance.
 await clckstrm.destroy();
 ```
 
-### Options
+## Options
 
 The constrsuctor takes an options object as parameter which has `event`, `batch` & `network` options as property.
 
@@ -140,6 +157,8 @@ The constrsuctor takes an options object as parameter which has `event`, `batch`
     // time after which retry will resume after hitting max retry count threshold (mSec)
     timeToResumeRetries: 20000,
   },
+  // crypto module instance
+  crypto: null
 }
 
 ```

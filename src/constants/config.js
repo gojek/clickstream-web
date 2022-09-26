@@ -24,7 +24,7 @@
  * @property {EventConfig=} event - event configurations
  * @property {BatchConfig=} batch - event configurations
  * @property {NetworkConfig} network - event configurations
- * @property {object=} crypto - crypto instance
+ * @property {object=} crypto - crypto module instance
  */
 
 /** @type {Config} } */

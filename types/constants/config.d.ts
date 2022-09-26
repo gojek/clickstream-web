@@ -21,7 +21,7 @@
  * @property {EventConfig=} event - event configurations
  * @property {BatchConfig=} batch - event configurations
  * @property {NetworkConfig} network - event configurations
- * @property {object=} crypto - crypto instance
+ * @property {object=} crypto - crypto module instance
  */
 /** @type {Config} } */
 export const defaultConfig: Config;
@@ -95,7 +95,7 @@ export type Config = {
      */
     network: NetworkConfig;
     /**
-     * - crypto instance
+     * - crypto module instance
      */
     crypto?: object | undefined;
 };
