@@ -119,13 +119,13 @@ clckstrm.track()
 
 ### Usage in Node JS
 
-**Only QoS0 (instant) events** are supported in Node JS runtime. All the events are treated as QoS0 events by default as browser dependent services/APIs are leveraged for QoS1 events.
+**Only QoS0 (instant) events** are supported in Node JS runtime. All the events are treated as QoS0 events by default as browser dependent services/APIs are used for QoS1 events.
 
-You need to provide crypto module object in the constructor while initialising as it is environment specific module.
+You need to provide crypto module object in the constructor while initialising as it is an environment specific module.
 
 #### For node version < 18
 
-A fetch polyfill like [node-fetch](https://github.com/node-fetch/node-fetch) has to be initialized globally. Check this out for [reference on how to do it](https://github.com/node-fetch/node-fetch#providing-global-access).
+2. A fetch polyfill like [node-fetch](https://github.com/node-fetch/node-fetch) has to be initialized globally. Check this out for [reference on how to do it](https://github.com/node-fetch/node-fetch#providing-global-access).
 
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
