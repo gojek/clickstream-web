@@ -1,6 +1,5 @@
 // @ts-check
 import { CUSTOM_EVENT, EVENT_TYPE } from "./constants/index.js"
-import Id from "./id.js"
 import { SendEventRequest, SendEventResponse, Event } from "./protos/raccoon.js"
 
 /**
@@ -23,13 +22,13 @@ export default class Transport {
   #id
   #retryCount
   #resetRetryTimeout
-  constructor({ config, eventBus, store }) {
+  constructor({ config, eventBus, store, id }) {
     this.#config = config
     this.#eventBus = eventBus
     this.#store = store
     this.#retryCount = 0
     this.#resetRetryTimeout = undefined
-    this.#id = new Id()
+    this.#id = id
   }
 
   #createRequest(batch) {

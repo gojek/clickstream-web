@@ -3,8 +3,9 @@ import Transport from "./transport.js"
 import Processor from "./processor.js"
 import Scheduler from "./scheduler.js"
 import EventBus from "./event.js"
-import { CUSTOM_EVENT, EVENT_TYPE, defaultConfig } from "./constants/index.js"
 import Store from "./store.js"
+import Id from "./id.js"
+import { CUSTOM_EVENT, EVENT_TYPE, defaultConfig } from "./constants/index.js"
 
 export default class Clickstream {
   #tracking
@@ -12,6 +13,7 @@ export default class Clickstream {
   #scheduler
   #transport
   #store
+  #id
   #eventBus
   #eventConfig
   #batchConfig
@@ -25,6 +27,7 @@ export default class Clickstream {
       event,
       batch,
       network,
+      crypto,
     } = defaultConfig
   ) {
     if (!network.url) {
@@ -42,10 +45,12 @@ export default class Clickstream {
     this.#tracking = true
     this.#eventBus = new EventBus()
     this.#store = new Store({})
+    this.#id = new Id({ crypto })
 
     this.#processor = new Processor({
       config: this.#eventConfig,
       store: this.#store,
+      id: this.#id,
     })
 
     this.#scheduler = new Scheduler({
@@ -58,6 +63,7 @@ export default class Clickstream {
       config: this.#networkConfig,
       eventBus: this.#eventBus,
       store: this.#store,
+      id: this.#id,
     })
 
     this.#init()
@@ -87,29 +93,27 @@ export default class Clickstream {
       return Promise.reject("Tracking is stopped")
     }
 
-    if (!this.#store.isOpen) {
-      try {
-        await this.#store.open()
-      } catch (error) {
-        Promise.reject(error)
-      }
-    }
+    const { type, event } = this.#processor.process(payload)
 
-    return new Promise((resolve, reject) => {
-      try {
-        const { type, event } = this.#processor.process(payload)
-
-        if (type === EVENT_TYPE.REALTIME) {
-          this.#store.write(event)
-        } else if (type === EVENT_TYPE.INSTANT) {
-          this.#transport.send([event])
+    try {
+      if (type === EVENT_TYPE.REALTIME) {
+        if (!this.#store.isOpen) {
+          try {
+            await this.#store.open()
+          } catch (error) {
+            Promise.reject(error)
+          }
         }
 
-        resolve("success")
-      } catch (error) {
-        reject(error)
+        this.#store.write(event)
+      } else if (type === EVENT_TYPE.INSTANT) {
+        this.#transport.send([event])
       }
-    })
+
+      Promise.resolve("success")
+    } catch (error) {
+      Promise.reject(error)
+    }
   }
 
   /**

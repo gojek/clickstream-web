@@ -1,7 +1,7 @@
 // @ts-check
 import { CUSTOM_EVENT, TICK_TIME } from "./constants/index.js"
 export default class Scheduler {
-  /** @type { number | undefined } */
+  /** @type { number | NodeJS.Timer | undefined } */
   #intervalId
   #waitTime
   #batching
@@ -140,7 +140,7 @@ export default class Scheduler {
 
   #run() {
     this.#clearInterval()
-    this.#intervalId = window.setInterval(() => {
+    this.#intervalId = setInterval(() => {
       if (!this.#batching) {
         return
       }

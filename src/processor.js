@@ -1,14 +1,13 @@
 // @ts-check
 import { EVENT_TYPE } from "./constants/index.js"
-import Id from "./id.js"
 export default class Processor {
   #config
   #store
   #id
-  constructor({ config, store }) {
+  constructor({ config, store, id }) {
     this.#config = config
     this.#store = store
-    this.#id = new Id()
+    this.#id = id
   }
 
   #type(proto) {

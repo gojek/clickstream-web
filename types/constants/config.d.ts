@@ -21,6 +21,7 @@
  * @property {EventConfig=} event - event configurations
  * @property {BatchConfig=} batch - event configurations
  * @property {NetworkConfig} network - event configurations
+ * @property {object=} crypto - crypto instance
  */
 /** @type {Config} } */
 export const defaultConfig: Config;
@@ -93,5 +94,9 @@ export type Config = {
      * - event configurations
      */
     network: NetworkConfig;
+    /**
+     * - crypto instance
+     */
+    crypto?: object | undefined;
 };
 //# sourceMappingURL=config.d.ts.map
