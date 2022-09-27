@@ -70,7 +70,7 @@ export default class Clickstream {
 
   #listeners() {
     this.#eventBus.on(CUSTOM_EVENT.BATCH_CREATED, (e) => {
-      this.#transport.send(e.detail.batch, true)
+      this.#transport.send(e.detail.batch, { retry: true })
     })
   }
 
