@@ -3,8 +3,21 @@ import Transport from "./transport.js"
 import Processor from "./processor.js"
 import Scheduler from "./scheduler.js"
 import EventBus from "./event.js"
-import { CUSTOM_EVENT, EVENT_TYPE, defaultConfig } from "./constants/index.js"
 import Store from "./store.js"
+import Id from "./id.js"
+import { CUSTOM_EVENT, EVENT_TYPE, defaultConfig } from "./constants/index.js"
+
+const isRealTimeEventsSupported = () => {
+  if (globalThis.indexedDB === undefined) {
+    return false
+  }
+
+  if (globalThis.EventTarget === undefined) {
+    return false
+  }
+
+  return true
+}
 
 export default class Clickstream {
   #tracking
@@ -12,10 +25,12 @@ export default class Clickstream {
   #scheduler
   #transport
   #store
+  #id
   #eventBus
   #eventConfig
   #batchConfig
   #networkConfig
+  #isRealTimeEventsSupported
   /**
    * @constructor
    * @param options Configuration options
@@ -25,6 +40,7 @@ export default class Clickstream {
       event,
       batch,
       network,
+      crypto,
     } = defaultConfig
   ) {
     if (!network.url) {
@@ -35,17 +51,27 @@ export default class Clickstream {
       throw new Error("Provide Authorization header in network config")
     }
 
+    this.#isRealTimeEventsSupported = isRealTimeEventsSupported()
+
     this.#eventConfig = Object.assign(defaultConfig.event, event)
     this.#batchConfig = Object.assign(defaultConfig.batch, batch)
     this.#networkConfig = Object.assign(defaultConfig.network, network)
 
     this.#tracking = true
-    this.#eventBus = new EventBus()
+
     this.#store = new Store({ name: this.#batchConfig.dbName })
+
+    if (this.#isRealTimeEventsSupported) {
+      this.#eventBus = new EventBus()
+    }
+
+    this.#id = new Id({ crypto })
 
     this.#processor = new Processor({
       config: this.#eventConfig,
       store: this.#store,
+      id: this.#id,
+      isRealTimeEventsSupported,
     })
 
     this.#scheduler = new Scheduler({
@@ -58,6 +84,7 @@ export default class Clickstream {
       config: this.#networkConfig,
       eventBus: this.#eventBus,
       store: this.#store,
+      id: this.#id,
     })
 
     this.#init()
@@ -69,8 +96,8 @@ export default class Clickstream {
   }
 
   #listeners() {
-    this.#eventBus.on(CUSTOM_EVENT.BATCH_CREATED, (e) => {
-      this.#transport.send(e.detail.batch, true)
+    this.#eventBus?.on(CUSTOM_EVENT.BATCH_CREATED, (e) => {
+      this.#transport.send(e.detail.batch, { retry: true })
     })
   }
 
@@ -87,7 +114,7 @@ export default class Clickstream {
       return Promise.reject("Tracking is stopped")
     }
 
-    if (!this.#store.isOpen) {
+    if (this.#isRealTimeEventsSupported && !this.#store?.isOpen) {
       try {
         await this.#store.open()
       } catch (error) {
@@ -95,21 +122,19 @@ export default class Clickstream {
       }
     }
 
-    return new Promise((resolve, reject) => {
-      try {
-        const { type, event } = this.#processor.process(payload)
+    const { type, event } = this.#processor.process(payload)
 
-        if (type === EVENT_TYPE.REALTIME) {
-          this.#store.write(event)
-        } else if (type === EVENT_TYPE.INSTANT) {
-          this.#transport.send([event])
-        }
-
-        resolve("success")
-      } catch (error) {
-        reject(error)
+    try {
+      if (type === EVENT_TYPE.REALTIME) {
+        await this.#store.write(event)
+      } else if (type === EVENT_TYPE.INSTANT) {
+        this.#transport.send([event])
       }
-    })
+
+      Promise.resolve("success")
+    } catch (error) {
+      Promise.reject(error)
+    }
   }
 
   /**

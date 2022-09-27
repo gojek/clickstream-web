@@ -3,7 +3,7 @@ export default class Clickstream {
      * @constructor
      * @param options Configuration options
      */
-    constructor({ event, batch, network, }?: import("./constants/config.js").Config);
+    constructor({ event, batch, network, crypto, }?: import("./constants/config.js").Config);
     /**
      * Dipatches a new event.
      *
@@ -12,7 +12,7 @@ export default class Clickstream {
      * @param payload - JavaScript proto instance
      * @returns Promise to get the status of the event track call
      */
-    track(payload: object): Promise<any>;
+    track(payload: object): Promise<never>;
     /**
      * Stops the tracking.
      *

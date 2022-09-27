@@ -1,7 +1,7 @@
 // @ts-check
 import { CUSTOM_EVENT, TICK_TIME } from "./constants/index.js"
 export default class Scheduler {
-  /** @type { number | undefined } */
+  /** @type { number | NodeJS.Timer | undefined } */
   #intervalId
   #waitTime
   #batching
@@ -10,7 +10,6 @@ export default class Scheduler {
   #store
   #batch
   #lastBatch
-  #instantEvents
   constructor({ config, eventBus, store }) {
     this.#config = config
     this.#eventBus = eventBus
@@ -20,15 +19,6 @@ export default class Scheduler {
     this.#batching = false
     this.#batch = []
     this.#lastBatch = []
-    this.#instantEvents = []
-  }
-
-  /**
-   * Ingest an event
-   * @param event event
-   */
-  ingest(/** @type {import("./store.js").Event} */ event) {
-    this.#instantEvents.push(event)
   }
 
   /**
@@ -79,7 +69,7 @@ export default class Scheduler {
   }
 
   #listeners() {
-    this.#eventBus.on(CUSTOM_EVENT.BATCH_FAILED, async (e) => {
+    this.#eventBus?.on(CUSTOM_EVENT.BATCH_FAILED, async (e) => {
       const events = await this.#store.readByReqGuid(e.detail.reqGuid)
       this.#eventBus.emit(CUSTOM_EVENT.BATCH_CREATED, { batch: events })
     })
@@ -127,20 +117,15 @@ export default class Scheduler {
   }
 
   async #fill() {
-    if (this.#instantEvents.length) {
-      const eventsBySize = this.#splitBySize(this.#instantEvents)
-      this.#batch.push(...eventsBySize)
-    } else {
-      const realTimeEvents = await this.#getRealTimeEvents()
-      if (realTimeEvents.length) {
-        this.#batch.push(...realTimeEvents)
-      }
+    const realTimeEvents = await this.#getRealTimeEvents()
+    if (realTimeEvents.length) {
+      this.#batch.push(...realTimeEvents)
     }
   }
 
   #run() {
     this.#clearInterval()
-    this.#intervalId = window.setInterval(() => {
+    this.#intervalId = setInterval(() => {
       if (!this.#batching) {
         return
       }

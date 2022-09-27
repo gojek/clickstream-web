@@ -23,8 +23,9 @@
 /**
  * @typedef {object} Config - Configuration
  * @property {EventConfig=} event - event configurations
- * @property {BatchConfig=} batch - event configurations
- * @property {NetworkConfig} network - event configurations
+ * @property {BatchConfig=} batch - batch configurations
+ * @property {NetworkConfig} network - network configurations
+ * @property {object=} crypto - crypto module instance
  */
 
 /** @type {Config} } */
@@ -53,4 +54,5 @@ export const defaultConfig = {
     // time after which retry will resume after hitting max retry count threshold (mSec)
     timeToResumeRetries: 20000,
   },
+  crypto: null,
 }

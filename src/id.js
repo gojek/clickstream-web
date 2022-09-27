@@ -1,5 +1,9 @@
 // @ts-check
 export default class Id {
+  #crypto
+  constructor({ crypto: cryptoObj }) {
+    this.#crypto = cryptoObj || crypto
+  }
   /**
    * Gives a unique random v4 uuid
    *
@@ -11,7 +15,7 @@ export default class Id {
       (/** @type any */ c) =>
         (
           c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+          (this.#crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
         ).toString(16)
     )
   }

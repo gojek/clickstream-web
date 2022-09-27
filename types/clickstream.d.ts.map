@@ -1,1 +1,1 @@
-{"version":3,"file":"clickstream.d.ts","sourceRoot":"","sources":["../src/clickstream.js"],"names":[],"mappings":"AAQA;IAUE;;;OAGG;IACH,yCACa,OAAO,uBAAuB,EAAE,MAAM,EAwClD;IAaD;;;;;;;OAOG;IACH,eAAuB,MAAM,gBA4B5B;IAED;;;;OAIG;IACH,aAEC;IAED;;OAEG;IACH,cAEC;IAED;;OAEG;IACH,2BAOC;;CACF"}
+{"version":3,"file":"clickstream.d.ts","sourceRoot":"","sources":["../src/clickstream.js"],"names":[],"mappings":"AAqBA;IAYE;;;OAGG;IACH,iDACa,OAAO,uBAAuB,EAAE,MAAM,EAmDlD;IAaD;;;;;;;OAOG;IACH,eAAuB,MAAM,kBA0B5B;IAED;;;;OAIG;IACH,aAEC;IAED;;OAEG;IACH,cAEC;IAED;;OAEG;IACH,2BAOC;;CACF"}

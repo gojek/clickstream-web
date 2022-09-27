@@ -5,11 +5,6 @@ export default class Scheduler {
         store: any;
     });
     /**
-     * Ingest an event
-     * @param event event
-     */
-    ingest(event: import("./store.js").Event): void;
-    /**
      * Start the scheduler
      */
     start(): void;
