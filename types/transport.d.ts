@@ -1,8 +1,9 @@
 export default class Transport {
-    constructor({ config, eventBus, store }: {
+    constructor({ config, eventBus, store, id }: {
         config: any;
         eventBus: any;
         store: any;
+        id: any;
     });
     /**
      * Send data over network to clickstream BE

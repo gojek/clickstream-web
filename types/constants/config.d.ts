@@ -19,8 +19,9 @@
 /**
  * @typedef {object} Config - Configuration
  * @property {EventConfig=} event - event configurations
- * @property {BatchConfig=} batch - event configurations
- * @property {NetworkConfig} network - event configurations
+ * @property {BatchConfig=} batch - batch configurations
+ * @property {NetworkConfig} network - network configurations
+ * @property {object=} crypto - crypto module instance
  */
 /** @type {Config} } */
 export const defaultConfig: Config;
@@ -86,12 +87,16 @@ export type Config = {
      */
     event?: EventConfig | undefined;
     /**
-     * - event configurations
+     * - batch configurations
      */
     batch?: BatchConfig | undefined;
     /**
-     * - event configurations
+     * - network configurations
      */
     network: NetworkConfig;
+    /**
+     * - crypto module instance
+     */
+    crypto?: object | undefined;
 };
 //# sourceMappingURL=config.d.ts.map
