@@ -66,7 +66,7 @@ export default class Transport {
     }
   }
 
-  async #makeRequest(request, retry) {
+  async #makeRequest(request, { retry }) {
     const headers = new Headers(this.#config.headers)
     headers.append("Content-Type", "application/proto")
 
@@ -124,8 +124,11 @@ export default class Transport {
    *
    * @param batch batch to send
    */
-  send(/** @type {import("./store.js").Event[]} */ batch, retry = false) {
+  send(
+    /** @type {import("./store.js").Event[]} */ batch,
+    { retry = false } = {}
+  ) {
     const request = this.#createRequest(batch)
-    this.#makeRequest(request, retry)
+    this.#makeRequest(request, { retry })
   }
 }
