@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/gojekfarm/clickstream-web/compare/v0.1.3...v0.2.0) (2022-09-27)
+
+### Features
+
+- add config for crypto ([e48931c](https://github.com/gojekfarm/clickstream-web/commit/e48931ca8c68ff088f73d83e9ab839a27c0dcd84))
+- add config for database ([3b700a6](https://github.com/gojekfarm/clickstream-web/commit/3b700a6ea776cb5157bb85c4942f7699a0e66044))
+- exclude QoS0 events from batching ([0f71815](https://github.com/gojekfarm/clickstream-web/commit/0f71815747f9323c7dff1266c5c8f0fddf1ecf3c))
+
 ### [0.1.3](https://github.com/gojekfarm/clickstream-web/compare/v0.1.2...v0.1.3) (2022-09-20)
 
 ### [0.1.2](https://github.com/gojekfarm/clickstream-web/compare/v0.1.1...v0.1.2) (2022-09-20)
