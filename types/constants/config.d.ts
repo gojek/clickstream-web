@@ -7,6 +7,7 @@
  * @typedef {object} BatchConfig - Batch configuration
  * @property {number=} maxTimeBetweenTwoBatches - Maximum wait time betweeen two batches
  * @property {number=} maxBatchSize - Maximum size of a batch
+ * @property {string=} dbName - name for indexedDB
  */
 /**
  * @typedef {object} NetworkConfig - Network configuration
@@ -52,6 +53,10 @@ export type BatchConfig = {
      * - Maximum size of a batch
      */
     maxBatchSize?: number | undefined;
+    /**
+     * - name for indexedDB
+     */
+    dbName?: string | undefined;
 };
 /**
  * - Network configuration

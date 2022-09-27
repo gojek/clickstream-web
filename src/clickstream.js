@@ -58,7 +58,8 @@ export default class Clickstream {
     this.#networkConfig = Object.assign(defaultConfig.network, network)
 
     this.#tracking = true
-    this.#store = new Store({})
+
+    this.#store = new Store({ name: this.#batchConfig.dbName })
 
     if (this.#isRealTimeEventsSupported) {
       this.#eventBus = new EventBus()
