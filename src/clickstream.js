@@ -12,6 +12,10 @@ const isRealTimeEventsSupported = () => {
     return false
   }
 
+  if (globalThis.EventTarget === undefined) {
+    return false
+  }
+
   return true
 }
 
@@ -54,8 +58,12 @@ export default class Clickstream {
     this.#networkConfig = Object.assign(defaultConfig.network, network)
 
     this.#tracking = true
-    this.#eventBus = new EventBus()
     this.#store = new Store({})
+
+    if (this.#isRealTimeEventsSupported) {
+      this.#eventBus = new EventBus()
+    }
+
     this.#id = new Id({ crypto })
 
     this.#processor = new Processor({
@@ -87,7 +95,7 @@ export default class Clickstream {
   }
 
   #listeners() {
-    this.#eventBus.on(CUSTOM_EVENT.BATCH_CREATED, (e) => {
+    this.#eventBus?.on(CUSTOM_EVENT.BATCH_CREATED, (e) => {
       this.#transport.send(e.detail.batch, { retry: true })
     })
   }
@@ -105,7 +113,7 @@ export default class Clickstream {
       return Promise.reject("Tracking is stopped")
     }
 
-    if (this.#isRealTimeEventsSupported && !this.#store.isOpen) {
+    if (this.#isRealTimeEventsSupported && !this.#store?.isOpen) {
       try {
         await this.#store.open()
       } catch (error) {

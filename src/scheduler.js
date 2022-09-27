@@ -69,7 +69,7 @@ export default class Scheduler {
   }
 
   #listeners() {
-    this.#eventBus.on(CUSTOM_EVENT.BATCH_FAILED, async (e) => {
+    this.#eventBus?.on(CUSTOM_EVENT.BATCH_FAILED, async (e) => {
       const events = await this.#store.readByReqGuid(e.detail.reqGuid)
       this.#eventBus.emit(CUSTOM_EVENT.BATCH_CREATED, { batch: events })
     })

@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"version":3,"file":"transport.d.ts","sourceRoot":"","sources":["../src/transport.js"],"names":[],"mappings":"AAiBA;IAOE;;;;;OAOC;IA0FD;;;;OAIG;IACH,YAAgB,OAAO,YAAY,EAAE,KAAK,EAAE,yBAG3C;;CACF"}
-=======
-{"version":3,"file":"transport.d.ts","sourceRoot":"","sources":["../src/transport.js"],"names":[],"mappings":"AAkBA;IAOE;;;;OAOC;IA0FD;;;;OAIG;IACH,YACa,OAAO,YAAY,EAAE,KAAK,EAAE;;aAKxC;;CACF"}
->>>>>>> d54d0f6815611cfbfe8db4c47bc605afd7e6eeb2
+{"version":3,"file":"transport.d.ts","sourceRoot":"","sources":["../src/transport.js"],"names":[],"mappings":"AAiBA;IAOE;;;;;OAOC;IA0FD;;;;OAIG;IACH,YACa,OAAO,YAAY,EAAE,KAAK,EAAE;;aAKxC;;CACF"}
