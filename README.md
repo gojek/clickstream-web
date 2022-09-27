@@ -14,12 +14,14 @@ yarn add @gojek/clickstream-web
 
 ## Usage
 
-Two types of events can be sent using clickstream
+Two types of events can be sent using Clickstream Web
 
 - QoS0 events - These events are `instant and fire & forget` in nature.
 - QoS1 events - These are `real time` and sent `at least once`.
 
-Every event is treated as QoS1 event by default and one can classify the QoS0 events using `classification` config.
+Every event is treated as a QoS1 event by default and one can classify the QoS0 events using `classification` config.
+
+#### Steps
 
 1. **Import `Clickstream` from the package.**
 
@@ -83,7 +85,7 @@ document.querySelector("#some-button").addEventListener("click", () => {
 
 ### Dispatching a QoS0 event
 
-include the event name in the `instant` array inside `classification` property of `event` configuration while initialising clickstream.
+Include the event name in the `instant` array inside `classification` property of `event` configuration while initialising clickstream.
 
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
@@ -101,6 +103,7 @@ const payload = proto.create({
 
 // initialise
 const clckstrm = new Clickstream({
+  // include the event name here
   event: {
     classification: {
       instant: ['test-event']
@@ -117,30 +120,19 @@ const clckstrm = new Clickstream({
 clckstrm.track()
 ```
 
-### Usage in Node JS
+### Usage in Node JS Runtimes
 
-**Only QoS0 (instant) events** are supported in Node JS runtime. All the events are treated as QoS0 events by default as browser dependent services/APIs are used for QoS1 events.
+**Only QoS0 (instant) events** are supported in Node JS runtimes. All the events are treated as QoS0 events by default as browser dependent services/APIs are used for QoS1 events.
 
-You need to provide crypto module object in the constructor while initialising as it is an environment specific module.
+#### Requirements
 
-#### For node version < 18
+- Node v14 is the minimum compatible version.
 
-2. A fetch polyfill like [node-fetch](https://github.com/node-fetch/node-fetch) has to be initialized globally. Check this out for [reference on how to do it](https://github.com/node-fetch/node-fetch#providing-global-access).
+#### Steps
+
+1. You need to provide crypto module object in the constructor while initialising as it is an environment & version specific module.
 
 ```js
-import { Clickstream } from "@gojek/clickstream-web"
-
-// import the proto from a package that contains your protos.
-import { proto } from "protobufjs-package"
-
-// fill in the data as per proto definition
-const payload = proto.create({
-  label: "test-event",
-  properties: {
-    test: 1,
-  },
-})
-
 // initialise
 const clckstrm = new Clickstream({
   network: {
@@ -149,12 +141,18 @@ const clckstrm = new Clickstream({
       Authorization: "Basic <secret-key>",
     }),
   },
-  // make sure to pass crypto module.
+  // pass crypto module.
   crypto: crypto.webcrypto,
 })
 
 clckstrm.track(payload)
 ```
+
+**Note** - For Node version 14, [web crypto](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API) is not supported natively, you can use a web crypto polyfill something similar to [this](https://www.npmjs.com/package/@peculiar/webcrypto)
+
+2. Node versions < 18 doesn't have support for [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Headers). You need to add polyfill for that to be available globally. A fetch polyfill like [node-fetch](https://github.com/node-fetch/node-fetch) can be initialized globally. Check this out for [reference on how to do it](https://github.com/node-fetch/node-fetch#providing-global-access).
+
+**Note** - This step is not required for Node version >= 18
 
 ## Methods
 
@@ -176,7 +174,7 @@ clckstrm.stop();
 
 ### start
 
-Resumes the tracking, have no effect when called with tracking on.
+Resumes the tracking, have no effect when called with tracking is not stopped.
 
 ```
 clckstrm.start();
@@ -192,7 +190,7 @@ await clckstrm.destroy();
 
 ## Options
 
-The constrsuctor takes an options object as parameter which has `event`, `batch` & `network` options as property.
+The constrsuctor takes an options object as parameter which has `event`, `batch`, `network` & `crypto` options as property.
 
 ```
 {
@@ -222,7 +220,7 @@ The constrsuctor takes an options object as parameter which has `event`, `batch`
     // time after which retry will resume after hitting max retry count threshold (mSec)
     timeToResumeRetries: 20000,
   },
-  // crypto module instance
+  // web crypto module instance
   crypto: null
 }
 
