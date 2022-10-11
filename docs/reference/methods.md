@@ -1,12 +1,8 @@
 # Methods
 
-### **track**
+## **track**
 
 Dispatches a new event.
-
-```
-await clckstrm.track(payload);
-```
 
 #### **Aurguments**
 
@@ -27,14 +23,28 @@ try {
 
 ```
 
-### **stop**
+## **stop**
 
 Gracefully stops the tracking, new track function calls are ignored, previously tracked events will be processed.
+
+#### **Aurguments**
+
+undefined
+
+#### **Returns**
+
+undefined
+
+#### **Example**
 
 ```
 clckstrm.stop();
 ```
 
+## **start**
+
+Resumes the tracking, have no effect when called with tracking is not stopped.
+
 #### **Aurguments**
 
 undefined
@@ -43,29 +53,15 @@ undefined
 
 undefined
 
-### **start**
-
-Resumes the tracking, have no effect when called with tracking is not stopped.
+#### **Example**
 
 ```
 clckstrm.start();
 ```
 
-#### **Aurguments**
-
-undefined
-
-#### **Returns**
-
-undefined
-
 ### **destroy**
 
 Releases all the resources used by the Clickstream instance.
-
-```
-await clckstrm.destroy();
-```
 
 #### **Aurguments**
 

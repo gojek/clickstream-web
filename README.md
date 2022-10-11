@@ -17,5 +17,3 @@ Clickstream Web is a Modern, Fast, and Lightweight Event Ingestion library, adhe
 ### [How To Guides](./docs/how-to-guides/index.md)
 
 ### [Reference](./docs/reference/index.md)
-
-### [Background Information](./docs/background.md)

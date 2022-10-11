@@ -2,11 +2,11 @@
 
 ## **event**
 
-### classification
+### **classification**
 
 Contains classification config
 
-#### instant
+#### **instant**
 
 Contains names of all the instant events, used to differentiate QoS0 and QoS1 events.
 
@@ -24,7 +24,7 @@ Contains names of all the instant events, used to differentiate QoS0 and QoS1 ev
 }
 ```
 
-### group
+### **group**
 
 Group name, used as prefix for event type
 
@@ -44,7 +44,7 @@ Group name, used as prefix for event type
 
 ## **batch**
 
-### maxTimeBetweenTwoBatches
+### **maxTimeBetweenTwoBatches**
 
 Max interval time between two batches(in seconds).
 
@@ -62,7 +62,7 @@ Max interval time between two batches(in seconds).
 }
 ```
 
-### maxBatchSize
+### **maxBatchSize**
 
 Max size of batch(in bytes).
 
@@ -80,7 +80,7 @@ Max size of batch(in bytes).
 }
 ```
 
-### dbName
+### **dbName**
 
 Name of the database, must be unique per domain.
 
@@ -100,7 +100,7 @@ Name of the database, must be unique per domain.
 
 ## **network**
 
-### url
+### **url**
 
 Raccoon host URL
 
@@ -118,7 +118,7 @@ Raccoon host URL
 }
 ```
 
-### headers
+### **headers**
 
 Request headers
 
@@ -138,7 +138,7 @@ Request headers
 }
 ```
 
-### maxRetries
+### **maxRetries**
 
 Max number of retries before pausing.
 
@@ -156,7 +156,7 @@ Max number of retries before pausing.
 }
 ```
 
-### timeBetweenTwoRetries
+### **timeBetweenTwoRetries**
 
 Gap between two retries (in milliseconds)
 
@@ -174,7 +174,7 @@ Gap between two retries (in milliseconds)
 }
 ```
 
-### timeToResumeRetries
+### **timeToResumeRetries**
 
 Time after which retry will resume after hitting max retry count threshold (in milliseconds)
 
