@@ -4,7 +4,7 @@
 
 Dispatches a new event.
 
-#### **Aurguments**
+#### **Arguments**
 
 payload (Object): event payload protobuf js object
 
@@ -27,7 +27,7 @@ try {
 
 Gracefully stops the tracking, new track function calls are ignored, previously tracked events will be processed.
 
-#### **Aurguments**
+#### **Arguments**
 
 undefined
 
@@ -45,7 +45,7 @@ clckstrm.stop();
 
 Resumes the tracking, have no effect when called with tracking is not stopped.
 
-#### **Aurguments**
+#### **Arguments**
 
 undefined
 
@@ -63,7 +63,7 @@ clckstrm.start();
 
 Releases all the resources used by the Clickstream instance.
 
-#### **Aurguments**
+#### **Arguments**
 
 undefined
 
@@ -75,7 +75,7 @@ undefined
 
 ```
 try {
-    const status =  await clckstrm.destroy()
+    const status = await clckstrm.destroy()
 } catch(err) {
     console.log(err)
 }

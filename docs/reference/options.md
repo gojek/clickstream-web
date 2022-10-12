@@ -10,7 +10,7 @@ Contains classification config
 
 Contains names of all the instant events, used to differentiate QoS0 and QoS1 events.
 
-**Default** - []
+**Default value** - []
 
 **Example** -
 
@@ -195,6 +195,18 @@ Time after which retry will resume after hitting max retry count threshold (in m
 ## **crypto**
 
 Web crypto module instance, used to provide different module that default or platform specific one.
+
+**Type -** Object
+
+**Default value -** null
+
+**Example -**
+
+```js
+{
+  crypto: crypto.webcrypto
+}
+```
 
 # Full list of options with default value
 

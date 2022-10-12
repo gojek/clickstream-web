@@ -20,10 +20,13 @@ yarn add @gojek/clickstream-web
 
 ## Usage
 
-1. **Import `Clickstream` from the package.**
+1. **Import SDK and proto package.**
 
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
+
+// import the proto from a package that contains your protos.
+import { proto } from "protobufjs-package"
 ```
 
 2. **Initialise Clickstream**
@@ -32,6 +35,8 @@ Clickstream accepts options to override the default behaviour. It supports `even
 
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
+
+import { proto } from "protobufjs-package"
 
 const clckstrm = new Clickstream({
   network: {
@@ -53,7 +58,6 @@ Following network options are mandatory to pass while initialising -
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
 
-// import the proto from a package that contains your protos.
 import { proto } from "protobufjs-package"
 
 // fill in the data as per proto definition
