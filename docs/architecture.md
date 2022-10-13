@@ -36,7 +36,7 @@ A batch is created if either the `maxBatchSize` threshold is reached or the wait
 
 The Egress Controller is the subsystem that handles networking.
 
-The Egress creates the request with a new req_guid as per Raccoon’s protobuf contract and sets up rest of the request object. Egress will update the req_guid for the events data in the database so that it can later query based on the req_guid to delete those events whose acknowledge has been received.
+The Egress creates the request with a new `req_guid` as per Raccoon’s protobuf contract and sets up rest of the request object. Egress will update the `req_guid` for the events data in the database so that it can later query based on the `req_guid` to delete those events whose acknowledge has been received.
 
 On response it checks for following statuses -
 Success - Acknowledge the event batch and remove all the events from database.
