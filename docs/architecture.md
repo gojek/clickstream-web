@@ -14,11 +14,13 @@ This architecture allows us to perform iterations where we can modify the Proces
 
 Event flows through various parts of the clickstream system, when the event is generated from end user it is sent to Clickstream Web SDK which procesess the event and send that to Clickstream backend service [Raccoon](https://odpf.github.io/raccoon/). Raccoon stores the events in kafka topics, these events can be consumed using any downstream application as per the use case.
 
-![Clickstream Web SDK](https://user-images.githubusercontent.com/14230239/195529355-e2afd6af-96ca-43b2-9220-9a28fbaca897.png)
+![Clickstream web SDK](https://user-images.githubusercontent.com/14230239/195533334-ed8a662d-8524-41af-9b67-57b2761d0748.png)
 
 ## High level design
 
 The SDK uses [Protocol Buffers](https://developers.google.com/protocol-buffers)(a.k.a Protobuf) as serialised structured data. Clickstream Web SDK accepts event payload data as Protobufs.
+
+![High Level Design@2x](https://user-images.githubusercontent.com/14230239/195533200-49ec9cfc-0c9d-4e90-9c2d-ff5fc620b2f4.png)
 
 ### EventProcessor
 
