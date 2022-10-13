@@ -1,3 +1,5 @@
+# Limitations
+
 ## SDK works only with HTTPS
 
 This is due to the [reason](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications#security_considerations) that WebSockets should not be used in a mixed content environment; that is, you shouldn't open a non-secure WebSocket connection from a page loaded using HTTPS or vice-versa. Most browsers now only allow secure WebSocket connections, and no longer support using them in insecure contexts.

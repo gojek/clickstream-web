@@ -10,4 +10,35 @@ The whole journey of event tracking can be modeled as Input - Process - Output M
 
 This architecture allows us to perform iterations where we can modify the Process’s internal implementation without affecting the Input and Output interface.
 
+## Event Flow
+
+Event flows through various parts of the clickstream system, when the event is generated from end user it is sent to Clickstream Web SDK which procesess the event and send that to Clickstream backend service [Raccoon](https://odpf.github.io/raccoon/). Raccoon stores the events in kafka topics, these events can be consumed using any downstream application as per the use case.
+
 ![Clickstream Web SDK](https://user-images.githubusercontent.com/14230239/195529355-e2afd6af-96ca-43b2-9220-9a28fbaca897.png)
+
+## High level design
+
+The SDK uses [Protocol Buffers](https://developers.google.com/protocol-buffers)(a.k.a Protobuf) as serialised structured data. Clickstream Web SDK accepts event payload data as Protobufs.
+
+### EventProcessor
+
+As part of the Input, once the data is received from the public API, the EventProcessor classifies an incoming event into QoS0 and QoS1 based on the configuration. After that it creates an Event object, adds unique identifiers etc. It forwards QoS0 events directly to event scheduler. QoS1 events hits the database for storage. EventProcessor caches the QoS1 events so that it can re-send the events in case of failures to meet Clickstream's at-least once guarantee. These events are stored inside the user agent’s IndexedDB database. This is the only cache layer the SDK uses to ensure least client side storage consumption.
+
+### Event Scheduler
+
+Primary job of Scheduler is to do batching of events and forward them to EgressController. It schedules events in a batch in a periodic manner based on the configurable batch timing.
+
+A batch is created if either the `maxBatchSize` threshold is reached or the wait time crosses `maxTimeBetweenTwoBatches`, and this is done periodically. Scheduler is also aware about the SDK network’s reachability and it pauses the batch creation process when the network is unreachable. Batch creation resumes once reachability re-establishes.
+
+### Egress Controller
+
+The Egress Controller is the subsystem that handles networking.
+
+The Egress creates the request with a new req_guid as per Raccoon’s protobuf contract and sets up rest of the request object. Egress will update the req_guid for the events data in the database so that it can later query based on the req_guid to delete those events whose acknowledge has been received.
+
+On response it checks for following statuses -
+Success - Acknowledge the event batch and remove all the events from database.
+
+Failure - Acknowledge the event batch and notify the event scheduler about the batch failure.
+
+Response handler notifies the event scheduler about the batch failure, on notification scheduler takes the batch events and dispatches another batch immediately to Egress Controller again.
