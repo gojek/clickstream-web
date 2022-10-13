@@ -6,6 +6,7 @@ import EventBus from "./event.js"
 import Store from "./store.js"
 import Id from "./id.js"
 import { CUSTOM_EVENT, EVENT_TYPE, defaultConfig } from "./constants/index.js"
+import Validator from "./validator.js"
 
 const isRealTimeEventsSupported = () => {
   if (globalThis.indexedDB === undefined) {
@@ -41,15 +42,9 @@ export default class Clickstream {
       batch,
       network,
       crypto,
-    } = defaultConfig
+    }
   ) {
-    if (!network.url) {
-      throw new Error("Provide url in network config")
-    }
-
-    if (!network.headers?.get("Authorization")) {
-      throw new Error("Provide Authorization header in network config")
-    }
+    new Validator().validate(event, batch, network, crypto)
 
     this.#isRealTimeEventsSupported = isRealTimeEventsSupported()
 

@@ -3,7 +3,7 @@ export default class Clickstream {
      * @constructor
      * @param options Configuration options
      */
-    constructor({ event, batch, network, crypto, }?: import("./constants/config.js").Config);
+    constructor({ event, batch, network, crypto, }: import("./constants/config.js").Config);
     /**
      * Dipatches a new event.
      *
