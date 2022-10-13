@@ -20,7 +20,7 @@ Event flows through various parts of the clickstream system, when the event is g
 
 The SDK uses [Protocol Buffers](https://developers.google.com/protocol-buffers)(a.k.a Protobuf) as serialised structured data. Clickstream Web SDK accepts event payload data as Protobufs.
 
-![High Level Design](https://user-images.githubusercontent.com/14230239/195533544-aa37a0da-d7ae-4637-8d7f-a558c58df5df.png)
+![High Level Design](https://user-images.githubusercontent.com/14230239/195533837-d22572e9-4102-4565-92b7-7d8c64f9cdd3.png)
 
 ### EventProcessor
 
