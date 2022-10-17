@@ -1,5 +1,7 @@
 # Architecture
 
+This section provide high level design and architectural decisions.
+
 ## Mile-high Architecture
 
 The whole journey of event tracking can be modeled as Input - Process - Output Model or the [IPO Model](https://en.wikipedia.org/wiki/IPO_model).

@@ -1,5 +1,7 @@
 # Methods
 
+This section provides details of all the public APIs exposed by the Clickstream Web SDK.
+
 ## **track**
 
 Dispatches a new event.
@@ -43,7 +45,7 @@ clckstrm.stop();
 
 ## **start**
 
-Resumes the tracking, have no effect when called with tracking is not stopped.
+Resumes the tracking, have no effect when tracking is on.
 
 #### **Arguments**
 

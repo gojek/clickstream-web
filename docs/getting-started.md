@@ -1,5 +1,9 @@
 # Gettting Started
 
+This section lays down the foundation & provide easy to follow steps to get started with the workings of Clickstream Web SDK.
+
+## Basic Concepts
+
 Two types of events can be sent using Clickstream Web
 
 - QoS0 events - These events are `instant and fire & forget` in nature.

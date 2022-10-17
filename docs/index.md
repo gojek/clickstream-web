@@ -6,7 +6,7 @@ Clickstream Web is a Modern, Fast, and Lightweight Event Ingestion library, adhe
 
 ### [Getting Started](https://github.com/gojekfarm/clickstream-web/blob/main/docs/getting-started.md)
 
-### [How To Guides](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/index.md)
+### [How To Guide](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/index.md)
 
 ### [Reference](https://github.com/gojekfarm/clickstream-web/blob/main/docs/reference/index.md)
 

@@ -142,11 +142,11 @@ The constrsuctor takes an options object as parameter which has `event`, `batch`
     group: ""
   },
   batch: {
-    // max interval time between two batches(sec).
+    // maximum interval time between two batches(sec).
     maxTimeBetweenTwoBatches: 10,
-    // max size of batch(bytes).
-    maxBatchSize: 50000,
-    // name of the database, must be unique per domain
+    // maximum size of batch(bytes).
+    maxBatchSize: 50_000,
+    // name of the database, must be unique per origin
     dbName: 'clickstream_db',
   },
   network: {
@@ -154,12 +154,12 @@ The constrsuctor takes an options object as parameter which has `event`, `batch`
     url: "",
     // Request headers
     headers: {},
-    // max number of retries before pausing
+    // maximum number of retries before pausing
     maxRetries: 5,
     // gap between two retries (mSec)
-    timeBetweenTwoRetries: 1000,
-    // time after which retry will resume after hitting max retry count threshold (mSec)
-    timeToResumeRetries: 20000,
+    timeBetweenTwoRetries: 1_000,
+    // time after which retry will resume after hitting maximum retry count threshold (mSec)
+    timeToResumeRetries: 20_000,
   },
   // web crypto module instance
   crypto: null
@@ -167,4 +167,32 @@ The constrsuctor takes an options object as parameter which has `event`, `batch`
 
 ```
 
-## [See Detailed Documentation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/index.md)
+## [Documentation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/index.md)
+
+### [Getting Started](https://github.com/gojekfarm/clickstream-web/blob/main/docs/getting-started.md)
+
+### [How To Guide](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/index.md)
+
+### [Reference](https://github.com/gojekfarm/clickstream-web/blob/main/docs/reference/index.md)
+
+### [Browser Compatibility](https://github.com/gojekfarm/clickstream-web/blob/main/docs/browser-compatibility.md)
+
+### [Limitation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/limitation.md)
+
+### [Architecture](https://github.com/gojekfarm/clickstream-web/blob/main/docs/architecture.md)
+
+## License
+
+```
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
