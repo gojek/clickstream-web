@@ -1,6 +1,6 @@
 # Architecture
 
-This section provide high level design and architectural decisions.
+Here we dive into the high level architecture of the SDK, explaining the event flow and major parts of the system.
 
 ## Mile-high Architecture
 

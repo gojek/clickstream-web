@@ -1,6 +1,6 @@
 # Methods
 
-This section provides details of all the public APIs exposed by the Clickstream Web SDK.
+Clickstream Web SDK exposes following public methods.
 
 ## **track**
 

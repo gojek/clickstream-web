@@ -1,6 +1,6 @@
 # Limitations
 
-This section list down all the limitation & caveats of the SDK. Limitations are mainly caused due to dependency on other technologies etc.
+We have listed all known limitations & caveats of the SDK. Most limitations are a result of the underlying web technologies or APIs being used.
 
 ## SDK works only with HTTPS
 

@@ -1,6 +1,6 @@
 # Gettting Started
 
-This section lays down the foundation & provide easy to follow steps to get started with the workings of Clickstream Web SDK.
+In this getting started guide, you'll learn how to integrate Clickstream Web in your project and send your very first event.
 
 ## Basic Concepts
 

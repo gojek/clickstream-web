@@ -1,6 +1,6 @@
 # Options
 
-This section provides details about all the configuration options avialable. This configuration can be passed while initialising Clickstream Web SDK.
+Clickstream Web SDK provides following configuration options. This configuration can be passed while initialising the SDK.
 
 ## **event**
 
@@ -30,7 +30,7 @@ Contains names of all the instant events, used to differentiate QoS0 and QoS1 ev
 
 ### **group**
 
-Group name gets prefixed with event type, used by backend to uniquely identify the firehose tables.
+Group name gets prefixed with event type, backend server uses the group name value to better identify the events when processing them further.
 
 **Type -** String
 
@@ -48,7 +48,7 @@ Group name gets prefixed with event type, used by backend to uniquely identify t
 
 ## **batch**
 
-Provide options to configure bacthing & databse functionalities.
+Provide options to configure batching & database functionalities.
 
 ### **maxTimeBetweenTwoBatches**
 
