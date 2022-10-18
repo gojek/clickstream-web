@@ -1,6 +1,6 @@
 # How to guides
 
-This section provides step by step walkthrough for a specific feature or action.
+You can refer these for step by step walkthrough of a specific feature or action.
 
 ### [Send QoS0 event](./send-qos0-event.md)
 

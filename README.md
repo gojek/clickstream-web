@@ -8,7 +8,7 @@ Clickstream Web is a Modern, Fast, and Lightweight Event Ingestion library, adhe
 - Reliable - At least once delivery, ensured
 - Highly configurable - Mold the behavior based on your business goals
 - Small & lightweight - Close to native web technologies, less dependencies
-- Node JS support - Use in Node JS runtimes without any hassle
+- Runtime Agnostic - Use in browser & Node JS runtimes seamlessly
 
 ## Installation
 

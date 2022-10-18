@@ -1,6 +1,6 @@
-# Send a QoS0 Event
+# Send a QoS1 Event
 
-An event is considered as an QoS1 event by default.
+An event is considered as an QoS1 event by default. You don't need to pass any extra cofiguration option to dispatch a QoS1 event.
 
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
