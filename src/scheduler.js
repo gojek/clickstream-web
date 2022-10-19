@@ -65,7 +65,6 @@ export default class Scheduler {
       this.stop()
       await this.#flush()
       this.#removeListeners()
-      return Promise.resolve("success")
     } catch (err) {
       return Promise.resolve(err)
     }
