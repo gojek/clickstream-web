@@ -22,7 +22,7 @@ export default class Processor {
     }
 
     // if the storage is not available, event is treated as instant event
-    if (!this.#store.isOpen) {
+    if (!this.#store.isOpen()) {
       console.log(
         "Clickstream: Treating event as QoS0 as indexedDB is not supported"
       )

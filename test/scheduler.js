@@ -31,10 +31,6 @@ test("emits the ingested event", async (t) => {
   scheduler.ingest(payload)
 
   await new Promise((resolve) => {
-    // setTimeout(() => {
-    //   t.fail()
-    //   resolve()
-    // }, 10)
     eventBus.on(CUSTOM_EVENT.BATCH_CREATED, (e) => {
       t.is(e.detail.batch, [payload])
       resolve()

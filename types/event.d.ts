@@ -18,5 +18,14 @@ export default class EventBus {
      * @param callback callback function
      */
     on(type: string, callback: any): void;
+    /**
+     * Event remover
+     *
+     * Removes to the given event on the same EventTarget
+     *
+     * @param type name of the event
+     * @param callback callback function
+     */
+    remove(type: string, callback: any): void;
 }
 //# sourceMappingURL=event.d.ts.map

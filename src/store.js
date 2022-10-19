@@ -13,10 +13,15 @@ export default class Store {
   #name
   #version
   #db
+  #isOpen
   constructor({ name = "clickstream_db", version = 1 }) {
     this.#name = name
     this.#version = version
-    this.isOpen = false
+    this.#isOpen = false
+  }
+
+  isOpen() {
+    return this.#isOpen
   }
 
   /**
@@ -45,7 +50,7 @@ export default class Store {
       request.onsuccess = (event) => {
         // @ts-ignore
         this.#db = event.target.result
-        this.isOpen = true
+        this.#isOpen = true
         resolve("success")
       }
 
@@ -67,7 +72,7 @@ export default class Store {
 
         this.#db.onversionchange = (event) => {
           this.#db.close()
-          this.isOpen = false
+          this.#isOpen = false
           console.log(
             "Clickstream: A new version of this page is ready. Please reload or close this tab!"
           )
@@ -200,7 +205,7 @@ export default class Store {
    * Deletes the database
    */
   delete() {
-    new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let request = window.indexedDB.deleteDatabase(this.#name)
 
       request.onerror = (event) => {
@@ -210,7 +215,7 @@ export default class Store {
 
       request.onsuccess = (event) => {
         this.#db = null
-        this.isOpen = false
+        this.#isOpen = false
         // @ts-ignore
         resolve(event.target.result)
       }
