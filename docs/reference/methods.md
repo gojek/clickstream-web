@@ -63,7 +63,7 @@ clckstrm.start();
 
 ### **destroy**
 
-Releases all the resources used by the Clickstream instance.
+Releases all the resources used by the Clickstream instance. Destroy makes sure all the existing events are sent to Raccoon before closing resources. Destroy has no side effects i.e. events can be dispatched after destroy call and additional step is required for that.
 
 #### **Arguments**
 
@@ -71,13 +71,13 @@ undefined
 
 #### **Returns**
 
-(Promise) - Return promise to get status of the call
+(Promise)
 
 #### **Example**
 
 ```
 try {
-    const status = await clckstrm.destroy()
+    await clckstrm.destroy()
 } catch(err) {
     console.log(err)
 }

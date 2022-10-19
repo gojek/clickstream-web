@@ -181,6 +181,10 @@ The constrsuctor takes an options object as parameter which has `event`, `batch`
 
 ### [Architecture](https://github.com/gojekfarm/clickstream-web/blob/main/docs/architecture.md)
 
+## Issues
+
+Submit your question and issues [here](https://github.com/gojekfarm/clickstream-web/issues)
+
 ## License
 
 ```
