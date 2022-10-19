@@ -18,16 +18,17 @@ payload (Object): event payload protobuf js object
 
 ```
 try {
-    const status =  await clckstrm.track(payload)
+    await clckstrm.track(payload)
 } catch(err) {
+    // handle the error
     console.log(err)
 }
 
 ```
 
-## **stop**
+## **pause**
 
-Gracefully stops the tracking, new track function calls are ignored, previously tracked events will be processed.
+Gracefully pauses the tracking, any new calls to `.track()` are ignored, previously tracked events will still be processed. Tracking can be resumed again by calling `.start()`
 
 #### **Arguments**
 
@@ -40,10 +41,10 @@ undefined
 #### **Example**
 
 ```
-clckstrm.stop();
+clckstrm.pause();
 ```
 
-## **start**
+## **resume**
 
 Resumes the tracking, have no effect when tracking is on.
 
@@ -61,9 +62,9 @@ undefined
 clckstrm.start();
 ```
 
-### **destroy**
+### **free**
 
-Releases all the resources used by the Clickstream instance. Destroy makes sure all the existing events are sent to Raccoon before closing resources. Destroy has no side effects i.e. events can be dispatched after destroy call and additional step is required for that.
+Releases all the resources used by the Clickstream instance. All the existing events are sent to Raccoon before closing resources. There are no side effects, events can be dispatched after destroy call and no additional step is required for that.
 
 #### **Arguments**
 

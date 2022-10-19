@@ -97,7 +97,7 @@ document.querySelector("#some-button").addEventListener("click", () => {
 
 ### track
 
-Dispatches a new event. Returns a promise, which can be used to get the status of the track call, cab be used for error handling.
+Dispatches a new event. Returns a promise, which can be used to get the status of the track call, can be used for error handling.
 
 ```
 await clckstrm.track(payload);
