@@ -24,7 +24,7 @@ export default class Scheduler {
      * Resume the scheduler
      */
     resume(): void;
-    destroy(): Promise<any>;
+    destroy(): Promise<never>;
     #private;
 }
 //# sourceMappingURL=scheduler.d.ts.map

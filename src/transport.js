@@ -1,5 +1,6 @@
 // @ts-check
 import { CUSTOM_EVENT, EVENT_TYPE } from "./constants/index.js"
+import { NetworkError } from "./error.js"
 import { SendEventRequest, SendEventResponse, Event } from "./protos/raccoon.js"
 
 /**
@@ -88,10 +89,9 @@ export default class Transport {
         const events = await this.#store.readByReqGuid(res.data["req_guid"])
         this.#store.remove(events)
       }
-    } catch (error) {
+    } catch (err) {
       if (!retry) {
-        console.error(error)
-        return
+        console.error(new NetworkError(err.message, { cause: err }))
       }
 
       const { maxRetries, timeBetweenTwoRetries, timeToResumeRetries } =
@@ -124,7 +124,7 @@ export default class Transport {
    *
    * @param batch batch to send
    */
-  send(
+  async send(
     /** @type {import("./store.js").Event[]} */ batch,
     { retry = false } = {}
   ) {

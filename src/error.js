@@ -1,8 +1,10 @@
 export const errorCode = {
+  CLICKSTREAM_ERROR: "clickstreamError",
   VALIDATION_ERROR: "validationError",
   DATABASE_ERROR: "databaseError",
   NETWORK_ERROR: "networkError",
-  TRACKING_STOPPED: "trackingStopped",
+  TRACKING_ERROR: "trackingError",
+  DESTROY_ERROR: "destroyError",
 }
 
 export const errorName = {
@@ -10,13 +12,15 @@ export const errorName = {
   VALIDATION_ERROR: "Validation Error",
   DATABASE_ERROR: "Database Error",
   NETWORK_ERROR: "Network Error",
+  TRACKING_ERROR: "Tracking Error",
+  DESTROY_ERROR: "Destroy Error",
 }
 
 export class ClickstreamError extends Error {
-  constructor(message, code, options) {
+  constructor(message, options) {
     super(message, options)
-    this.name = errorName.CLICKSTREAM_ERROR
-    this.code = errorCode.TRACKING_STOPPED
+    this.name = options.name || errorName.CLICKSTREAM_ERROR
+    this.code = options.code || errorCode.CLICKSTREAM_ERROR
   }
 }
 

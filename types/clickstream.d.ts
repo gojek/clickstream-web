@@ -5,28 +5,40 @@ export default class Clickstream {
      */
     constructor({ event, batch, network, crypto, }: import("./constants/config.js").Config);
     /**
-     * Dipatches a new event.
+     * Dipatches a new event asynchronously.
      *
-     * Used to dispatch an event, return a promise with status of the track call.
+     * It processes the event and registers them in the system.
+     * It doesn't take network request into account, success of the .track() should not be mean that event is sent and stored at backend.
+     *
+     * In case of failure it rejects the promise with proper error, and in that case event is not registered in the system.
      *
      * @param payload - JavaScript proto instance
-     * @returns Promise to get the status of the event track call
+     * @returns Promise
      */
     track(payload: object): Promise<never>;
     /**
-     * Stops the tracking.
+     * Pauses the tracking.
      *
-     * Track function call is ignored, existing events are processed.
+     * New .track() method calls are ignored, existing events in the system are still processed.
+     * Tracking can be resumed by calling .resume() method.
      */
-    stop(): void;
+    pause(): void;
     /**
-     * Resumes the tracking.
+     * Resumes the tracking if it is paused by calling .pause() mehtod, have no effect otherwise.
      */
-    start(): void;
+    resume(): void;
     /**
-     * Releases all the resources used.
+     * frees up all the resource used by the Clickstream instance asynchronously.
+     *
+     * clears the timeouts and intevals used.
+     * removes all the event listneres.
+     * flushes all the existing events in the system.
+     * deletes the indexedDB database in use.
+     *
+     * It has no side effect on the working oh the SDK.
+     * calling .track() method will recreate all the timeouts, interval and database for event tracking.
      */
-    destroy(): Promise<never>;
+    free(): Promise<never>;
     #private;
 }
 //# sourceMappingURL=clickstream.d.ts.map

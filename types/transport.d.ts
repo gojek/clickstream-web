@@ -12,7 +12,7 @@ export default class Transport {
      */
     send(batch: import("./store.js").Event[], { retry }?: {
         retry?: boolean;
-    }): void;
+    }): Promise<void>;
     #private;
 }
 //# sourceMappingURL=transport.d.ts.map
