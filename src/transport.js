@@ -84,7 +84,7 @@ export default class Transport {
       const uInt = new Uint8Array(resBuffer)
       const res = SendEventResponse.decode(uInt)
 
-      if (this.#store.isOpen) {
+      if (this.#store.isOpen()) {
         const events = await this.#store.readByReqGuid(res.data["req_guid"])
         this.#store.remove(events)
       }

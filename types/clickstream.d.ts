@@ -26,7 +26,7 @@ export default class Clickstream {
     /**
      * Releases all the resources used.
      */
-    destroy(): Promise<string>;
+    destroy(): Promise<never>;
     #private;
 }
 //# sourceMappingURL=clickstream.d.ts.map

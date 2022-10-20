@@ -112,7 +112,11 @@ export default class Clickstream {
       )
     }
 
-    if (this.#isRealTimeEventsSupported && !this.#store?.isOpen) {
+    if (this.#isRealTimeEventsSupported && !this.#scheduler.isRunning()) {
+      this.#scheduler.start()
+    }
+
+    if (this.#isRealTimeEventsSupported && !this.#store?.isOpen()) {
       try {
         await this.#store.open()
       } catch (error) {
@@ -158,8 +162,8 @@ export default class Clickstream {
    */
   async destroy() {
     try {
+      await this.#scheduler.destroy()
       await this.#store.delete()
-      return Promise.resolve("success")
     } catch (error) {
       return Promise.reject(error)
     }

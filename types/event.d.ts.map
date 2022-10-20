@@ -1,1 +1,1 @@
-{"version":3,"file":"event.d.ts","sourceRoot":"","sources":["../src/event.js"],"names":[],"mappings":"AACA;IAEI,yBAAoC;IAEtC;;;;;;;OAOG;IACH,WAAgB,MAAM,WAAsB,MAAM,QAGjD;IAED;;;;;;;OAOG;IACH,SAAc,MAAM,uBAEnB;CACF"}
+{"version":3,"file":"event.d.ts","sourceRoot":"","sources":["../src/event.js"],"names":[],"mappings":"AACA;IAEI,yBAAoC;IAEtC;;;;;;;OAOG;IACH,WAAgB,MAAM,WAAsB,MAAM,QAGjD;IAED;;;;;;;OAOG;IACH,SAAc,MAAM,uBAEnB;IAED;;;;;;;OAOG;IACH,aAAkB,MAAM,uBAEvB;CACF"}

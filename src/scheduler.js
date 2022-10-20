@@ -22,6 +22,13 @@ export default class Scheduler {
   }
 
   /**
+   * Return if the sceduler is running or not
+   */
+  isRunning() {
+    return this.#batching
+  }
+
+  /**
    * Start the scheduler
    */
   start() {
@@ -35,6 +42,8 @@ export default class Scheduler {
    */
   stop() {
     this.#clearInterval()
+    this.#waitTime = 0
+    this.#batching = false
   }
 
   /**
@@ -49,6 +58,34 @@ export default class Scheduler {
    */
   resume() {
     this.#batching = true
+  }
+
+  async destroy() {
+    try {
+      this.stop()
+      await this.#flush()
+      this.#removeListeners()
+    } catch (err) {
+      return Promise.resolve(err)
+    }
+  }
+
+  /**
+   * Flushes all the events in store
+   */
+  async #flush() {
+    let events = await this.#store.read()
+
+    // filter out existing events in batch and last batch
+    events = events.filter((event) => {
+      return ![...this.#batch, ...this.#lastBatch].some((data) => {
+        return data.eventGuid === event.eventGuid
+      })
+    })
+
+    this.#batch.push(...events)
+
+    this.#emit()
   }
 
   #clearInterval() {
@@ -75,6 +112,10 @@ export default class Scheduler {
     })
   }
 
+  #removeListeners() {
+    this.#eventBus?.remvove(CUSTOM_EVENT.BATCH_FAILED)
+  }
+
   #batchSize(batch) {
     return batch.reduce((prev, curr) => {
       return prev + new Blob(curr?.data).size
@@ -90,7 +131,7 @@ export default class Scheduler {
   }
 
   async #getRealTimeEvents() {
-    if (!this.#store.isOpen) {
+    if (!this.#store.isOpen()) {
       return []
     }
     try {

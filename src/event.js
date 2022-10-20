@@ -27,4 +27,16 @@ export default class EventBus {
   on(/** @type {string} */ type, callback) {
     this.eventTarget.addEventListener(type, callback)
   }
+
+  /**
+   * Event remover
+   *
+   * Removes to the given event on the same EventTarget
+   *
+   * @param type name of the event
+   * @param callback callback function
+   */
+  remove(/** @type {string} */ type, callback) {
+    this.eventTarget.removeEventListener(type, callback)
+  }
 }
