@@ -7,6 +7,7 @@ import Store from "./store.js"
 import Id from "./id.js"
 import { CUSTOM_EVENT, EVENT_TYPE, defaultConfig } from "./constants/index.js"
 import Validator from "./validator.js"
+import { ClickstreamError, DatabaseError, errorCode } from "./error.js"
 
 const isRealTimeEventsSupported = () => {
   if (globalThis.indexedDB === undefined) {
@@ -106,14 +107,18 @@ export default class Clickstream {
    */
   async track(/** @type {object} */ payload) {
     if (!this.#tracking) {
-      return Promise.reject("Tracking is stopped")
+      return Promise.reject(
+        new ClickstreamError("Tracking is stopped", errorCode.TRACKING_STOPPED)
+      )
     }
 
     if (this.#isRealTimeEventsSupported && !this.#store?.isOpen) {
       try {
         await this.#store.open()
       } catch (error) {
-        Promise.reject(error)
+        return Promise.reject(
+          new DatabaseError(error.message, { cause: error })
+        )
       }
     }
 
@@ -125,10 +130,10 @@ export default class Clickstream {
       } else if (type === EVENT_TYPE.INSTANT) {
         this.#transport.send([event])
       }
-
-      Promise.resolve("success")
     } catch (error) {
-      Promise.reject(error)
+      return Promise.reject(
+        new ClickstreamError(error.message, { cause: error })
+      )
     }
   }
 
