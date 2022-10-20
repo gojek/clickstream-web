@@ -182,13 +182,13 @@ export default class Clickstream {
    */
   async free() {
     try {
-      await this.#scheduler.destroy()
+      await this.#scheduler.free()
       await this.#store.delete()
     } catch (error) {
       return Promise.reject(
         new ClickstreamError(error.message, {
-          name: errorName.DESTROY_ERROR,
-          code: errorCode.DESTROY_ERROR,
+          name: errorName.CLEANUP_ERROR,
+          code: errorCode.CLEANUP_ERROR,
         })
       )
     }

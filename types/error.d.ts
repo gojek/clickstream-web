@@ -4,7 +4,7 @@ export namespace errorCode {
     const DATABASE_ERROR: string;
     const NETWORK_ERROR: string;
     const TRACKING_ERROR: string;
-    const DESTROY_ERROR: string;
+    const CLEANUP_ERROR: string;
 }
 export namespace errorName {
     const CLICKSTREAM_ERROR_1: string;
@@ -17,8 +17,8 @@ export namespace errorName {
     export { NETWORK_ERROR_1 as NETWORK_ERROR };
     const TRACKING_ERROR_1: string;
     export { TRACKING_ERROR_1 as TRACKING_ERROR };
-    const DESTROY_ERROR_1: string;
-    export { DESTROY_ERROR_1 as DESTROY_ERROR };
+    const CLEANUP_ERROR_1: string;
+    export { CLEANUP_ERROR_1 as CLEANUP_ERROR };
 }
 export class ClickstreamError extends Error {
     constructor(message: any, options: any);

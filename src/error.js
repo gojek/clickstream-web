@@ -4,7 +4,7 @@ export const errorCode = {
   DATABASE_ERROR: "databaseError",
   NETWORK_ERROR: "networkError",
   TRACKING_ERROR: "trackingError",
-  DESTROY_ERROR: "destroyError",
+  CLEANUP_ERROR: "cleanupError",
 }
 
 export const errorName = {
@@ -13,7 +13,7 @@ export const errorName = {
   DATABASE_ERROR: "Database Error",
   NETWORK_ERROR: "Network Error",
   TRACKING_ERROR: "Tracking Error",
-  DESTROY_ERROR: "Destroy Error",
+  CLEANUP_ERROR: "Cleanup Error",
 }
 
 export class ClickstreamError extends Error {

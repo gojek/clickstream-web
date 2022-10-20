@@ -60,7 +60,7 @@ export default class Scheduler {
     this.#batching = true
   }
 
-  async destroy() {
+  async free() {
     try {
       this.stop()
       await this.#flush()
