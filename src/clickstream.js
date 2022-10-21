@@ -103,12 +103,12 @@ export default class Clickstream {
   }
 
   /**
-   * Dipatches a new event asynchronously.
+   * Dispatches a new event asynchronously.
    *
    * It processes the event and registers them in the system.
-   * It doesn't take network request into account, success of the .track() should not be mean that event is sent and stored at backend.
+   * It doesn't take network request into account, success of the .track() doesn't mean that event is sent and stored at backend.
    *
-   * In case of failure it rejects the promise with proper error, and in that case event is not registered in the system.
+   * In case of failure it rejects the promise with error, and in that case event is not registered in the system.
    *
    * @param payload - JavaScript proto instance
    * @returns Promise
@@ -163,7 +163,7 @@ export default class Clickstream {
   }
 
   /**
-   * Resumes the tracking if it is paused by calling .pause() mehtod, have no effect otherwise.
+   * Resumes the tracking if it is paused by calling .pause() method, have no effect otherwise.
    */
   resume() {
     this.#tracking = true
@@ -172,13 +172,13 @@ export default class Clickstream {
   /**
    * frees up all the resource used by the Clickstream instance asynchronously.
    *
-   * clears the timeouts and intevals used.
-   * removes all the event listneres.
+   * clears the timeouts and intervals used.
+   * removes all the event listeners.
    * flushes all the existing events in the system.
    * deletes the indexedDB database in use.
    *
    * It has no side effect on the working oh the SDK.
-   * calling .track() method will recreate all the timeouts, interval and database for event tracking.
+   * calling .track() method again will re-create all the timeouts, interval and database for event tracking.
    */
   async free() {
     try {
