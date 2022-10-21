@@ -8,12 +8,12 @@
 
 ## Steps
 
-1. Provide web crypto module object in the constructor while initialising as it is an environment & version specific module.
+1. Provide web crypto module object in the constructor while initializing as it is an environment & version specific module.
 
 ```js
 import crypto from "crypto"
 
-// initialise
+// initialize
 const clckstrm = new Clickstream({
   network: {
     url: new URL("https://example.org"),

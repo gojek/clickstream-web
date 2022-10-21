@@ -40,9 +40,9 @@ import { Clickstream } from "@gojek/clickstream-web"
 import { proto } from "protobufjs-package"
 ```
 
-2. **Initialise Clickstream**
+2. **Initialize Clickstream**
 
-Clickstream accepts options to override the default behaviour. It supports `event`, `batch`, `network` & `crypto` configurations.
+Clickstream accepts options to override the default behavior. It supports `event`, `batch`, `network` & `crypto` configurations.
 
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
@@ -77,7 +77,7 @@ const payload = proto.create({
   },
 })
 
-// initialise
+// initialize
 const clckstrm = new Clickstream({
   network: {
     url: new URL("https://example.org"),
@@ -89,7 +89,13 @@ const clckstrm = new Clickstream({
 
 // call on some event such as user click.
 document.querySelector("#some-button").addEventListener("click", () => {
-  clckstrm.track(payload)
+  try {
+    await clckstrm.track(payload)
+  } catch(err) {
+    // handle error
+    console.log(err)
+  }
+
 })
 ```
 
@@ -97,39 +103,61 @@ document.querySelector("#some-button").addEventListener("click", () => {
 
 ### track
 
-Dispatches a new event. Returns a promise, which can be used to get the status of the track call, can be used for error handling.
+Dispatches a new event asynchronously. Processes the event and registers them in the system.
+It doesn't take network request into account, success of the .track() should not mean that event is sent and stored at backend.
+In case of failure it rejects the promise with proper error, and in that case event is not registered in the system.
+Errors can be of different type, represented by the [error codes](https://github.com/gojekfarm/clickstream-web/blob/main/src/error.js).
 
 ```
-await clckstrm.track(payload);
-```
-
-### stop
-
-Gracefully stops the tracking, new track function calls are ignored, previously tracked events will be processed.
-
-```
-clckstrm.stop();
-```
-
-### start
-
-Resumes the tracking, have no effect when called with tracking is not stopped.
+try {
+  await clckstrm.track(payload);
+} catch(err) {
+  // handle error
+  console.log(err)
+}
 
 ```
-clckstrm.start();
+
+### pause
+
+Pauses the tracking. New `.track()` method calls are ignored, existing events in the system are still processed.
+Tracking can be resumed by calling `.resume()` method.
+
+```
+clckstrm.pause();
 ```
 
-### destroy
+### resume
 
-Releases all the resources used by the Clickstream instance.
+Resumes the tracking if it is paused by calling `.pause()` method, has no effect otherwise.
 
 ```
-await clckstrm.destroy();
+clckstrm.resume();
+```
+
+### free
+
+Frees up all the resource used by the Clickstream instance asynchronously.
+Clears the timeouts and intervals used & removes all the event listeners.
+Flushes all the existing events in the system before deleting the indexedDB database in use.
+
+It has no side effect on the working oh the SDK, calling .track() method will recreate all the timeouts, interval and database for event tracking.
+
+Returns errors with proper message and code on failure.
+
+```
+try {
+  await clckstrm.free();
+} catch(err) {
+  // handle error
+  console.log(err)
+}
+
 ```
 
 ## Options
 
-The constrsuctor takes an options object as parameter which has `event`, `batch`, `network` & `crypto` options as property.
+The constructor takes an options object as parameter which has `event`, `batch`, `network` & `crypto` options as property.
 
 ```
 {

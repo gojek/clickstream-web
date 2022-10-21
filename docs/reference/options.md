@@ -1,6 +1,6 @@
 # Options
 
-Clickstream Web SDK provides following configuration options. This configuration can be passed while initialising the SDK.
+Clickstream Web SDK provides following configuration options. This configuration can be passed while initializing the SDK.
 
 ## **event**
 
@@ -202,7 +202,7 @@ Time after which retry will resume after hitting maximum retry count threshold (
 
 ## **crypto**
 
-Web crypto module instance, which is different for browser and node runtimes, you would need to provide node’s web crypto module during initialisation if you are using the SDK in node runtimes.
+Web crypto module instance, which is different for browser and node runtimes, you would need to provide node’s web crypto module during initialization if you are using the SDK in node runtimes.
 
 **Type -** Object
 

@@ -1,4 +1,4 @@
-# Gettting Started
+# Getting Started
 
 In this getting started guide, you'll learn how to integrate Clickstream Web in your project and send your very first event.
 
@@ -33,9 +33,9 @@ import { Clickstream } from "@gojek/clickstream-web"
 import { proto } from "protobufjs-package"
 ```
 
-2. **Initialise Clickstream**
+2. **Initialize Clickstream**
 
-Clickstream accepts options to override the default behaviour. It supports `event`, `batch`, `network` & `crypto` configurations.
+Clickstream accepts options to override the default behavior. It supports `event`, `batch`, `network` & `crypto` configurations.
 
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
@@ -52,7 +52,7 @@ const clckstrm = new Clickstream({
 })
 ```
 
-Following network options are mandatory to pass while initialising -
+Following network options are mandatory to pass while initializing -
 
 - `url` - [Raccoon](https://odpf.github.io/raccoon/) host url, must be either a string or instance of [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL).
 - `headers` - Request headers, must be instance of [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Headers).
@@ -72,7 +72,7 @@ const payload = proto.create({
   },
 })
 
-// initialise
+// initialize
 const clckstrm = new Clickstream({
   network: {
     url: new URL("https://example.org"),

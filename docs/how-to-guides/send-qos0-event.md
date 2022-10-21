@@ -1,6 +1,6 @@
 # Send a QoS0 Event
 
-To send an event as a QoS0 event, include the event name in the `instant` array inside `classification` property of `event` configuration option while initialising clickstream.
+To send an event as a QoS0 event, include the event name in the `instant` array inside `classification` property of `event` configuration option while initializing clickstream.
 
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
@@ -16,7 +16,7 @@ const payload = proto.create({
   },
 })
 
-// initialise
+// initialize
 const clckstrm = new Clickstream({
   // include the event name here
   event: {
