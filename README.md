@@ -108,19 +108,18 @@ It doesn't take network request into account, success of the .track() doesn't th
 In case of failure it rejects the promise with error, and in that case event is not registered in the system.
 Errors can be of different type, represented by the [error codes](https://github.com/gojekfarm/clickstream-web/blob/main/src/error.js).
 
-```
+```js
 try {
-  await clckstrm.track(payload);
-} catch(err) {
+  await clckstrm.track(payload)
+} catch (err) {
   // handle error
-  if(err.code === 'trackingError') {
+  if (err.code === "trackingError") {
     clckstrm.resume()
   } else {
     console.log(err.message)
   }
   console.log(err)
 }
-
 ```
 
 ### pause
@@ -128,16 +127,16 @@ try {
 Pauses the tracking. New `.track()` method calls are ignored, existing events in the system are still processed.
 Tracking can be resumed by calling `.resume()` method.
 
-```
-clckstrm.pause();
+```js
+clckstrm.pause()
 ```
 
 ### resume
 
 Resumes the tracking if it is paused by calling `.pause()` method, has no effect otherwise.
 
-```
-clckstrm.resume();
+```js
+clckstrm.resume()
 ```
 
 ### free

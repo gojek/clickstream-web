@@ -2,6 +2,8 @@
 
 This section contains all the methods and options available.
 
-### [Methods](./methods.md)
+### [Methods](https://github.com/gojekfarm/clickstream-web/blob/main/docs/reference/methods.md)
 
-### [Options](./options.md)
+### [Options](https://github.com/gojekfarm/clickstream-web/blob/main/docs/reference/options.md)
+
+### [Errors](https://github.com/gojekfarm/clickstream-web/blob/main/docs/reference/errors.md)

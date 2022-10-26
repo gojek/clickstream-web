@@ -19,14 +19,13 @@ payload (Object): event payload protobuf js object
 
 #### **Example**
 
-```
+```js
 try {
-    await clckstrm.track(payload)
-} catch(err) {
-    // handle the error
-    console.log(err)
+  await clckstrm.track(payload)
+} catch (err) {
+  // handle the error
+  console.log(err)
 }
-
 ```
 
 ## **pause**
@@ -44,8 +43,8 @@ undefined
 
 #### **Example**
 
-```
-clckstrm.pause();
+```js
+clckstrm.pause()
 ```
 
 ## **resume**
@@ -62,8 +61,8 @@ undefined
 
 #### **Example**
 
-```
-clckstrm.resume();
+```js
+clckstrm.resume()
 ```
 
 ### **free**
@@ -88,12 +87,11 @@ undefined
 
 #### **Example**
 
-```
+```js
 try {
-    await clckstrm.free()
-} catch(err) {
-    // handle error
-    console.log(err)
+  await clckstrm.free()
+} catch (err) {
+  // handle error
+  console.log(err)
 }
-
 ```
