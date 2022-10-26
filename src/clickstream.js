@@ -7,6 +7,12 @@ import Store from "./store.js"
 import Id from "./id.js"
 import { CUSTOM_EVENT, EVENT_TYPE, defaultConfig } from "./constants/index.js"
 import Validator from "./validator.js"
+import {
+  ClickstreamError,
+  DatabaseError,
+  ErrorCodes,
+  ErrorNames,
+} from "./error.js"
 
 const isRealTimeEventsSupported = () => {
   if (globalThis.indexedDB === undefined) {
@@ -97,23 +103,37 @@ export default class Clickstream {
   }
 
   /**
-   * Dipatches a new event.
+   * Dispatches a new event asynchronously.
    *
-   * Used to dispatch an event, return a promise with status of the track call.
+   * It processes the event and registers them in the system.
+   * It doesn't take network request into account, success of the .track() doesn't mean that event is sent and stored at backend.
+   *
+   * In case of failure it rejects the promise with error, and in that case event is not registered in the system.
    *
    * @param payload - JavaScript proto instance
-   * @returns Promise to get the status of the event track call
+   * @returns Promise
    */
   async track(/** @type {object} */ payload) {
     if (!this.#tracking) {
-      return Promise.reject("Tracking is stopped")
+      return Promise.reject(
+        new ClickstreamError(
+          "Tracking is paused, call .resume() method to resume tracking",
+          { code: ErrorCodes.TRACKING_ERROR }
+        )
+      )
     }
 
-    if (this.#isRealTimeEventsSupported && !this.#store?.isOpen) {
+    if (this.#isRealTimeEventsSupported && !this.#scheduler.isRunning()) {
+      this.#scheduler.start()
+    }
+
+    if (this.#isRealTimeEventsSupported && !this.#store?.isOpen()) {
       try {
         await this.#store.open()
       } catch (error) {
-        Promise.reject(error)
+        return Promise.reject(
+          new DatabaseError(error.message, { cause: error })
+        )
       }
     }
 
@@ -125,38 +145,52 @@ export default class Clickstream {
       } else if (type === EVENT_TYPE.INSTANT) {
         this.#transport.send([event])
       }
-
-      Promise.resolve("success")
     } catch (error) {
-      Promise.reject(error)
+      return Promise.reject(
+        new ClickstreamError(error.message, { cause: error })
+      )
     }
   }
 
   /**
-   * Stops the tracking.
+   * Pauses the tracking.
    *
-   * Track function call is ignored, existing events are processed.
+   * New .track() method calls are ignored, existing events in the system are still processed.
+   * Tracking can be resumed by calling .resume() method.
    */
-  stop() {
+  pause() {
     this.#tracking = false
   }
 
   /**
-   * Resumes the tracking.
+   * Resumes the tracking if it is paused by calling .pause() method, have no effect otherwise.
    */
-  start() {
+  resume() {
     this.#tracking = true
   }
 
   /**
-   * Releases all the resources used.
+   * frees up all the resource used by the Clickstream instance asynchronously.
+   *
+   * clears the timeouts and intervals used.
+   * removes all the event listeners.
+   * flushes all the existing events in the system.
+   * deletes the indexedDB database in use.
+   *
+   * It has no side effect on the working oh the SDK.
+   * calling .track() method again will re-create all the timeouts, interval and database for event tracking.
    */
-  async destroy() {
+  async free() {
     try {
+      await this.#scheduler.free()
       await this.#store.delete()
-      return Promise.resolve("success")
     } catch (error) {
-      return Promise.reject(error)
+      return Promise.reject(
+        new ClickstreamError(error.message, {
+          name: ErrorNames.CLEANUP_ERROR,
+          code: ErrorCodes.CLEANUP_ERROR,
+        })
+      )
     }
   }
 }

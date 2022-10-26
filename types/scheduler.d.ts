@@ -5,6 +5,10 @@ export default class Scheduler {
         store: any;
     });
     /**
+     * Return if the sceduler is running or not
+     */
+    isRunning(): boolean;
+    /**
      * Start the scheduler
      */
     start(): void;
@@ -20,6 +24,7 @@ export default class Scheduler {
      * Resume the scheduler
      */
     resume(): void;
+    free(): Promise<never>;
     #private;
 }
 //# sourceMappingURL=scheduler.d.ts.map

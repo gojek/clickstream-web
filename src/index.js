@@ -1,3 +1,5 @@
 import Clickstream from "./clickstream.js"
 
-export { Clickstream }
+import { ErrorCodes } from "./error.js"
+
+export { Clickstream, ErrorCodes }

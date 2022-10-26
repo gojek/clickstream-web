@@ -11,7 +11,7 @@ export default class Store {
         name?: string;
         version?: number;
     });
-    isOpen: boolean;
+    isOpen(): boolean;
     /**
      * Open a new database connection
      * @returns Returns status
@@ -50,7 +50,7 @@ export default class Store {
     /**
      * Deletes the database
      */
-    delete(): void;
+    delete(): Promise<any>;
     #private;
 }
 /**
