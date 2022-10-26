@@ -22,7 +22,7 @@ Here is the list of all types of error with error codes that occurs through life
 ## Example
 
 Import the `ErrorCodes` variable from the SDK. Here we wrap `.track()` call in a `try...catch` block in order to catch the error.
-We check if `err.code` is `ErrorCodes.TRACKING_ERROR` and resume the tracking if it wes stopped earlier otherwise we just log the `err.message` and `err.cause` to get more details.
+We check if `err.code` is `ErrorCodes.TRACKING_ERROR` and resume the tracking if it was stopped earlier otherwise we just log the `err.message` and `err.cause` to get more details.
 
 ```js
 import { ErrorCodes } from "@gojek/clickstream-web"
