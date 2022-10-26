@@ -2,6 +2,14 @@
 
 Clickstream Web is a Modern, Fast, and Lightweight Event Ingestion library, adhering to the philosophy and workings of Clickstream. Clickstream is event agnostic and real-time in nature. Web applications can maintain a long-running connection to send data in real-time using Clickstream.
 
+## Features
+
+- Fast - Much faster than other third-party analytics solutions
+- Reliable - At least once delivery, ensured
+- Highly configurable - Mold the behavior based on your business goals
+- Small & lightweight - Close to native web technologies, less dependencies
+- Runtime Agnostic - Use in browser & Node JS runtimes seamlessly
+
 ## Installation
 
 ```sh
@@ -23,15 +31,18 @@ Every event is treated as a QoS1 event by default and one can classify the QoS0 
 
 #### Steps
 
-1. **Import `Clickstream` from the package.**
+1. **Import SDK and proto package**
 
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
+
+// import the proto from a package that contains your protos.
+import { proto } from "protobufjs-package"
 ```
 
-2. **Initialise Clickstream**
+2. **Initialize Clickstream**
 
-Clickstream accepts options to override the default behaviour. It supports `event`, `batch`, `network` & `crypto` configurations.
+Clickstream accepts options to override the default behavior. It supports `event`, `batch`, `network` & `crypto` configurations.
 
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
@@ -56,7 +67,6 @@ Following network options are mandatory to pass while initialising -
 ```js
 import { Clickstream } from "@gojek/clickstream-web"
 
-// import the proto from a package that contains your protos.
 import { proto } from "protobufjs-package"
 
 // fill in the data as per proto definition
@@ -67,7 +77,7 @@ const payload = proto.create({
   },
 })
 
-// initialise
+// initialize
 const clckstrm = new Clickstream({
   network: {
     url: new URL("https://example.org"),
@@ -79,118 +89,74 @@ const clckstrm = new Clickstream({
 
 // call on some event such as user click.
 document.querySelector("#some-button").addEventListener("click", () => {
-  clckstrm.track(payload)
-})
-```
-
-### Dispatching a QoS0 event
-
-Include the event name in the `instant` array inside `classification` property of `event` configuration while initialising clickstream.
-
-```js
-import { Clickstream } from "@gojek/clickstream-web"
-
-// import the proto from a package that contains your protos.
-import { proto } from "protobufjs-package"
-
-// fill in the data as per proto definition
-const payload = proto.create({
-  eventName: 'test-event',
-  properties: {
-    test: 1,
-  },
-})
-
-// initialise
-const clckstrm = new Clickstream({
-  // include the event name here
-  event: {
-    classification: {
-      instant: ['test-event']
-    }
+  try {
+    await clckstrm.track(payload)
+  } catch(err) {
+    // handle error
+    console.log(err)
   }
-  network: {
-    url: new URL("https://example.org"),
-    headers: new Headers({
-      Authorization: "Basic <secret-key>",
-    }),
-  },
+
 })
-
-clckstrm.track()
 ```
-
-### Usage in Node JS Runtimes
-
-**Only QoS0 (instant) events** are supported in Node JS runtimes. All the events are treated as QoS0 events by default as browser dependent services/APIs are used for QoS1 events.
-
-#### Requirements
-
-- Node v14 is the minimum compatible version.
-
-#### Steps
-
-1. You need to provide crypto module object in the constructor while initialising as it is an environment & version specific module.
-
-```js
-// initialise
-const clckstrm = new Clickstream({
-  network: {
-    url: new URL("https://example.org"),
-    headers: new Headers({
-      Authorization: "Basic <secret-key>",
-    }),
-  },
-  // pass crypto module.
-  crypto: crypto.webcrypto,
-})
-
-clckstrm.track(payload)
-```
-
-**Note** - For Node version 14, [web crypto](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API) is not supported natively, you can use a web crypto polyfill something similar to [this](https://www.npmjs.com/package/@peculiar/webcrypto)
-
-2. Node versions < 18 doesn't have support for [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Headers). You need to add polyfill for that to be available globally. A fetch polyfill like [node-fetch](https://github.com/node-fetch/node-fetch) can be initialized globally. Check this out for [reference on how to do it](https://github.com/node-fetch/node-fetch#providing-global-access).
-
-**Note** - This step is not required for Node version >= 18
 
 ## Methods
 
 ### track
 
-Dispatches a new event. Returns a promise, which can be used to get the status of the track call, cab be used for error handling.
+Dispatches a new event asynchronously. Processes the event and registers them in the system.
+It doesn't take network request into account, success of the .track() doesn't that event is sent and stored at backend.
+In case of failure it rejects the promise with error, and in that case event is not registered in the system.
+Errors can be of different type, represented by the [error codes](https://github.com/gojekfarm/clickstream-web/blob/main/src/error.js).
 
-```
-await clckstrm.track(payload);
-```
-
-### stop
-
-Gracefully stops the tracking, new track function calls are ignored, previously tracked events will be processed.
-
-```
-clckstrm.stop();
-```
-
-### start
-
-Resumes the tracking, have no effect when called with tracking is not stopped.
-
-```
-clckstrm.start();
+```js
+try {
+  await clckstrm.track(payload)
+} catch (err) {
+  // handle error
+  console.log(err)
+}
 ```
 
-### destroy
+### pause
 
-Releases all the resources used by the Clickstream instance.
+Pauses the tracking. New `.track()` method calls are ignored, existing events in the system are still processed.
+Tracking can be resumed by calling `.resume()` method.
+
+```js
+clckstrm.pause()
+```
+
+### resume
+
+Resumes the tracking if it is paused by calling `.pause()` method, has no effect otherwise.
+
+```js
+clckstrm.resume()
+```
+
+### free
+
+Frees up all the resource used by the Clickstream instance asynchronously.
+Clears the timeouts and intervals used & removes all the event listeners.
+Flushes all the existing events in the system before deleting the indexedDB database in use.
+
+It has no side effect on the working oh the SDK, calling .track() method again will recreate all the timeouts, interval and database for event tracking.
+
+Returns errors with message and code on failure.
 
 ```
-await clckstrm.destroy();
+try {
+  await clckstrm.free();
+} catch(err) {
+  // handle error
+  console.log(err)
+}
+
 ```
 
 ## Options
 
-The constrsuctor takes an options object as parameter which has `event`, `batch`, `network` & `crypto` options as property.
+The constructor takes an options object as parameter which has `event`, `batch`, `network` & `crypto` options as property.
 
 ```
 {
@@ -203,11 +169,11 @@ The constrsuctor takes an options object as parameter which has `event`, `batch`
     group: ""
   },
   batch: {
-    // max interval time between two batches(sec).
+    // maximum interval time between two batches(sec).
     maxTimeBetweenTwoBatches: 10,
-    // max size of batch(bytes).
-    maxBatchSize: 50000,
-    // name of the database, must be unique per domain
+    // maximum size of batch(bytes).
+    maxBatchSize: 50_000,
+    // name of the database, must be unique per origin
     dbName: 'clickstream_db',
   },
   network: {
@@ -215,15 +181,66 @@ The constrsuctor takes an options object as parameter which has `event`, `batch`
     url: "",
     // Request headers
     headers: {},
-    // max number of retries before pausing
+    // maximum number of retries before pausing
     maxRetries: 5,
     // gap between two retries (mSec)
-    timeBetweenTwoRetries: 1000,
-    // time after which retry will resume after hitting max retry count threshold (mSec)
-    timeToResumeRetries: 20000,
+    timeBetweenTwoRetries: 1_000,
+    // time after which retry will resume after hitting maximum retry count threshold (mSec)
+    timeToResumeRetries: 20_000,
   },
   // web crypto module instance
   crypto: null
 }
+```
 
+## Error Handling
+
+SDK throws error with `message`, `code` & `cause` which can be used for better error handling as shown below -
+
+```js
+import { ErrorCodes } from "@gojek/clickstream-web"
+
+try {
+  await clckstrm.track(payload)
+} catch (err) {
+  if (err.code === ErrorCodes.TRACKING_ERROR) {
+    clckstrm.resume()
+  } else {
+    console.log(err.message)
+  }
+}
+```
+
+## [Documentation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/index.md)
+
+### [Getting Started](https://github.com/gojekfarm/clickstream-web/blob/main/docs/getting-started.md)
+
+### [How To Guide](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/index.md)
+
+### [Reference](https://github.com/gojekfarm/clickstream-web/blob/main/docs/reference/index.md)
+
+### [Browser Compatibility](https://github.com/gojekfarm/clickstream-web/blob/main/docs/browser-compatibility.md)
+
+### [Limitation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/limitation.md)
+
+### [Architecture](https://github.com/gojekfarm/clickstream-web/blob/main/docs/architecture.md)
+
+## Issues
+
+Submit your question and issues [here](https://github.com/gojekfarm/clickstream-web/issues)
+
+## License
+
+```
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 ```
