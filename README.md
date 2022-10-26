@@ -113,11 +113,6 @@ try {
   await clckstrm.track(payload)
 } catch (err) {
   // handle error
-  if (err.code === "trackingError") {
-    clckstrm.resume()
-  } else {
-    console.log(err.message)
-  }
   console.log(err)
 }
 ```
@@ -196,7 +191,24 @@ The constructor takes an options object as parameter which has `event`, `batch`,
   // web crypto module instance
   crypto: null
 }
+```
 
+## Error Handling
+
+SDK throws error with `message`, `code` & `cause` which can be used for better error handling as shown below -
+
+```js
+import { ErrorCodes } from "@gojek/clickstream-web"
+
+try {
+  await clckstrm.track(payload)
+} catch (err) {
+  if (err.code === ErrorCodes.TRACKING_ERROR) {
+    clckstrm.resume()
+  } else {
+    console.log(err.message)
+  }
+}
 ```
 
 ## [Documentation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/index.md)
