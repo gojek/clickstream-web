@@ -113,6 +113,11 @@ try {
   await clckstrm.track(payload);
 } catch(err) {
   // handle error
+  if(err.code === 'trackingError') {
+    clckstrm.resume()
+  } else {
+    console.log(err.message)
+  }
   console.log(err)
 }
 
