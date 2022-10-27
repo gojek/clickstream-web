@@ -7,6 +7,7 @@ import Store from "./store.js"
 import Id from "./id.js"
 import { CUSTOM_EVENT, EVENT_TYPE, defaultConfig } from "./constants/index.js"
 import Validator from "./validator.js"
+import Logger from "./logger.js"
 import {
   ClickstreamError,
   DatabaseError,
@@ -32,12 +33,14 @@ export default class Clickstream {
   #scheduler
   #transport
   #store
+  #logger
   #id
   #eventBus
   #eventConfig
   #batchConfig
   #networkConfig
   #isRealTimeEventsSupported
+  #logging = 1
   /**
    * @constructor
    * @param options Configuration options
@@ -62,6 +65,8 @@ export default class Clickstream {
 
     this.#store = new Store({ name: this.#batchConfig.dbName })
 
+    this.#logger = new Logger()
+
     if (this.#isRealTimeEventsSupported) {
       this.#eventBus = new EventBus()
     }
@@ -71,6 +76,7 @@ export default class Clickstream {
     this.#processor = new Processor({
       config: this.#eventConfig,
       store: this.#store,
+      logger: this.#logger,
       id: this.#id,
       isRealTimeEventsSupported,
     })
@@ -79,6 +85,7 @@ export default class Clickstream {
       config: this.#batchConfig,
       eventBus: this.#eventBus,
       store: this.#store,
+      logger: this.#logger,
     })
 
     this.#transport = new Transport({
@@ -86,9 +93,23 @@ export default class Clickstream {
       eventBus: this.#eventBus,
       store: this.#store,
       id: this.#id,
+      logger: this.#logger,
     })
 
     this.#init()
+  }
+
+  get logging() {
+    return this.#logging
+  }
+
+  set logging(value) {
+    if (Number.isInteger(value)) {
+      this.#logging = value
+      this.#logger.logging = value
+    } else {
+      this.#logger.error("Provide an integer for logging value")
+    }
   }
 
   #init() {

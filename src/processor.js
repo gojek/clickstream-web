@@ -4,35 +4,37 @@ import { EVENT_TYPE } from "./constants/index.js"
 export default class Processor {
   #config
   #store
+  #logger
   #id
   #isRealTimeEventsSupported
-  constructor({ config, store, id, isRealTimeEventsSupported }) {
+  constructor({ config, store, logger, id, isRealTimeEventsSupported }) {
     this.#config = config
     this.#store = store
+    this.#logger = logger
     this.#id = id
     this.#isRealTimeEventsSupported = isRealTimeEventsSupported
   }
 
   #type(proto) {
     if (!this.#isRealTimeEventsSupported) {
-      console.log(
-        "Clickstream: Treating event as QoS0 as QoS1 events are not supported"
+      this.#logger.info(
+        "Treating event as QoS0 as QoS1 events are not supported"
       )
       return EVENT_TYPE.INSTANT
     }
 
     // if the storage is not available, event is treated as instant event
     if (!this.#store.isOpen()) {
-      console.log(
-        "Clickstream: Treating event as QoS0 as indexedDB is not supported"
-      )
+      this.#logger.info("Treating event as QoS0 as indexedDB is not supported")
       return EVENT_TYPE.INSTANT
     }
 
     if (this.#config?.classification?.instant?.includes(proto.eventName)) {
+      this.#logger.info("Event is classified as QoS0 as per configuration")
       return EVENT_TYPE.INSTANT
     }
 
+    this.#logger.info("Event is considered as QoS1 by default configuration")
     return EVENT_TYPE.REALTIME
   }
 
@@ -45,6 +47,8 @@ export default class Processor {
     const type = this.#config.group
       ? `${this.#config.group}-${typeUrl}`
       : typeUrl
+
+    this.#logger.info(`Event type is set as ${type}`)
 
     /** @type {import("./store.js").Event} */
     const event = {

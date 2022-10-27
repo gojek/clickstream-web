@@ -19,14 +19,16 @@ const getTimestamp = () => {
 export default class Transport {
   #config
   #store
+  #logger
   #eventBus
   #id
   #retryCount
   #resetRetryTimeout
-  constructor({ config, eventBus, store, id }) {
+  constructor({ config, eventBus, store, logger, id }) {
     this.#config = config
     this.#eventBus = eventBus
     this.#store = store
+    this.#logger = logger
     this.#retryCount = 0
     this.#resetRetryTimeout = undefined
     this.#id = id
@@ -61,6 +63,9 @@ export default class Transport {
       },
       events: [...encodedBatch],
     })
+
+    this.#logger.log(`Network request body -`, request)
+
     return {
       reqGuid,
       body: SendEventRequest.encode(request).finish(),
@@ -84,6 +89,8 @@ export default class Transport {
       const resBuffer = await blob.arrayBuffer()
       const uInt = new Uint8Array(resBuffer)
       const res = SendEventResponse.decode(uInt)
+
+      this.#logger.log(`Network response from Raccoon -`, res)
 
       if (this.#store.isOpen()) {
         const events = await this.#store.readByReqGuid(res.data["req_guid"])

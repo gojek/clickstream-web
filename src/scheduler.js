@@ -8,12 +8,14 @@ export default class Scheduler {
   #config
   #eventBus
   #store
+  #logger
   #batch
   #lastBatch
-  constructor({ config, eventBus, store }) {
+  constructor({ config, logger, eventBus, store }) {
     this.#config = config
     this.#eventBus = eventBus
     this.#store = store
+    this.#logger = logger
     this.#intervalId = undefined
     this.#waitTime = 0
     this.#batching = false
@@ -22,7 +24,7 @@ export default class Scheduler {
   }
 
   /**
-   * Return if the sceduler is running or not
+   * Return if the scheduler is running or not
    */
   isRunning() {
     return this.#batching
@@ -113,7 +115,7 @@ export default class Scheduler {
   }
 
   #removeListeners() {
-    this.#eventBus?.remvove(CUSTOM_EVENT.BATCH_FAILED)
+    this.#eventBus?.remove(CUSTOM_EVENT.BATCH_FAILED)
   }
 
   #batchSize(batch) {

@@ -1,7 +1,8 @@
 export default class Processor {
-    constructor({ config, store, id, isRealTimeEventsSupported }: {
+    constructor({ config, store, logger, id, isRealTimeEventsSupported }: {
         config: any;
         store: any;
+        logger: any;
         id: any;
         isRealTimeEventsSupported: any;
     });

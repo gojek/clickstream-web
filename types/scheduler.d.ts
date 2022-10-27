@@ -1,11 +1,12 @@
 export default class Scheduler {
-    constructor({ config, eventBus, store }: {
+    constructor({ config, logger, eventBus, store }: {
         config: any;
+        logger: any;
         eventBus: any;
         store: any;
     });
     /**
-     * Return if the sceduler is running or not
+     * Return if the scheduler is running or not
      */
     isRunning(): boolean;
     /**
