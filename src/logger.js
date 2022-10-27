@@ -1,18 +1,32 @@
 // @ts-check
 
+export const logLevels = {
+  ERROR: 1,
+  INFO: 2,
+}
+
+export const isValidLogLevel = (value) => {
+  return Object.values(logLevels).includes(value)
+}
+
 export default class Logger {
-  #logging = 1
+  #logLevel = logLevels.ERROR
 
-  set logging(value) {
-    this.#logging = value
-  }
-
-  info(message) {
-    this.#log("info", message)
+  set logLevel(value) {
+    this.#logLevel = value
+    console.log(this.#logLevel, "logger")
   }
 
   error(message) {
-    this.#log("error", message)
+    if (this.#logLevel >= logLevels.ERROR) {
+      this.#log("error", message)
+    }
+  }
+
+  info(message) {
+    if (this.#logLevel >= logLevels.INFO) {
+      this.#log("info", message)
+    }
   }
 
   log(message) {
@@ -20,7 +34,7 @@ export default class Logger {
   }
 
   #log(type, message) {
-    if (this.#logging && globalThis.console) {
+    if (globalThis.console) {
       console[type](`Clickstream: ${message}`)
     }
   }

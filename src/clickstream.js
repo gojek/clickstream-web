@@ -7,7 +7,7 @@ import Store from "./store.js"
 import Id from "./id.js"
 import { CUSTOM_EVENT, EVENT_TYPE, defaultConfig } from "./constants/index.js"
 import Validator from "./validator.js"
-import Logger from "./logger.js"
+import Logger, { isValidLogLevel, logLevels } from "./logger.js"
 import {
   ClickstreamError,
   DatabaseError,
@@ -40,7 +40,7 @@ export default class Clickstream {
   #batchConfig
   #networkConfig
   #isRealTimeEventsSupported
-  #logging = 1
+  #logLevel = logLevels.ERROR
   /**
    * @constructor
    * @param options Configuration options
@@ -63,7 +63,10 @@ export default class Clickstream {
 
     this.#tracking = true
 
-    this.#store = new Store({ name: this.#batchConfig.dbName })
+    this.#store = new Store({
+      name: this.#batchConfig.dbName,
+      logger: this.#logger,
+    })
 
     this.#logger = new Logger()
 
@@ -99,16 +102,16 @@ export default class Clickstream {
     this.#init()
   }
 
-  get logging() {
-    return this.#logging
+  get logLevel() {
+    return this.#logLevel
   }
 
-  set logging(value) {
-    if (Number.isInteger(value)) {
-      this.#logging = value
-      this.#logger.logging = value
+  set logLevel(value) {
+    if (isValidLogLevel(value)) {
+      this.#logLevel = value
+      this.#logger.logLevel = value
     } else {
-      this.#logger.error("Provide an integer for logging value")
+      this.#logger.error("Provide a valid log level")
     }
   }
 

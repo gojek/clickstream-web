@@ -64,7 +64,9 @@ export default class Transport {
       events: [...encodedBatch],
     })
 
-    this.#logger.log(`Network request body -`, request)
+    this.#logger.info(
+      `Network request body - ${JSON.stringify(request, undefined, 2)}`
+    )
 
     return {
       reqGuid,
@@ -90,7 +92,9 @@ export default class Transport {
       const uInt = new Uint8Array(resBuffer)
       const res = SendEventResponse.decode(uInt)
 
-      this.#logger.log(`Network response from Raccoon -`, res)
+      this.#logger.info(
+        `Network response from Raccoon - ${JSON.stringify(res, undefined, 2)}`
+      )
 
       if (this.#store.isOpen()) {
         const events = await this.#store.readByReqGuid(res.data["req_guid"])

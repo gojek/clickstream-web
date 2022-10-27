@@ -13,10 +13,12 @@ export default class Store {
   #name
   #version
   #db
+  #logger
   #isOpen
-  constructor({ name = "clickstream_db", version = 1 }) {
+  constructor({ name = "clickstream_db", version = 1, logger }) {
     this.#name = name
     this.#version = version
+    this.#logger = logger
     this.#isOpen = false
   }
 
@@ -35,7 +37,7 @@ export default class Store {
       request.onblocked = (event) => {
         // If some other tab is loaded with the database, then it needs to be closed
         // before we can proceed.
-        console.log(
+        this.#logger.log(
           "Clickstream: Please close all other tabs with this site open!"
         )
         // @ts-ignore
@@ -73,7 +75,7 @@ export default class Store {
         this.#db.onversionchange = (event) => {
           this.#db.close()
           this.#isOpen = false
-          console.log(
+          this.#logger.log(
             "Clickstream: A new version of this page is ready. Please reload or close this tab!"
           )
           reject(event.target.error)
