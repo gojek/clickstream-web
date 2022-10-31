@@ -10,8 +10,8 @@ import Validator from "./validator.js"
 import {
   ClickstreamError,
   DatabaseError,
-  ErrorCodes,
-  ErrorNames,
+  errorCodes,
+  errorNames,
 } from "./error.js"
 
 const isRealTimeEventsSupported = () => {
@@ -118,7 +118,7 @@ export default class Clickstream {
       return Promise.reject(
         new ClickstreamError(
           "Tracking is paused, call .resume() method to resume tracking",
-          { code: ErrorCodes.TRACKING_ERROR }
+          { code: errorCodes.TRACKING_ERROR }
         )
       )
     }
@@ -187,8 +187,8 @@ export default class Clickstream {
     } catch (error) {
       return Promise.reject(
         new ClickstreamError(error.message, {
-          name: ErrorNames.CLEANUP_ERROR,
-          code: ErrorCodes.CLEANUP_ERROR,
+          name: errorNames.CLEANUP_ERROR,
+          code: errorCodes.CLEANUP_ERROR,
         })
       )
     }

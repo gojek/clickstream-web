@@ -1,4 +1,4 @@
 import Clickstream from "./clickstream.js";
-import { ErrorCodes } from "./error.js";
-export { Clickstream, ErrorCodes };
+import { errorCodes } from "./error.js";
+export { Clickstream, errorCodes };
 //# sourceMappingURL=index.d.ts.map

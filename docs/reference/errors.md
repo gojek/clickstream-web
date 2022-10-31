@@ -1,6 +1,6 @@
 # Handling Errors
 
-SDk throws different type of errors with `message`, `code` & `cause`. You can see full list of errors [here](https://github.com/gojekfarm/clickstream-web/blob/main/src/error.js). The SDK exports all the error codes as `ErrorCodes` named export.
+SDk throws different type of errors with `message`, `code` & `cause`. You can see full list of errors [here](https://github.com/gojekfarm/clickstream-web/blob/main/src/error.js). The SDK exports all the error codes as `errorCodes` named export.
 
 ## Constituents
 
@@ -21,11 +21,11 @@ Here is the list of all types of error with error codes that occurs through life
 
 ## Example
 
-Import the `ErrorCodes` variable from the SDK. Here we wrap `.track()` call in a `try...catch` block in order to catch the error.
-We check if `err.code` is `ErrorCodes.TRACKING_ERROR` and resume the tracking if it was stopped earlier otherwise we just log the `err.message` and `err.cause` to get more details.
+Import the `errorCodes` variable from the SDK. Here we wrap `.track()` call in a `try...catch` block in order to catch the error.
+We check if `err.code` is `errorCodes.TRACKING_ERROR` and resume the tracking if it was stopped earlier otherwise we just log the `err.message` and `err.cause` to get more details.
 
 ```js
-import { ErrorCodes } from "@gojek/clickstream-web"
+import { errorCodes } from "@gojek/clickstream-web"
 
 try {
   await clckstrm.track(payload)

@@ -198,12 +198,12 @@ The constructor takes an options object as parameter which has `event`, `batch`,
 SDK throws error with `message`, `code` & `cause` which can be used for better error handling as shown below -
 
 ```js
-import { ErrorCodes } from "@gojek/clickstream-web"
+import { errorCodes } from "@gojek/clickstream-web"
 
 try {
   await clckstrm.track(payload)
 } catch (err) {
-  if (err.code === ErrorCodes.TRACKING_ERROR) {
+  if (err.code === errorCodes.TRACKING_ERROR) {
     clckstrm.resume()
   } else {
     console.log(err.message)
