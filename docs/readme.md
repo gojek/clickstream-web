@@ -12,6 +12,6 @@ Clickstream Web is a Modern, Fast, and Lightweight Event Ingestion library, adhe
 
 ### [Browser Compatibility](https://github.com/gojekfarm/clickstream-web/blob/main/docs/browser-compatibility.md)
 
-### [Limitations](https://github.com/gojekfarm/clickstream-web/blob/main/docs/limitation.md)
+### [Limitations](https://github.com/gojekfarm/clickstream-web/blob/main/docs/limitations.md)
 
 ### [Architecture](https://github.com/gojekfarm/clickstream-web/blob/main/docs/architecture.md)
