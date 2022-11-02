@@ -68,7 +68,6 @@ export default class Transport {
   }
 
   #retry(request) {
-    console.log(this.#retryCount)
     const { maxRetries, timeBetweenTwoRetries, timeToResumeRetries } =
       this.#config
 
