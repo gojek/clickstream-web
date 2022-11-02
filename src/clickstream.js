@@ -15,6 +15,8 @@ import {
   ErrorNames,
 } from "./error.js"
 
+const logPrefix = "Cickstream:"
+
 const isRealTimeEventsSupported = () => {
   if (globalThis.indexedDB === undefined) {
     return false
@@ -105,6 +107,8 @@ export default class Clickstream {
   #init() {
     this.#listeners()
     this.#scheduler.start()
+
+    logger.debug(logPrefix, "Scheduler is up and running")
   }
 
   #listeners() {
@@ -141,6 +145,7 @@ export default class Clickstream {
     if (this.#isRealTimeEventsSupported && !this.#store?.isOpen()) {
       try {
         await this.#store.open()
+        logger.debug(logPrefix, "store is initialized")
       } catch (error) {
         return Promise.reject(
           new DatabaseError(error.message, { cause: error })
@@ -149,6 +154,8 @@ export default class Clickstream {
     }
 
     const { type, event } = this.#processor.process(payload)
+
+    logger.debug(logPrefix, "event type", type)
 
     try {
       if (type === EVENT_TYPE.REALTIME) {
@@ -171,6 +178,7 @@ export default class Clickstream {
    */
   pause() {
     this.#tracking = false
+    logger.debug(logPrefix, "tracking value", this.#tracking)
   }
 
   /**
@@ -178,6 +186,7 @@ export default class Clickstream {
    */
   resume() {
     this.#tracking = true
+    logger.debug(logPrefix, "tracking value", this.#tracking)
   }
 
   /**
@@ -194,7 +203,9 @@ export default class Clickstream {
   async free() {
     try {
       await this.#scheduler.free()
+      logger.debug(logPrefix, "scheduler resources are released")
       await this.#store.delete()
+      logger.debug(logPrefix, "store is deleted")
     } catch (error) {
       return Promise.reject(
         new ClickstreamError(error.message, {

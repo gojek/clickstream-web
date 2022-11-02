@@ -1,5 +1,6 @@
 // @ts-check
 import { CUSTOM_EVENT, TICK_TIME } from "./constants/index.js"
+import { logger } from "./logger.js"
 export default class Scheduler {
   /** @type { number | NodeJS.Timer | undefined } */
   #intervalId
@@ -152,7 +153,7 @@ export default class Scheduler {
 
       return eventsBySize
     } catch (error) {
-      console.error(error)
+      logger.error("Scheduler:", error)
       return []
     }
   }

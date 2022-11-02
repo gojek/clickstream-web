@@ -1,6 +1,7 @@
 // @ts-check
 
 import { ValidationError } from "./error.js"
+import { logger } from "./logger.js"
 
 const isPositiveInteger = (value) => {
   return Number.isInteger(value) && value > 0
@@ -112,5 +113,7 @@ export default class Validator {
     if (isDefined(crypto) && typeof crypto !== "object") {
       throw new ValidationError("crypto must be of type object")
     }
+
+    logger.info("Clickstream:", "Initialization validation is successful")
   }
 }

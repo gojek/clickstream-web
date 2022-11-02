@@ -2,7 +2,7 @@
 import { EVENT_TYPE } from "./constants/index.js"
 import { logger } from "./logger.js"
 
-const logPrefix = "Processor: "
+const logPrefix = "Processor:"
 
 export default class Processor {
   #config
@@ -50,13 +50,21 @@ export default class Processor {
     const PayloadConstructor = payload.constructor
     const encodedEvent = PayloadConstructor.encode(payload).finish()
 
+    if (PayloadConstructor.decode) {
+      logger.debug(
+        logPrefix,
+        "Decoded payload",
+        PayloadConstructor.decode(encodedEvent)
+      )
+    }
+
     const typeUrlSplit = PayloadConstructor.getTypeUrl("").split(".")
     const typeUrl = typeUrlSplit[typeUrlSplit.length - 1].toLowerCase()
     const type = this.#config.group
       ? `${this.#config.group}-${typeUrl}`
       : typeUrl
 
-    logger.info(`Event type is set as ${type}`)
+    logger.debug(logPrefix, "Backend topic name is set to", type)
 
     /** @type {import("./store.js").Event} */
     const event = {

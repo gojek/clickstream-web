@@ -4,6 +4,8 @@ import { NetworkError } from "./error.js"
 import { SendEventRequest, SendEventResponse, Event } from "./protos/raccoon.js"
 import { logger } from "./logger.js"
 
+const logPrefix = "Network:"
+
 /**
  * Gives timestamp object as google timestamp format
  * @returns timestamp object containing seconds and nanos
@@ -64,8 +66,12 @@ export default class Transport {
       events: [...encodedBatch],
     })
 
-    logger.info(
-      `Network request body - ${JSON.stringify(request, undefined, 2)}`
+    logger.debug(
+      logPrefix,
+      "Network request",
+      request,
+      "stringified",
+      JSON.stringify(request, undefined, 2)
     )
 
     return {
