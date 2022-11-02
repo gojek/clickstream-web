@@ -1,23 +1,25 @@
 // @ts-check
 import { EVENT_TYPE } from "./constants/index.js"
+import { logger } from "./logger.js"
+
+const logPrefix = "Processor: "
 
 export default class Processor {
   #config
   #store
-  #logger
   #id
   #isRealTimeEventsSupported
-  constructor({ config, store, logger, id, isRealTimeEventsSupported }) {
+  constructor({ config, store, id, isRealTimeEventsSupported }) {
     this.#config = config
     this.#store = store
-    this.#logger = logger
     this.#id = id
     this.#isRealTimeEventsSupported = isRealTimeEventsSupported
   }
 
   #type(proto) {
     if (!this.#isRealTimeEventsSupported) {
-      this.#logger.info(
+      logger.info(
+        logPrefix,
         "Treating event as QoS0 as QoS1 events are not supported"
       )
       return EVENT_TYPE.INSTANT
@@ -25,16 +27,22 @@ export default class Processor {
 
     // if the storage is not available, event is treated as instant event
     if (!this.#store.isOpen()) {
-      this.#logger.info("Treating event as QoS0 as indexedDB is not supported")
+      logger.info(
+        logPrefix,
+        "Treating event as QoS0 as indexedDB is not supported"
+      )
       return EVENT_TYPE.INSTANT
     }
 
     if (this.#config?.classification?.instant?.includes(proto.eventName)) {
-      this.#logger.info("Event is classified as QoS0 as per configuration")
+      logger.info(logPrefix, "Event is classified as QoS0 as per configuration")
       return EVENT_TYPE.INSTANT
     }
 
-    this.#logger.info("Event is considered as QoS1 by default configuration")
+    logger.info(
+      logPrefix,
+      "Event is considered as QoS1 by default configuration"
+    )
     return EVENT_TYPE.REALTIME
   }
 
@@ -48,7 +56,7 @@ export default class Processor {
       ? `${this.#config.group}-${typeUrl}`
       : typeUrl
 
-    this.#logger.info(`Event type is set as ${type}`)
+    logger.info(`Event type is set as ${type}`)
 
     /** @type {import("./store.js").Event} */
     const event = {

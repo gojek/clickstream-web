@@ -1,7 +1,6 @@
 export default class Scheduler {
-    constructor({ config, logger, eventBus, store }: {
+    constructor({ config, eventBus, store }: {
         config: any;
-        logger: any;
         eventBus: any;
         store: any;
     });

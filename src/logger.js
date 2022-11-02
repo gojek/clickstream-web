@@ -1,41 +1,40 @@
 // @ts-check
 
-export const logLevels = {
-  ERROR: 1,
-  INFO: 2,
+let logging = false
+
+function format(prefix, args) {
+  if (!prefix) return args
+  return [prefix, ...args]
 }
 
-export const isValidLogLevel = (value) => {
-  return Object.values(logLevels).includes(value)
+const info = function (prefix = "", ...args) {
+  if (!logging) return
+  console.log(...format(prefix, args))
 }
 
-export default class Logger {
-  #logLevel = logLevels.ERROR
+const debug = function (prefix = "", ...args) {
+  if (!logging) return
+  console.debug(...format(prefix, args))
+}
 
-  set logLevel(value) {
-    this.#logLevel = value
-    console.log(this.#logLevel, "logger")
-  }
+const warn = function (prefix = "", ...args) {
+  if (!logging) return
+  console.warn(...format(prefix, args))
+}
 
-  error(message) {
-    if (this.#logLevel >= logLevels.ERROR) {
-      this.#log("error", message)
-    }
-  }
+const error = function (prefix = "", ...args) {
+  console.error(...format(prefix, args))
+}
 
-  info(message) {
-    if (this.#logLevel >= logLevels.INFO) {
-      this.#log("info", message)
-    }
-  }
-
-  log(message) {
-    this.#log("log", message)
-  }
-
-  #log(type, message) {
-    if (globalThis.console) {
-      console[type](`Clickstream: ${message}`)
-    }
-  }
+export const logger = {
+  info,
+  debug,
+  warn,
+  error,
+  get logging() {
+    return logging
+  },
+  set logging(value) {
+    logging = value
+  },
 }

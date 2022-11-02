@@ -7,10 +7,9 @@
  * @property {string} type - type
  */
 export default class Store {
-    constructor({ name, version, logger }: {
+    constructor({ name, version }: {
         name?: string;
         version?: number;
-        logger: any;
     });
     isOpen(): boolean;
     /**

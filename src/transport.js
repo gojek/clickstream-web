@@ -2,6 +2,7 @@
 import { CUSTOM_EVENT, EVENT_TYPE } from "./constants/index.js"
 import { NetworkError } from "./error.js"
 import { SendEventRequest, SendEventResponse, Event } from "./protos/raccoon.js"
+import { logger } from "./logger.js"
 
 /**
  * Gives timestamp object as google timestamp format
@@ -24,11 +25,10 @@ export default class Transport {
   #id
   #retryCount
   #resetRetryTimeout
-  constructor({ config, eventBus, store, logger, id }) {
+  constructor({ config, eventBus, store, id }) {
     this.#config = config
     this.#eventBus = eventBus
     this.#store = store
-    this.#logger = logger
     this.#retryCount = 0
     this.#resetRetryTimeout = undefined
     this.#id = id
@@ -64,7 +64,7 @@ export default class Transport {
       events: [...encodedBatch],
     })
 
-    this.#logger.info(
+    logger.info(
       `Network request body - ${JSON.stringify(request, undefined, 2)}`
     )
 
@@ -92,7 +92,7 @@ export default class Transport {
       const uInt = new Uint8Array(resBuffer)
       const res = SendEventResponse.decode(uInt)
 
-      this.#logger.info(
+      logger.info(
         `Network response from Raccoon - ${JSON.stringify(res, undefined, 2)}`
       )
 

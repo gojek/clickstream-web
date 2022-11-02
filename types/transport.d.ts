@@ -1,9 +1,8 @@
 export default class Transport {
-    constructor({ config, eventBus, store, logger, id }: {
+    constructor({ config, eventBus, store, id }: {
         config: any;
         eventBus: any;
         store: any;
-        logger: any;
         id: any;
     });
     /**

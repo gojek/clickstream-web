@@ -1,5 +1,6 @@
 // @ts-check
 const STORE = "events"
+import { logger } from "./logger.js"
 
 /**
  * @typedef {object} Event - Event type used in database
@@ -15,10 +16,9 @@ export default class Store {
   #db
   #logger
   #isOpen
-  constructor({ name = "clickstream_db", version = 1, logger }) {
+  constructor({ name = "clickstream_db", version = 1 }) {
     this.#name = name
     this.#version = version
-    this.#logger = logger
     this.#isOpen = false
   }
 
@@ -37,7 +37,7 @@ export default class Store {
       request.onblocked = (event) => {
         // If some other tab is loaded with the database, then it needs to be closed
         // before we can proceed.
-        this.#logger.log(
+        logger.info(
           "Clickstream: Please close all other tabs with this site open!"
         )
         // @ts-ignore
@@ -75,7 +75,7 @@ export default class Store {
         this.#db.onversionchange = (event) => {
           this.#db.close()
           this.#isOpen = false
-          this.#logger.log(
+          logger.info(
             "Clickstream: A new version of this page is ready. Please reload or close this tab!"
           )
           reject(event.target.error)

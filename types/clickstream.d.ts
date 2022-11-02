@@ -4,8 +4,8 @@ export default class Clickstream {
      * @param options Configuration options
      */
     constructor({ event, batch, network, crypto, }: import("./constants/config.js").Config);
-    set logLevel(arg: number);
-    get logLevel(): number;
+    set logging(arg: boolean);
+    get logging(): boolean;
     /**
      * Dispatches a new event asynchronously.
      *

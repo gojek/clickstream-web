@@ -8,14 +8,12 @@ export default class Scheduler {
   #config
   #eventBus
   #store
-  #logger
   #batch
   #lastBatch
-  constructor({ config, logger, eventBus, store }) {
+  constructor({ config, eventBus, store }) {
     this.#config = config
     this.#eventBus = eventBus
     this.#store = store
-    this.#logger = logger
     this.#intervalId = undefined
     this.#waitTime = 0
     this.#batching = false
