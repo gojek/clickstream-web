@@ -1,4 +1,4 @@
-export namespace ErrorCodes {
+export namespace errorCodes {
     const CLICKSTREAM_ERROR: string;
     const VALIDATION_ERROR: string;
     const DATABASE_ERROR: string;
@@ -6,7 +6,7 @@ export namespace ErrorCodes {
     const TRACKING_ERROR: string;
     const CLEANUP_ERROR: string;
 }
-export namespace ErrorNames {
+export namespace errorNames {
     const CLICKSTREAM_ERROR_1: string;
     export { CLICKSTREAM_ERROR_1 as CLICKSTREAM_ERROR };
     const VALIDATION_ERROR_1: string;

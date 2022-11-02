@@ -198,12 +198,12 @@ The constructor takes an options object as parameter which has `event`, `batch`,
 SDK throws error with `message`, `code` & `cause` which can be used for better error handling as shown below -
 
 ```js
-import { ErrorCodes } from "@gojek/clickstream-web"
+import { errorCodes } from "@gojek/clickstream-web"
 
 try {
   await clckstrm.track(payload)
 } catch (err) {
-  if (err.code === ErrorCodes.TRACKING_ERROR) {
+  if (err.code === errorCodes.TRACKING_ERROR) {
     clckstrm.resume()
   } else {
     console.log(err.message)
@@ -211,17 +211,17 @@ try {
 }
 ```
 
-## [Documentation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/index.md)
+## [Documentation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/readme.md)
 
 ### [Getting Started](https://github.com/gojekfarm/clickstream-web/blob/main/docs/getting-started.md)
 
-### [How To Guide](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/index.md)
+### [How To Guide](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/readme.md)
 
-### [Reference](https://github.com/gojekfarm/clickstream-web/blob/main/docs/reference/index.md)
+### [Reference](https://github.com/gojekfarm/clickstream-web/blob/main/docs/reference/readme.md)
 
 ### [Browser Compatibility](https://github.com/gojekfarm/clickstream-web/blob/main/docs/browser-compatibility.md)
 
-### [Limitation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/limitation.md)
+### [Limitation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/limitations.md)
 
 ### [Architecture](https://github.com/gojekfarm/clickstream-web/blob/main/docs/architecture.md)
 

@@ -25,7 +25,7 @@ export default class Transport {
   #logger
   #eventBus
   #id
-  #retryCount
+  #retryCount = 0
   #resetRetryTimeout
   constructor({ config, eventBus, store, id }) {
     this.#config = config
@@ -80,59 +80,69 @@ export default class Transport {
     }
   }
 
+  #retry(request) {
+    const { maxRetries, timeBetweenTwoRetries, timeToResumeRetries } =
+      this.#config
+
+    if (this.#retryCount < maxRetries) {
+      if (this.#resetRetryTimeout) {
+        window.clearTimeout(this.#resetRetryTimeout)
+        this.#resetRetryTimeout = undefined
+      }
+
+      this.#retryCount += 1
+
+      window.setTimeout(() => {
+        this.#eventBus.emit(CUSTOM_EVENT.BATCH_FAILED, {
+          reqGuid: request.reqGuid,
+        })
+      }, timeBetweenTwoRetries)
+    } else if (this.#retryCount === maxRetries) {
+      if (this.#resetRetryTimeout === undefined) {
+        this.#resetRetryTimeout = window.setTimeout(() => {
+          this.#retryCount = 0
+        }, timeToResumeRetries)
+      }
+    }
+  }
+
   async #makeRequest(request, { retry }) {
     const headers = new Headers(this.#config.headers)
     headers.append("Content-Type", "application/proto")
 
     try {
-      const data = await fetch(this.#config.url, {
+      const response = await fetch(this.#config.url, {
         method: "POST",
         headers,
         body: request.body,
       })
 
-      this.#retryCount = 0
-
-      const blob = await data.blob()
-      const resBuffer = await blob.arrayBuffer()
-      const uInt = new Uint8Array(resBuffer)
-      const res = SendEventResponse.decode(uInt)
+      if (!response.ok) {
+        console.error(
+          new NetworkError(
+            `Network request to Clickstream backend failed with status code ${response.status}`
+          )
+        )
+        if (retry) this.#retry(request)
+        return
+      }
 
       logger.info(
         `Network response from Raccoon - ${JSON.stringify(res, undefined, 2)}`
       )
 
       if (this.#store.isOpen()) {
+        const blob = await response.blob()
+        const buffer = await blob.arrayBuffer()
+        const uInt = new Uint8Array(buffer)
+        const res = SendEventResponse.decode(uInt)
+
         const events = await this.#store.readByReqGuid(res.data["req_guid"])
         this.#store.remove(events)
       }
     } catch (err) {
-      if (!retry) {
-        console.error(new NetworkError(err.message, { cause: err }))
-      }
-
-      const { maxRetries, timeBetweenTwoRetries, timeToResumeRetries } =
-        this.#config
-
-      if (this.#retryCount < maxRetries) {
-        if (this.#resetRetryTimeout) {
-          window.clearTimeout(this.#resetRetryTimeout)
-        }
-
-        this.#retryCount += 1
-
-        window.setTimeout(() => {
-          this.#eventBus.emit(CUSTOM_EVENT.BATCH_FAILED, {
-            reqGuid: request.reqGuid,
-          })
-        }, timeBetweenTwoRetries)
-      } else if (this.#retryCount === maxRetries) {
-        if (this.#resetRetryTimeout === undefined) {
-          this.#resetRetryTimeout = window.setTimeout(() => {
-            this.#retryCount = 0
-          }, timeToResumeRetries)
-        }
-      }
+      console.error(new NetworkError(err.message, { cause: err }))
+      if (retry) this.#retry(request)
     }
   }
 
