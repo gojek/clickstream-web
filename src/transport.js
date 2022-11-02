@@ -92,6 +92,7 @@ export default class Transport {
 
       this.#retryCount += 1
 
+      logger.debug(logPrefix, "retry", this.#retryCount)
       window.setTimeout(() => {
         this.#eventBus.emit(CUSTOM_EVENT.BATCH_FAILED, {
           reqGuid: request.reqGuid,
@@ -118,7 +119,8 @@ export default class Transport {
       })
 
       if (!response.ok) {
-        console.error(
+        logger.error(
+          logPrefix,
           new NetworkError(
             `Network request to Clickstream backend failed with status code ${response.status}`
           )
@@ -127,15 +129,18 @@ export default class Transport {
         return
       }
 
-      logger.info(
-        `Network response from Raccoon - ${JSON.stringify(res, undefined, 2)}`
-      )
-
       if (this.#store.isOpen()) {
         const blob = await response.blob()
         const buffer = await blob.arrayBuffer()
         const uInt = new Uint8Array(buffer)
         const res = SendEventResponse.decode(uInt)
+
+        logger.info(
+          logPrefix,
+          "Response data from Raccoon",
+          res,
+          JSON.stringify(res, undefined, 2)
+        )
 
         const events = await this.#store.readByReqGuid(res.data["req_guid"])
         this.#store.remove(events)
