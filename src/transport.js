@@ -135,7 +135,7 @@ export default class Transport {
         const uInt = new Uint8Array(buffer)
         const res = SendEventResponse.decode(uInt)
 
-        logger.info(
+        logger.debug(
           logPrefix,
           "Response data from Raccoon",
           res,
