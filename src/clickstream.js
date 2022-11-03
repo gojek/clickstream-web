@@ -102,17 +102,19 @@ export default class Clickstream {
 
   set logging(value) {
     logger.logging = Boolean(value)
+    logger.info(logPrefix, "logging is set to", logger.logging)
   }
 
   #init() {
     this.#listeners()
     this.#scheduler.start()
 
-    logger.debug(logPrefix, "Scheduler is up and running")
+    logger.debug(logPrefix, "scheduler is up and running")
   }
 
   #listeners() {
     this.#eventBus?.on(CUSTOM_EVENT.BATCH_CREATED, (e) => {
+      logger.debug(logPrefix, "new batch created", e.detail.batch)
       this.#transport.send(e.detail.batch, { retry: true })
     })
   }
@@ -145,7 +147,6 @@ export default class Clickstream {
     if (this.#isRealTimeEventsSupported && !this.#store?.isOpen()) {
       try {
         await this.#store.open()
-        logger.debug(logPrefix, "store is initialized")
       } catch (error) {
         return Promise.reject(
           new DatabaseError(error.message, { cause: error })
@@ -160,7 +161,13 @@ export default class Clickstream {
     try {
       if (type === EVENT_TYPE.REALTIME) {
         await this.#store.write(event)
+        logger.debug(logPrefix, "event is stored in the store", event.eventGuid)
       } else if (type === EVENT_TYPE.INSTANT) {
+        logger.debug(
+          logPrefix,
+          "event is sent to transport layer",
+          event.eventGuid
+        )
         this.#transport.send([event])
       }
     } catch (error) {
@@ -178,7 +185,7 @@ export default class Clickstream {
    */
   pause() {
     this.#tracking = false
-    logger.debug(logPrefix, "tracking value", this.#tracking)
+    logger.debug(logPrefix, "tracking is set to", this.#tracking)
   }
 
   /**
@@ -186,7 +193,7 @@ export default class Clickstream {
    */
   resume() {
     this.#tracking = true
-    logger.debug(logPrefix, "tracking value", this.#tracking)
+    logger.debug(logPrefix, "tracking is set to", this.#tracking)
   }
 
   /**

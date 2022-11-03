@@ -2,6 +2,8 @@
 const STORE = "events"
 import { logger } from "./logger.js"
 
+const logPrefix = "Store:"
+
 /**
  * @typedef {object} Event - Event type used in database
  * @property {Uint8Array} data - encoded event data
@@ -38,7 +40,8 @@ export default class Store {
         // If some other tab is loaded with the database, then it needs to be closed
         // before we can proceed.
         logger.info(
-          "Clickstream: Please close all other tabs with this site open!"
+          logPrefix,
+          "please close all other tabs with this site open!"
         )
         // @ts-ignore
         reject(event.target.error)
@@ -54,6 +57,7 @@ export default class Store {
         this.#db = event.target.result
         this.#isOpen = true
         resolve("success")
+        logger.debug(logPrefix, "store is open with name", this.#name)
       }
 
       request.onupgradeneeded = (event) => {
@@ -76,7 +80,8 @@ export default class Store {
           this.#db.close()
           this.#isOpen = false
           logger.info(
-            "Clickstream: A new version of this page is ready. Please reload or close this tab!"
+            logPrefix,
+            "a new version of this page is ready. Please reload or close this tab!"
           )
           reject(event.target.error)
         }

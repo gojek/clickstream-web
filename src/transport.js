@@ -146,7 +146,7 @@ export default class Transport {
         this.#store.remove(events)
       }
     } catch (err) {
-      console.error(new NetworkError(err.message, { cause: err }))
+      logger.error(logPrefix, new NetworkError(err.message, { cause: err }))
       if (retry) this.#retry(request)
     }
   }

@@ -1,6 +1,8 @@
 // @ts-check
 import { CUSTOM_EVENT, TICK_TIME } from "./constants/index.js"
 import { logger } from "./logger.js"
+
+const logPrefix = "Scheduler:"
 export default class Scheduler {
   /** @type { number | NodeJS.Timer | undefined } */
   #intervalId
@@ -153,7 +155,7 @@ export default class Scheduler {
 
       return eventsBySize
     } catch (error) {
-      logger.error("Scheduler:", error)
+      logger.error(logPrefix, error)
       return []
     }
   }
@@ -177,8 +179,18 @@ export default class Scheduler {
 
       if (this.#batchSize(this.#batch) >= this.#config.maxBatchSize) {
         this.#emit()
+        logger.debug(
+          logPrefix,
+          "batch has reached max size of",
+          this.#config.maxBatchSize
+        )
       } else if (this.#waitTime >= this.#config.maxTimeBetweenTwoBatches) {
         this.#emit()
+        logger.debug(
+          logPrefix,
+          "batch has reached max time of",
+          this.#config.maxTimeBetweenTwoBatches
+        )
       }
     }, TICK_TIME)
   }
