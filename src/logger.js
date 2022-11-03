@@ -35,6 +35,6 @@ export const logger = {
     return logging
   },
   set logging(value) {
-    logging = value
+    logging = Boolean(value)
   },
 }

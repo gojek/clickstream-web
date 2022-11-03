@@ -55,7 +55,16 @@ export default class Clickstream {
   ) {
     new Validator().validate(event, batch, network, crypto)
 
+    logger.info(logPrefix, "Configuration validation is successful")
+
     this.#isRealTimeEventsSupported = isRealTimeEventsSupported()
+
+    logger.info(
+      logPrefix,
+      `QoS1 events are ${
+        this.#isRealTimeEventsSupported ? "" : "not"
+      } supported`
+    )
 
     this.#eventConfig = Object.assign(defaultConfig.event, event)
     this.#batchConfig = Object.assign(defaultConfig.batch, batch)
@@ -101,15 +110,16 @@ export default class Clickstream {
   }
 
   set logging(value) {
-    logger.logging = Boolean(value)
+    logger.logging = value
     logger.info(logPrefix, "logging is set to", logger.logging)
   }
 
   #init() {
-    this.#listeners()
-    this.#scheduler.start()
-
-    logger.debug(logPrefix, "scheduler is up and running")
+    if (this.#isRealTimeEventsSupported) {
+      this.#listeners()
+      this.#scheduler.start()
+      logger.info(logPrefix, "scheduler is up and running")
+    }
   }
 
   #listeners() {
@@ -156,18 +166,14 @@ export default class Clickstream {
 
     const { type, event } = this.#processor.process(payload)
 
-    logger.debug(logPrefix, "event type", type)
+    logger.debug(logPrefix, "event type is set to", type)
 
     try {
       if (type === EVENT_TYPE.REALTIME) {
         await this.#store.write(event)
         logger.debug(logPrefix, "event is stored in the store", event.eventGuid)
       } else if (type === EVENT_TYPE.INSTANT) {
-        logger.debug(
-          logPrefix,
-          "event is sent to transport layer",
-          event.eventGuid
-        )
+        logger.debug(logPrefix, "event is sent to transport layer")
         this.#transport.send([event])
       }
     } catch (error) {

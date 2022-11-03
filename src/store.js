@@ -16,7 +16,6 @@ export default class Store {
   #name
   #version
   #db
-  #logger
   #isOpen
   constructor({ name = "clickstream_db", version = 1 }) {
     this.#name = name
@@ -41,7 +40,7 @@ export default class Store {
         // before we can proceed.
         logger.info(
           logPrefix,
-          "please close all other tabs with this site open!"
+          "please close all other tabs with this site open"
         )
         // @ts-ignore
         reject(event.target.error)
@@ -81,7 +80,7 @@ export default class Store {
           this.#isOpen = false
           logger.info(
             logPrefix,
-            "a new version of this page is ready. Please reload or close this tab!"
+            "a new version of this page is ready, please reload or close this tab"
           )
           reject(event.target.error)
         }

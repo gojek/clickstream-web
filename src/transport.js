@@ -22,7 +22,6 @@ const getTimestamp = () => {
 export default class Transport {
   #config
   #store
-  #logger
   #eventBus
   #id
   #retryCount = 0
@@ -68,9 +67,8 @@ export default class Transport {
 
     logger.debug(
       logPrefix,
-      "Network request",
+      "network request",
       request,
-      "stringified",
       JSON.stringify(request, undefined, 2)
     )
 
@@ -100,6 +98,7 @@ export default class Transport {
       }, timeBetweenTwoRetries)
     } else if (this.#retryCount === maxRetries) {
       if (this.#resetRetryTimeout === undefined) {
+        logger.debug(logPrefix, "waiting for", timeToResumeRetries)
         this.#resetRetryTimeout = window.setTimeout(() => {
           this.#retryCount = 0
         }, timeToResumeRetries)
@@ -110,6 +109,8 @@ export default class Transport {
   async #makeRequest(request, { retry }) {
     const headers = new Headers(this.#config.headers)
     headers.append("Content-Type", "application/proto")
+
+    logger.debug(logPrefix, "network request headers", headers)
 
     try {
       const response = await fetch(this.#config.url, {
@@ -137,13 +138,17 @@ export default class Transport {
 
         logger.debug(
           logPrefix,
-          "Response data from Raccoon",
+          "response data from Raccoon",
           res,
           JSON.stringify(res, undefined, 2)
         )
 
         const events = await this.#store.readByReqGuid(res.data["req_guid"])
         this.#store.remove(events)
+        logger.debug(
+          "remove events from store with reqGuid",
+          res.data["req_guid"]
+        )
       }
     } catch (err) {
       logger.error(logPrefix, new NetworkError(err.message, { cause: err }))
