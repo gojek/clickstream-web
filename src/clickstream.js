@@ -51,6 +51,7 @@ export default class Clickstream {
       batch,
       network,
       crypto,
+      debug,
     }
   ) {
     logger.info(logPrefix, "configuration received")
@@ -62,6 +63,11 @@ export default class Clickstream {
     new Validator().validate(event, batch, network, crypto)
 
     logger.info(logPrefix, "configuration validation is successful")
+
+    if (debug) {
+      logger.logging = debug
+      logger.info(logPrefix, "logging is set to", logger.logging)
+    }
 
     this.#isRealTimeEventsSupported = isRealTimeEventsSupported()
 
@@ -115,15 +121,6 @@ export default class Clickstream {
     })
 
     this.#init()
-  }
-
-  get logging() {
-    return logger.logging
-  }
-
-  set logging(value) {
-    logger.logging = value
-    logger.info(logPrefix, "logging is set to", logger.logging)
   }
 
   #init() {

@@ -120,14 +120,14 @@ export default class Transport {
         logger.error(
           logPrefix,
           new NetworkError(
-            `Network request to Clickstream backend failed with status code ${response.status}`
+            `Network request to raccoon failed with status code ${response.status}`
           )
         )
         if (retry) this.#retry(request)
         return
       }
 
-      logger.info(logPrefix, "received response from Clickstream backend ")
+      logger.info(logPrefix, "received response from raccoon ")
       if (this.#store.isOpen()) {
         const blob = await response.blob()
         const buffer = await blob.arrayBuffer()
