@@ -56,7 +56,7 @@ export default class Store {
         this.#db = event.target.result
         this.#isOpen = true
         resolve("success")
-        logger.debug(logPrefix, "store is open with name", this.#name)
+        logger.info(logPrefix, "store is open with name", this.#name)
       }
 
       request.onupgradeneeded = (event) => {

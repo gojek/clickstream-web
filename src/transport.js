@@ -39,6 +39,9 @@ export default class Transport {
     const reqGuid = this.#id.uuidv4()
     const { seconds, nanos } = getTimestamp()
 
+    logger.info(logPrefix, "generated reqGuid", reqGuid)
+    logger.info(logPrefix, "generated timestamp(seconds)", seconds)
+
     // update QoS1 events in store
     const realTimeBatch = batch.filter((event) => {
       return event.eventType === EVENT_TYPE.REALTIME
@@ -46,6 +49,7 @@ export default class Transport {
 
     if (realTimeBatch.length && this.#store.isOpen) {
       this.#store.update(realTimeBatch, "reqGuid", reqGuid)
+      logger.info(logPrefix, "updated reqGuid for all events in store")
     }
 
     const encodedBatch = batch.map((payload) => {
@@ -65,12 +69,7 @@ export default class Transport {
       events: [...encodedBatch],
     })
 
-    logger.debug(
-      logPrefix,
-      "network request",
-      request,
-      JSON.stringify(request, undefined, 2)
-    )
+    logger.debug(logPrefix, "network request", request)
 
     return {
       reqGuid,
@@ -110,8 +109,6 @@ export default class Transport {
     const headers = new Headers(this.#config.headers)
     headers.append("Content-Type", "application/proto")
 
-    logger.debug(logPrefix, "network request headers", headers)
-
     try {
       const response = await fetch(this.#config.url, {
         method: "POST",
@@ -130,6 +127,7 @@ export default class Transport {
         return
       }
 
+      logger.info(logPrefix, "received response from Clickstream backend ")
       if (this.#store.isOpen()) {
         const blob = await response.blob()
         const buffer = await blob.arrayBuffer()

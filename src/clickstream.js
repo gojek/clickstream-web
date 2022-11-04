@@ -53,9 +53,15 @@ export default class Clickstream {
       crypto,
     }
   ) {
+    logger.info(logPrefix, "configuration received")
+    logger.debug(logPrefix, "event configuration received", event)
+    logger.debug(logPrefix, "batch configuration received", batch)
+    logger.debug(logPrefix, "network configuration received", network)
+    logger.debug(logPrefix, "crypto configuration received", crypto)
+
     new Validator().validate(event, batch, network, crypto)
 
-    logger.info(logPrefix, "Configuration validation is successful")
+    logger.info(logPrefix, "configuration validation is successful")
 
     this.#isRealTimeEventsSupported = isRealTimeEventsSupported()
 
@@ -69,6 +75,12 @@ export default class Clickstream {
     this.#eventConfig = Object.assign(defaultConfig.event, event)
     this.#batchConfig = Object.assign(defaultConfig.batch, batch)
     this.#networkConfig = Object.assign(defaultConfig.network, network)
+
+    logger.info(logPrefix, "configuration merged with default configuration")
+    logger.debug(logPrefix, "event configuration", this.#eventConfig)
+    logger.debug(logPrefix, "batch configuration", this.#batchConfig)
+    logger.debug(logPrefix, "network configuration", this.#networkConfig)
+    logger.debug(logPrefix, "crypto configuration", crypto)
 
     this.#tracking = true
 
@@ -124,7 +136,8 @@ export default class Clickstream {
 
   #listeners() {
     this.#eventBus?.on(CUSTOM_EVENT.BATCH_CREATED, (e) => {
-      logger.debug(logPrefix, "new batch created", e.detail.batch)
+      logger.info(logPrefix, "new batch created")
+      logger.debug(logPrefix, "new batch data", e.detail.batch)
       this.#transport.send(e.detail.batch, { retry: true })
     })
   }
@@ -152,6 +165,7 @@ export default class Clickstream {
 
     if (this.#isRealTimeEventsSupported && !this.#scheduler.isRunning()) {
       this.#scheduler.start()
+      logger.info(logPrefix, "restarted scheduler")
     }
 
     if (this.#isRealTimeEventsSupported && !this.#store?.isOpen()) {
@@ -166,14 +180,18 @@ export default class Clickstream {
 
     const { type, event } = this.#processor.process(payload)
 
-    logger.debug(logPrefix, "event type is set to", type)
+    logger.info(logPrefix, "event type is set to", type)
 
     try {
       if (type === EVENT_TYPE.REALTIME) {
         await this.#store.write(event)
-        logger.debug(logPrefix, "event is stored in the store", event.eventGuid)
+        logger.info(
+          logPrefix,
+          "event is stored in the store with eventGuid",
+          event.eventGuid
+        )
       } else if (type === EVENT_TYPE.INSTANT) {
-        logger.debug(logPrefix, "event is sent to transport layer")
+        logger.info(logPrefix, "event is sent to transport layer")
         this.#transport.send([event])
       }
     } catch (error) {
@@ -191,7 +209,7 @@ export default class Clickstream {
    */
   pause() {
     this.#tracking = false
-    logger.debug(logPrefix, "tracking is set to", this.#tracking)
+    logger.info(logPrefix, "tracking is set to", this.#tracking)
   }
 
   /**
@@ -199,7 +217,7 @@ export default class Clickstream {
    */
   resume() {
     this.#tracking = true
-    logger.debug(logPrefix, "tracking is set to", this.#tracking)
+    logger.info(logPrefix, "tracking is set to", this.#tracking)
   }
 
   /**
@@ -216,9 +234,10 @@ export default class Clickstream {
   async free() {
     try {
       await this.#scheduler.free()
-      logger.debug(logPrefix, "scheduler resources are released")
+      logger.info(logPrefix, "scheduler resources are released")
       await this.#store.delete()
-      logger.debug(logPrefix, "store is deleted")
+      logger.info(logPrefix, "store is deleted")
+      logger.info(logPrefix, "cleanup is done")
     } catch (error) {
       return Promise.reject(
         new ClickstreamError(error.message, {

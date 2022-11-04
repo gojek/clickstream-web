@@ -20,7 +20,7 @@ export default class Processor {
     if (!this.#isRealTimeEventsSupported) {
       logger.info(
         logPrefix,
-        `treating ${proto.eventName} event as QoS0 as QoS1 events are not supported`
+        `treating "${proto.eventName}" event as QoS0 as QoS1 events are not supported`
       )
       return EVENT_TYPE.INSTANT
     }
@@ -29,7 +29,7 @@ export default class Processor {
     if (!this.#store.isOpen()) {
       logger.info(
         logPrefix,
-        `treating ${proto.eventName} event as QoS0 as indexedDB is not supported`
+        `treating "${proto.eventName}" event as QoS0 as indexedDB is not supported`
       )
       return EVENT_TYPE.INSTANT
     }
@@ -37,14 +37,14 @@ export default class Processor {
     if (this.#config?.classification?.instant?.includes(proto.eventName)) {
       logger.info(
         logPrefix,
-        `${proto.eventName} event is classified as QoS0 as per configuration`
+        `"${proto.eventName}" event is classified as QoS0 as per configuration`
       )
       return EVENT_TYPE.INSTANT
     }
 
     logger.info(
       logPrefix,
-      `${proto.eventName} event is considered as QoS1 by default configuration`
+      `"${proto.eventName}" event is considered as QoS1 by default configuration`
     )
     return EVENT_TYPE.REALTIME
   }
@@ -68,7 +68,7 @@ export default class Processor {
       ? `${this.#config.group}-${typeUrl}`
       : typeUrl
 
-    logger.debug(logPrefix, "topic name is set to", type)
+    logger.info(logPrefix, "topic name is set to", type)
 
     /** @type {import("./store.js").Event} */
     const event = {
@@ -82,7 +82,8 @@ export default class Processor {
       event.reqGuid = ""
     }
 
-    logger.debug(logPrefix, "event created", event)
+    logger.info(logPrefix, "created a new event")
+    logger.debug(logPrefix, "new event data", event)
     return event
   }
 
