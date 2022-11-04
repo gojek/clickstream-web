@@ -17,6 +17,42 @@ import {
 
 const logPrefix = "Cickstream:"
 
+const runtime = {
+  BROWSER: "browser",
+  NODE: "node",
+}
+
+const getRuntime = () => {
+  try {
+    if (globalThis === window) {
+      return runtime.BROWSER
+    }
+  } catch (err) {
+    return runtime.NODE
+  }
+}
+
+const logMetaData = () => {
+  const rt = getRuntime()
+  let meta
+  if (rt === runtime.BROWSER) {
+    const { vendor, userAgent, platform } = globalThis.navigator
+
+    meta = {
+      runtime: runtime.BROWSER,
+      url: document?.location.href ?? null,
+      platform,
+      vendor,
+      userAgent,
+    }
+  } else if (rt === runtime.NODE) {
+    meta = {
+      runtime: runtime.NODE,
+    }
+  }
+  logger.debug(logPrefix, "meta", meta)
+}
+
 const isRealTimeEventsSupported = () => {
   if (globalThis.indexedDB === undefined) {
     return false
@@ -54,6 +90,13 @@ export default class Clickstream {
       debug,
     }
   ) {
+    if (debug) {
+      logger.logging = debug
+      logger.info(logPrefix, "logging is set to", logger.logging)
+    }
+
+    logMetaData()
+
     logger.info(logPrefix, "configuration received")
     logger.debug(logPrefix, "event configuration received", event)
     logger.debug(logPrefix, "batch configuration received", batch)
@@ -63,11 +106,6 @@ export default class Clickstream {
     new Validator().validate(event, batch, network, crypto)
 
     logger.info(logPrefix, "configuration validation is successful")
-
-    if (debug) {
-      logger.logging = debug
-      logger.info(logPrefix, "logging is set to", logger.logging)
-    }
 
     this.#isRealTimeEventsSupported = isRealTimeEventsSupported()
 
