@@ -17,6 +17,7 @@
     // "Go to Definition" in VSCode
     "declarationMap": true,
     "target": "ESNext",
+    "module": "ESNext",
     "moduleResolution": "node"
   }
 }

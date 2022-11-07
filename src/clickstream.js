@@ -32,7 +32,7 @@ const getRuntime = () => {
   }
 }
 
-const logMetaData = () => {
+const logMetaData = async () => {
   const rt = getRuntime()
   let meta
   if (rt === runtime.BROWSER) {
@@ -46,8 +46,11 @@ const logMetaData = () => {
       userAgent,
     }
   } else if (rt === runtime.NODE) {
+    const { version } = await import("node:process")
+
     meta = {
       runtime: runtime.NODE,
+      version,
     }
   }
   logger.debug(logPrefix, "meta", meta)
