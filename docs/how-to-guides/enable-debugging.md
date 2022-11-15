@@ -32,8 +32,14 @@ All the logs are visible in node runtime by default.
 ## Browsers
 
 Use console tab in browser's dev tool to see all the logs printed
-By default some browsers do not show the `debug` type logs, in order to enable them select debug option in the filter as shown below
+By default some browsers do not show the `debug` type logs, in order to enable them select verbose/debug option in the filter as shown below
 
 ### Chrome
 
+Select the `verbose` option from the list in order to see the `debug` logs -
+<img width="575" alt="Screenshot 2022-11-14 at 8 36 41 PM" src="https://user-images.githubusercontent.com/14230239/201834747-f6e97872-7d64-45ae-b372-98cba20fe670.png">
+
 ### Firefox
+Make sure the `debug` button is selected in order to see the `debug` logs -
+<img width="701" alt="Screenshot 2022-11-14 at 8 39 54 PM" src="https://user-images.githubusercontent.com/14230239/201834840-48eb4a9f-fa4e-4590-81d5-f22a5294c922.png">
+
