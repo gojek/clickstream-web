@@ -1,4 +1,4 @@
-# Enable debugging
+# Debugging guide
 
 Clickstream Web SDK comes with detailed logging to provide more details of the event data and flow, starting from event ingestion till event sent to Raccoon over network.
 
@@ -11,8 +11,8 @@ Three types of logs are used by the SDK -
 [`debug`](https://developer.mozilla.org/en-US/docs/Web/API/console/debug) - details and data related to operations performed and other details.
 
 
-## Steps
-1. By default the SDK logs all the `error` type logs, in order to enable `info` and `debug` logs, pass the `debug` configuration option as `true` to enable it while initializing the SDK as shown below
+## Enable debugging
+By default the SDK logs all the `error` type logs, in order to enable `info` and `debug` logs, pass the `debug` configuration option as `true` to enable it while initializing the SDK as shown below
 
 ```js
 new Clickstream({
@@ -26,14 +26,14 @@ new Clickstream({
   debug: true,
 })
 ```
-2. Enable debug log
+
+## See logs
 
 ### Node
-All the logs are visible in node runtime by default, you don't need any additional step to see logs.
+All the logs including `debug` logs are visible in node runtime by default, you don't need any additional step here.
 
 ### Browsers
-Use console tab in browser's dev tool to see all the logs printed
-By default some browsers do not show the `debug` type logs, in order to enable them select verbose/debug option in the filter as shown below
+Use console tab in browser's dev tool to see all the logs printed. By default some browsers do not show the `debug` type logs, in order to enable them select verbose/debug option in the filter as shown below
 
 #### Chrome
 Select the `verbose` option from the list in order to see the `debug` logs.
