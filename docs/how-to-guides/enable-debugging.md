@@ -10,7 +10,9 @@ Three types of logs are used by the SDK -
 
 [`debug`](https://developer.mozilla.org/en-US/docs/Web/API/console/debug) - details and data related to operations performed and other details.
 
-By default the SDK logs all the `error` type logs, in order to enable `info` and `debug` logs, pass the `debug` configuration option as `true` to enable it while initializing the SDK as shown below
+
+## Steps
+1. By default the SDK logs all the `error` type logs, in order to enable `info` and `debug` logs, pass the `debug` configuration option as `true` to enable it while initializing the SDK as shown below
 
 ```js
 new Clickstream({
@@ -24,22 +26,27 @@ new Clickstream({
   debug: true,
 })
 ```
+2. Enable debug log
 
-## Node
-
+### Node
 All the logs are visible in node runtime by default, you don't need any additional step to see logs.
 
-## Browsers
+### Browsers
 Use console tab in browser's dev tool to see all the logs printed
 By default some browsers do not show the `debug` type logs, in order to enable them select verbose/debug option in the filter as shown below
 
-### Chrome
+#### Chrome
 Select the `verbose` option from the list in order to see the `debug` logs.
 
 <img width="575" alt="Screenshot 2022-11-14 at 8 36 41 PM" src="https://user-images.githubusercontent.com/14230239/201834747-f6e97872-7d64-45ae-b372-98cba20fe670.png">
 
-### Firefox
+#### Firefox
 Make sure the `debug` button is selected in order to see the `debug` logs.
 
 <img width="701" alt="Screenshot 2022-11-14 at 8 39 54 PM" src="https://user-images.githubusercontent.com/14230239/201834840-48eb4a9f-fa4e-4590-81d5-f22a5294c922.png">
+
+## Sample logs
+
+<img width="619" alt="Screenshot 2022-11-15 at 11 14 09 AM" src="https://user-images.githubusercontent.com/14230239/201836029-36063b5b-33da-4030-82bf-43a0d5058faa.png">
+
 
