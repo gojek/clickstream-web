@@ -19,8 +19,7 @@
   ],
   "scripts": {
     "lint": "npx eslint src --ignore-path .gitignore",
-    "test:ava": "ava --watch",
-    "test:jest": "jest --watch",
+    "test": "jest --watch",
     "build": "rollup --config --environment PRODUCTION && npm run build:types",
     "build:types": "npx tsc",
     "release": "standard-version",
@@ -59,7 +58,6 @@
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-eslint": "^8.0.2",
     "@rollup/plugin-node-resolve": "^13.3.0",
-    "ava": "^4.3.1",
     "babel-preset-es2015": "^6.24.1",
     "eslint": "^8.21.0",
     "eslint-config-prettier": "^8.5.0",
