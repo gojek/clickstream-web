@@ -10,4 +10,4 @@ You can refer these for step by step walkthrough of a specific feature or action
 
 ### [Control retry mechanism](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/control-retry-mechanism.md)
 
-### [Enable Debugging](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/enable-debugging.md)
+### [Enable debugging](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/enable-debugging.md)
