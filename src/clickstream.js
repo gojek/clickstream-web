@@ -45,6 +45,8 @@ const logMetaData = async () => {
     logger.debug(logPrefix, "platform:", platform)
     logger.debug(logPrefix, "vendor:", vendor)
     logger.debug(logPrefix, "userAgent:", userAgent)
+  } else if (rt === runtime.NODE) {
+    logger.debug(logPrefix, `node version: ${globalThis.process.version}`)
   }
 }
 
