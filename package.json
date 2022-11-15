@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "lint": "npx eslint src --ignore-path .gitignore",
-    "test": "jest --watch",
+    "test": "jest",
     "build": "rollup --config --environment PRODUCTION && npm run build:types",
     "build:types": "npx tsc",
     "release": "standard-version",
