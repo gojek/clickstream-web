@@ -20,40 +20,32 @@ const logPrefix = "Cickstream:"
 const runtime = {
   BROWSER: "browser",
   NODE: "node",
+  UNKNOWN: "unknown",
 }
 
 const getRuntime = () => {
-  try {
-    if (globalThis === window) {
-      return runtime.BROWSER
-    }
-  } catch (err) {
+  if (typeof globalThis.process === "object") {
     return runtime.NODE
+  } else if (typeof globalThis.window !== "undefined") {
+    return runtime.BROWSER
+  } else {
+    return runtime.UNKNOWN
   }
 }
 
 const logMetaData = async () => {
   const rt = getRuntime()
-  let meta
+
+  logger.debug(logPrefix, "runtime detected:", rt)
+
   if (rt === runtime.BROWSER) {
     const { vendor, userAgent, platform } = globalThis.navigator
 
-    meta = {
-      runtime: runtime.BROWSER,
-      url: document?.location.href ?? null,
-      platform,
-      vendor,
-      userAgent,
-    }
-  } else if (rt === runtime.NODE) {
-    const { version } = await import("node:process")
-
-    meta = {
-      runtime: runtime.NODE,
-      version,
-    }
+    logger.debug(logPrefix, "url:", document?.location.href ?? null)
+    logger.debug(logPrefix, "platform:", platform)
+    logger.debug(logPrefix, "vendor:", vendor)
+    logger.debug(logPrefix, "userAgent:", userAgent)
   }
-  logger.debug(logPrefix, "meta", meta)
 }
 
 const isRealTimeEventsSupported = () => {
