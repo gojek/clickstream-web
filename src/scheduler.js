@@ -68,7 +68,9 @@ export default class Scheduler {
       this.stop()
       logger.info(logPrefix, "scheduler is stopped")
       logger.info(logPrefix, "flushing all events")
-      await this.#flush()
+      if (this.#store.isOpen()) {
+        await this.#flush()
+      }
       this.#removeListeners()
     } catch (err) {
       return Promise.reject(err)
