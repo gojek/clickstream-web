@@ -5,7 +5,7 @@ export default class Scheduler {
         store: any;
     });
     /**
-     * Return if the sceduler is running or not
+     * Return if the scheduler is running or not
      */
     isRunning(): boolean;
     /**
