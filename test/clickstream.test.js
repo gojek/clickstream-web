@@ -2,10 +2,10 @@
 import Clickstream from "../src/clickstream.js"
 
 describe("clickstream", () => {
-  test("initialization", () => {
+  test("initializes clickstream with all the public method", () => {
     const clckstrm = new Clickstream({
       network: {
-        url: new URL("https://raccoon-integration.gojekapi.com/api/v1/events"),
+        url: new URL("https://example.com"),
         headers: new Headers({
           Authorization: "Basic <secret-key>",
         }),
