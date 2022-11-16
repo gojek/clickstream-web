@@ -100,6 +100,7 @@ export default class Transport {
         logger.debug(logPrefix, "waiting for", timeToResumeRetries)
         this.#resetRetryTimeout = window.setTimeout(() => {
           this.#retryCount = 0
+          this.#retry(request)
         }, timeToResumeRetries)
       }
     }

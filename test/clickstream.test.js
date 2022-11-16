@@ -1,9 +1,6 @@
 /* eslint-env jest */
 import Clickstream from "../src/clickstream.js"
 
-jest.useFakeTimers()
-jest.spyOn(globalThis, "setInterval")
-
 describe("clickstream", () => {
   test("initialization", () => {
     const clckstrm = new Clickstream({
@@ -20,6 +17,5 @@ describe("clickstream", () => {
     expect(clckstrm.pause).toBeDefined()
     expect(clckstrm.resume).toBeDefined()
     expect(clckstrm.free).toBeDefined()
-    expect(setInterval).toHaveBeenCalledTimes(1)
   })
 })

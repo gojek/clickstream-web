@@ -19,8 +19,8 @@ export const errorNames = {
 export class ClickstreamError extends Error {
   constructor(message, options) {
     super(message, options)
-    this.name = options.name || errorNames.CLICKSTREAM_ERROR
-    this.code = options.code || errorCodes.CLICKSTREAM_ERROR
+    this.name = options?.name ?? errorNames.CLICKSTREAM_ERROR
+    this.code = options?.code ?? errorCodes.CLICKSTREAM_ERROR
   }
 }
 

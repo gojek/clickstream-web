@@ -42,7 +42,7 @@ export default class Validator {
 
     if (!network?.headers) {
       throw new ValidationError(
-        "provide Authorization header in network config"
+        `provide "Authorization" header in network config`
       )
     }
 
@@ -52,14 +52,14 @@ export default class Validator {
 
     if (!network.headers.get("Authorization")) {
       throw new ValidationError(
-        "provide Authorization header in network config"
+        `provide "Authorization" header in network config`
       )
     }
 
     if (isDefined(network.timeBetweenTwoRetries)) {
       if (!isPositiveInteger(network.timeBetweenTwoRetries)) {
         throw new ValidationError(
-          "timeBetweenTwoRetries must be a positive integer"
+          `"timeBetweenTwoRetries" must be a positive integer`
         )
       }
     }
@@ -67,7 +67,7 @@ export default class Validator {
     if (isDefined(network.timeToResumeRetries)) {
       if (!isPositiveInteger(network.timeToResumeRetries)) {
         throw new ValidationError(
-          "timeToResumeRetries must be a positive integer"
+          `"timeToResumeRetries" must be a positive integer`
         )
       }
     }
@@ -79,12 +79,14 @@ export default class Validator {
       })
 
       if (isNonString) {
-        throw new ValidationError("instant event names must be of type string")
+        throw new ValidationError(
+          `"instant" event names must be of type string`
+        )
       }
     }
 
     if (isDefined(event?.group) && !isString(event.group)) {
-      throw new ValidationError("group name must be of type string")
+      throw new ValidationError(`"group" name must be of type string`)
     }
 
     // batch validation
@@ -101,16 +103,16 @@ export default class Validator {
       isDefined(batch?.maxBatchSize) &&
       !isPositiveInteger(batch.maxBatchSize)
     ) {
-      throw new ValidationError("maxBatchSize must be a positive integer")
+      throw new ValidationError(`"maxBatchSize" must be a positive integer`)
     }
 
     if (isDefined(batch?.dbName) && !isString(batch.dbName)) {
-      throw new ValidationError("group name must be of type string")
+      throw new ValidationError(`"dbName" name must be of type string`)
     }
 
     // crypto validation
     if (isDefined(crypto) && typeof crypto !== "object") {
-      throw new ValidationError("crypto must be of type object")
+      throw new ValidationError(`"crypto" must be of type object`)
     }
   }
 }

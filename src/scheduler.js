@@ -206,12 +206,14 @@ export default class Scheduler {
       this.#waitTime += 1
       this.#fill()
 
-      if (this.#batchSize(this.#batch) >= this.#config.maxBatchSize) {
+      const batchSize = this.#batchSize(this.#batch)
+
+      if (batchSize >= this.#config.maxBatchSize) {
         this.#emit()
         logger.info(
           logPrefix,
           "this batch of size",
-          this.#batchSize(this.#batchSize),
+          batchSize,
           "batch has reached max size threshold of",
           this.#config.maxBatchSize
         )
