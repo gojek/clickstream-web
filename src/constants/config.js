@@ -26,6 +26,7 @@
  * @property {BatchConfig=} batch - batch configurations
  * @property {NetworkConfig} network - network configurations
  * @property {object=} crypto - crypto module instance
+ * @property {Boolean=} debug - debug option
  */
 
 /** @type {Config} } */

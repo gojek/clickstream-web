@@ -7,12 +7,48 @@ import Store from "./store.js"
 import Id from "./id.js"
 import { CUSTOM_EVENT, EVENT_TYPE, defaultConfig } from "./constants/index.js"
 import Validator from "./validator.js"
+import { logger } from "./logger.js"
 import {
   ClickstreamError,
   DatabaseError,
   errorCodes,
   errorNames,
 } from "./error.js"
+
+const logPrefix = "Cickstream:"
+
+const runtime = {
+  BROWSER: "browser",
+  NODE: "node",
+  UNKNOWN: "unknown",
+}
+
+const getRuntime = () => {
+  if (typeof globalThis.process === "object") {
+    return runtime.NODE
+  } else if (typeof globalThis.window !== "undefined") {
+    return runtime.BROWSER
+  } else {
+    return runtime.UNKNOWN
+  }
+}
+
+const logMetaData = async () => {
+  const rt = getRuntime()
+
+  logger.debug(logPrefix, "runtime detected:", rt)
+
+  if (rt === runtime.BROWSER) {
+    const { vendor, userAgent, platform } = globalThis.navigator
+
+    logger.debug(logPrefix, "url:", document?.location.href ?? null)
+    logger.debug(logPrefix, "platform:", platform)
+    logger.debug(logPrefix, "vendor:", vendor)
+    logger.debug(logPrefix, "userAgent:", userAgent)
+  } else if (rt === runtime.NODE) {
+    logger.debug(logPrefix, `node version: ${globalThis.process.version}`)
+  }
+}
 
 const isRealTimeEventsSupported = () => {
   if (globalThis.indexedDB === undefined) {
@@ -48,19 +84,50 @@ export default class Clickstream {
       batch,
       network,
       crypto,
+      debug,
     }
   ) {
+    if (debug) {
+      logger.logging = debug
+      logger.info(logPrefix, "logging is set to", logger.logging)
+    }
+
+    logMetaData()
+
+    logger.info(logPrefix, "configuration received")
+    logger.debug(logPrefix, "event configuration received", event)
+    logger.debug(logPrefix, "batch configuration received", batch)
+    logger.debug(logPrefix, "network configuration received", network)
+    logger.debug(logPrefix, "crypto configuration received", crypto)
+
     new Validator().validate(event, batch, network, crypto)
 
+    logger.info(logPrefix, "configuration validation is successful")
+
     this.#isRealTimeEventsSupported = isRealTimeEventsSupported()
+
+    logger.info(
+      logPrefix,
+      `QoS1 events are ${
+        this.#isRealTimeEventsSupported ? "" : "not"
+      } supported`
+    )
 
     this.#eventConfig = Object.assign(defaultConfig.event, event)
     this.#batchConfig = Object.assign(defaultConfig.batch, batch)
     this.#networkConfig = Object.assign(defaultConfig.network, network)
 
+    logger.info(logPrefix, "configuration merged with default configuration")
+    logger.debug(logPrefix, "event configuration", this.#eventConfig)
+    logger.debug(logPrefix, "batch configuration", this.#batchConfig)
+    logger.debug(logPrefix, "network configuration", this.#networkConfig)
+    logger.debug(logPrefix, "crypto configuration", crypto)
+
     this.#tracking = true
 
-    this.#store = new Store({ name: this.#batchConfig.dbName })
+    this.#store = new Store({
+      name: this.#batchConfig.dbName,
+    })
 
     if (this.#isRealTimeEventsSupported) {
       this.#eventBus = new EventBus()
@@ -92,12 +159,17 @@ export default class Clickstream {
   }
 
   #init() {
-    this.#listeners()
-    this.#scheduler.start()
+    if (this.#isRealTimeEventsSupported) {
+      this.#listeners()
+      this.#scheduler.start()
+      logger.info(logPrefix, "scheduler is up and running")
+    }
   }
 
   #listeners() {
     this.#eventBus?.on(CUSTOM_EVENT.BATCH_CREATED, (e) => {
+      logger.info(logPrefix, "new batch created")
+      logger.debug(logPrefix, "new batch data", e.detail.batch)
       this.#transport.send(e.detail.batch, { retry: true })
     })
   }
@@ -125,6 +197,7 @@ export default class Clickstream {
 
     if (this.#isRealTimeEventsSupported && !this.#scheduler.isRunning()) {
       this.#scheduler.start()
+      logger.info(logPrefix, "restarted scheduler")
     }
 
     if (this.#isRealTimeEventsSupported && !this.#store?.isOpen()) {
@@ -139,10 +212,18 @@ export default class Clickstream {
 
     const { type, event } = this.#processor.process(payload)
 
+    logger.info(logPrefix, "event type is set to", type)
+
     try {
       if (type === EVENT_TYPE.REALTIME) {
         await this.#store.write(event)
+        logger.info(
+          logPrefix,
+          "event is stored in the store with eventGuid",
+          event.eventGuid
+        )
       } else if (type === EVENT_TYPE.INSTANT) {
+        logger.info(logPrefix, "event is sent to transport layer")
         this.#transport.send([event])
       }
     } catch (error) {
@@ -160,6 +241,7 @@ export default class Clickstream {
    */
   pause() {
     this.#tracking = false
+    logger.info(logPrefix, "tracking is set to", this.#tracking)
   }
 
   /**
@@ -167,6 +249,7 @@ export default class Clickstream {
    */
   resume() {
     this.#tracking = true
+    logger.info(logPrefix, "tracking is set to", this.#tracking)
   }
 
   /**
@@ -183,7 +266,10 @@ export default class Clickstream {
   async free() {
     try {
       await this.#scheduler.free()
+      logger.info(logPrefix, "scheduler resources are released")
       await this.#store.delete()
+      logger.info(logPrefix, "store is deleted")
+      logger.info(logPrefix, "cleanup is done")
     } catch (error) {
       return Promise.reject(
         new ClickstreamError(error.message, {

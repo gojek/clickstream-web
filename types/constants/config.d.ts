@@ -23,6 +23,7 @@
  * @property {BatchConfig=} batch - batch configurations
  * @property {NetworkConfig} network - network configurations
  * @property {object=} crypto - crypto module instance
+ * @property {Boolean=} debug - debug option
  */
 /** @type {Config} } */
 export const defaultConfig: Config;
@@ -103,5 +104,9 @@ export type Config = {
      * - crypto module instance
      */
     crypto?: object | undefined;
+    /**
+     * - debug option
+     */
+    debug?: boolean | undefined;
 };
 //# sourceMappingURL=config.d.ts.map

@@ -2,6 +2,9 @@
 import { CUSTOM_EVENT, EVENT_TYPE } from "./constants/index.js"
 import { NetworkError } from "./error.js"
 import { SendEventRequest, SendEventResponse, Event } from "./protos/raccoon.js"
+import { logger } from "./logger.js"
+
+const logPrefix = "Network:"
 
 /**
  * Gives timestamp object as google timestamp format
@@ -36,6 +39,9 @@ export default class Transport {
     const reqGuid = this.#id.uuidv4()
     const { seconds, nanos } = getTimestamp()
 
+    logger.info(logPrefix, "generated reqGuid", reqGuid)
+    logger.info(logPrefix, "generated timestamp(seconds)", seconds)
+
     // update QoS1 events in store
     const realTimeBatch = batch.filter((event) => {
       return event.eventType === EVENT_TYPE.REALTIME
@@ -43,6 +49,7 @@ export default class Transport {
 
     if (realTimeBatch.length && this.#store.isOpen) {
       this.#store.update(realTimeBatch, "reqGuid", reqGuid)
+      logger.info(logPrefix, "updated reqGuid for all events in store")
     }
 
     const encodedBatch = batch.map((payload) => {
@@ -61,6 +68,9 @@ export default class Transport {
       },
       events: [...encodedBatch],
     })
+
+    logger.debug(logPrefix, "network request", request)
+
     return {
       reqGuid,
       body: SendEventRequest.encode(request).finish(),
@@ -79,6 +89,7 @@ export default class Transport {
 
       this.#retryCount += 1
 
+      logger.debug(logPrefix, "retry", this.#retryCount)
       window.setTimeout(() => {
         this.#eventBus.emit(CUSTOM_EVENT.BATCH_FAILED, {
           reqGuid: request.reqGuid,
@@ -86,6 +97,7 @@ export default class Transport {
       }, timeBetweenTwoRetries)
     } else if (this.#retryCount === maxRetries) {
       if (this.#resetRetryTimeout === undefined) {
+        logger.debug(logPrefix, "waiting for", timeToResumeRetries)
         this.#resetRetryTimeout = window.setTimeout(() => {
           this.#retryCount = 0
         }, timeToResumeRetries)
@@ -105,26 +117,39 @@ export default class Transport {
       })
 
       if (!response.ok) {
-        console.error(
+        logger.error(
+          logPrefix,
           new NetworkError(
-            `Network request to Clickstream backend failed with status code ${response.status}`
+            `Network request to raccoon failed with status code ${response.status}`
           )
         )
         if (retry) this.#retry(request)
         return
       }
 
+      logger.info(logPrefix, "received response from raccoon ")
       if (this.#store.isOpen()) {
         const blob = await response.blob()
         const buffer = await blob.arrayBuffer()
         const uInt = new Uint8Array(buffer)
         const res = SendEventResponse.decode(uInt)
 
+        logger.debug(
+          logPrefix,
+          "response data from Raccoon",
+          res,
+          JSON.stringify(res, undefined, 2)
+        )
+
         const events = await this.#store.readByReqGuid(res.data["req_guid"])
         this.#store.remove(events)
+        logger.debug(
+          "remove events from store with reqGuid",
+          res.data["req_guid"]
+        )
       }
     } catch (err) {
-      console.error(new NetworkError(err.message, { cause: err }))
+      logger.error(logPrefix, new NetworkError(err.message, { cause: err }))
       if (retry) this.#retry(request)
     }
   }

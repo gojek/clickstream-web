@@ -1,5 +1,8 @@
 // @ts-check
 import { CUSTOM_EVENT, TICK_TIME } from "./constants/index.js"
+import { logger } from "./logger.js"
+
+const logPrefix = "Scheduler:"
 export default class Scheduler {
   /** @type { number | NodeJS.Timer | undefined } */
   #intervalId
@@ -22,7 +25,7 @@ export default class Scheduler {
   }
 
   /**
-   * Return if the sceduler is running or not
+   * Return if the scheduler is running or not
    */
   isRunning() {
     return this.#batching
@@ -63,6 +66,8 @@ export default class Scheduler {
   async free() {
     try {
       this.stop()
+      logger.info(logPrefix, "scheduler is stopped")
+      logger.info(logPrefix, "flushing all events")
       await this.#flush()
       this.#removeListeners()
     } catch (err) {
@@ -83,6 +88,7 @@ export default class Scheduler {
       })
     })
 
+    logger.debug(logPrefix, "flushed events", events)
     this.#batch.push(...events)
 
     this.#emit()
@@ -107,13 +113,16 @@ export default class Scheduler {
 
   #listeners() {
     this.#eventBus?.on(CUSTOM_EVENT.BATCH_FAILED, async (e) => {
+      logger.debug(logPrefix, "batch failed with reqGuid", e.detail.reqGuid)
       const events = await this.#store.readByReqGuid(e.detail.reqGuid)
       this.#eventBus.emit(CUSTOM_EVENT.BATCH_CREATED, { batch: events })
     })
+    logger.info(logPrefix, 'added "BATCH_FAILED" listener')
   }
 
   #removeListeners() {
-    this.#eventBus?.remvove(CUSTOM_EVENT.BATCH_FAILED)
+    this.#eventBus?.remove(CUSTOM_EVENT.BATCH_FAILED)
+    logger.info(logPrefix, 'removed "BATCH_FAILED" listener')
   }
 
   #batchSize(batch) {
@@ -127,11 +136,16 @@ export default class Scheduler {
     const batchSize = this.#batchSize(this.#batch)
     const remSize = this.#config.maxBatchSize - batchSize
 
+    logger.debug(logPrefix, "current batch size", batchSize)
+    logger.debug(logPrefix, "max batch size", this.#config.maxBatchSize)
+    logger.debug(logPrefix, "remaining batch size", remSize)
+
     return events.splice(0, Math.ceil(remSize / unitSize) + 1)
   }
 
   async #getRealTimeEvents() {
     if (!this.#store.isOpen()) {
+      logger.debug(logPrefix, "store is not open")
       return []
     }
     try {
@@ -145,22 +159,39 @@ export default class Scheduler {
       })
 
       if (!events.length) {
+        logger.debug("no new QoS1 events are found")
         return []
       }
 
       const eventsBySize = this.#splitBySize(events)
 
+      logger.debug(
+        logPrefix,
+        "events before splitting by size",
+        events,
+        events.length
+      )
+
+      logger.debug(
+        logPrefix,
+        "events after splitting by size",
+        eventsBySize,
+        eventsBySize.length
+      )
+
       return eventsBySize
     } catch (error) {
-      console.error(error)
+      logger.error(logPrefix, error)
       return []
     }
   }
 
   async #fill() {
     const realTimeEvents = await this.#getRealTimeEvents()
+    logger.debug(logPrefix, "QoS1 events", realTimeEvents)
     if (realTimeEvents.length) {
       this.#batch.push(...realTimeEvents)
+      logger.debug(logPrefix, "QoS1 events pushed in batch", this.#batch)
     }
   }
 
@@ -168,6 +199,7 @@ export default class Scheduler {
     this.#clearInterval()
     this.#intervalId = setInterval(() => {
       if (!this.#batching) {
+        logger.debug(logPrefix, "batching is not running")
         return
       }
 
@@ -176,8 +208,20 @@ export default class Scheduler {
 
       if (this.#batchSize(this.#batch) >= this.#config.maxBatchSize) {
         this.#emit()
+        logger.info(
+          logPrefix,
+          "this batch of size",
+          this.#batchSize(this.#batchSize),
+          "batch has reached max size threshold of",
+          this.#config.maxBatchSize
+        )
       } else if (this.#waitTime >= this.#config.maxTimeBetweenTwoBatches) {
         this.#emit()
+        logger.info(
+          logPrefix,
+          "batch has waited max time of",
+          this.#config.maxTimeBetweenTwoBatches
+        )
       }
     }, TICK_TIME)
   }
