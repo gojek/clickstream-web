@@ -1,5 +1,3 @@
-// @ts-check
-
 import { ValidationError } from "./error.js"
 
 const isPositiveInteger = (value) => {

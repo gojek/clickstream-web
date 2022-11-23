@@ -1,4 +1,3 @@
-// @ts-check
 export default class EventBus {
   constructor() {
     this.eventTarget = new EventTarget()

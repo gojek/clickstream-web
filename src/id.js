@@ -1,4 +1,3 @@
-// @ts-check
 export default class Id {
   #crypto
   constructor({ crypto: cryptoObj }) {

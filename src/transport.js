@@ -1,4 +1,3 @@
-// @ts-check
 import { CUSTOM_EVENT, EVENT_TYPE } from "./constants/index.js"
 import { NetworkError } from "./error.js"
 import { SendEventRequest, SendEventResponse, Event } from "./protos/raccoon.js"

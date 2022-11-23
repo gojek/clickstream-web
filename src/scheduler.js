@@ -1,4 +1,3 @@
-// @ts-check
 import { CUSTOM_EVENT, TICK_TIME } from "./constants/index.js"
 import { logger } from "./logger.js"
 

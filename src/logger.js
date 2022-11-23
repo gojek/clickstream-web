@@ -1,5 +1,3 @@
-// @ts-check
-
 let logging = false
 
 function format(prefix, args) {

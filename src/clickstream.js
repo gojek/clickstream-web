@@ -1,4 +1,3 @@
-// @ts-check
 import Transport from "./transport.js"
 import Processor from "./processor.js"
 import Scheduler from "./scheduler.js"
