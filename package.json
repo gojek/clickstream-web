@@ -17,6 +17,7 @@
     "dist",
     "types"
   ],
+  "sideEffects": "false",
   "scripts": {
     "lint": "npx eslint src --ignore-path .gitignore",
     "test": "jest",
