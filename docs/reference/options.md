@@ -216,6 +216,22 @@ Web crypto module instance, which is different for browser and node runtimes, yo
 }
 ```
 
+## **debug**
+
+Control logging using debug option
+
+**Type -** Boolean
+
+**Default value -** false
+
+**Example -**
+
+```js
+{
+  debug: false
+}
+```
+
 # Full list of options with default value
 
 Comprehensive list of options with default value assigned to them
@@ -251,6 +267,8 @@ Comprehensive list of options with default value assigned to them
     timeToResumeRetries: 20_000,
   },
   // web crypto module instance
-  crypto: null
+  crypto: null,
+  // enable logging by setting this to true
+  debug: false
 }
 ```

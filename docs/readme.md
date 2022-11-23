@@ -1,17 +1,17 @@
 # Clickstream Web
 
-Clickstream Web is a Modern, Fast, and Lightweight Event Ingestion library, adhering to the philosophy and workings of Clickstream. Clickstream is event agnostic and real-time in nature. Web applications can maintain a long-running connection to send data in real-time using Clickstream.
+Clickstream Web is a Modern, Fast, and Lightweight Event Ingestion library, adhering to the philosophy and workings of Clickstream. Clickstream is event agnostic and real-time in nature.
 
 ## Contents
 
-### [Getting Started](https://github.com/gojekfarm/clickstream-web/blob/main/docs/getting-started.md)
+- ### [Getting Started](https://github.com/gojekfarm/clickstream-web/blob/main/docs/getting-started.md)
 
-### [How To Guides](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/readme.md)
+- ### [How To Guides](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/readme.md)
 
-### [Reference](https://github.com/gojekfarm/clickstream-web/blob/main/docs/reference/readme.md)
+- ### [API Reference](https://github.com/gojekfarm/clickstream-web/blob/main/docs/reference/readme.md)
 
-### [Browser Compatibility](https://github.com/gojekfarm/clickstream-web/blob/main/docs/browser-compatibility.md)
+- ### [Browser Compatibility](https://github.com/gojekfarm/clickstream-web/blob/main/docs/browser-compatibility.md)
 
-### [Limitations](https://github.com/gojekfarm/clickstream-web/blob/main/docs/limitations.md)
+- ### [Limitations](https://github.com/gojekfarm/clickstream-web/blob/main/docs/limitations.md)
 
-### [Architecture](https://github.com/gojekfarm/clickstream-web/blob/main/docs/architecture.md)
+- ### [Architecture](https://github.com/gojekfarm/clickstream-web/blob/main/docs/architecture.md)

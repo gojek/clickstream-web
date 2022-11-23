@@ -1,14 +1,14 @@
 # Clickstream Web
 
-Clickstream Web is a Modern, Fast, and Lightweight Event Ingestion library, adhering to the philosophy and workings of Clickstream. Clickstream is event agnostic and real-time in nature. Web applications can maintain a long-running connection to send data in real-time using Clickstream.
+Clickstream Web is a Modern, Fast, and Lightweight Event Ingestion library, adhering to the philosophy and workings of Clickstream. Clickstream is event agnostic and real-time in nature.
 
 ## Features
 
-- Fast - Much faster than other third-party analytics solutions
-- Reliable - At least once delivery, ensured
-- Highly configurable - Mold the behavior based on your business goals
-- Small & lightweight - Close to native web technologies, less dependencies
-- Runtime Agnostic - Use in browser & Node JS runtimes seamlessly
+- **Fast** - Much faster than other third-party analytics solutions
+- **Reliable** - At least once delivery, ensured
+- **Highly configurable** - Mold the behavior based on your business goals
+- **Lean** - Close to native web technologies, less dependencies
+- **Runtime Agnostic** - Use in browser & Node JS runtimes seamlessly
 
 ## Installation
 
@@ -95,7 +95,6 @@ document.querySelector("#some-button").addEventListener("click", () => {
     // handle error
     console.log(err)
   }
-
 })
 ```
 
@@ -140,25 +139,24 @@ Frees up all the resource used by the Clickstream instance asynchronously.
 Clears the timeouts and intervals used & removes all the event listeners.
 Flushes all the existing events in the system before deleting the indexedDB database in use.
 
-It has no side effect on the working oh the SDK, calling .track() method again will recreate all the timeouts, interval and database for event tracking.
+It has no side effect on the working oh the SDK, calling `.track()` method again will re-create all the timeout, interval and database for event tracking.
 
 Returns errors with message and code on failure.
 
-```
+```js
 try {
-  await clckstrm.free();
-} catch(err) {
+  await clckstrm.free()
+} catch (err) {
   // handle error
   console.log(err)
 }
-
 ```
 
 ## Options
 
-The constructor takes an options object as parameter which has `event`, `batch`, `network` & `crypto` options as property.
+The constructor takes an options object as parameter which has `event`, `batch`, `network`, `crypto` & `debug` options as property.
 
-```
+```js
 {
   event: {
     // contains names of all the instant events, used to differentiate QoS0 and QoS1 events.
@@ -189,7 +187,9 @@ The constructor takes an options object as parameter which has `event`, `batch`,
     timeToResumeRetries: 20_000,
   },
   // web crypto module instance
-  crypto: null
+  crypto: null,
+  // enable logging by setting this to true
+  debug: false,
 }
 ```
 
@@ -211,27 +211,37 @@ try {
 }
 ```
 
-## [Documentation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/readme.md)
+## Documentation
 
-### [Getting Started](https://github.com/gojekfarm/clickstream-web/blob/main/docs/getting-started.md)
+- ### [Getting Started](https://github.com/gojekfarm/clickstream-web/blob/main/docs/getting-started.md)
 
-### [How To Guide](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/readme.md)
+- ### [How To Guide](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/readme.md)
 
-### [Reference](https://github.com/gojekfarm/clickstream-web/blob/main/docs/reference/readme.md)
+- ### [API Reference](https://github.com/gojekfarm/clickstream-web/blob/main/docs/reference/readme.md)
 
-### [Browser Compatibility](https://github.com/gojekfarm/clickstream-web/blob/main/docs/browser-compatibility.md)
+- ### [Browser Compatibility](https://github.com/gojekfarm/clickstream-web/blob/main/docs/browser-compatibility.md)
 
-### [Limitation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/limitations.md)
+- ### [Limitation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/limitations.md)
 
-### [Architecture](https://github.com/gojekfarm/clickstream-web/blob/main/docs/architecture.md)
+- ### [Architecture](https://github.com/gojekfarm/clickstream-web/blob/main/docs/architecture.md)
+
+## Contribution Guidelines
+
+See the [guidelines](https://github.com/gojekfarm/clickstream-web/blob/main//CONTRIBUTION.md)
+
+## Sibling SDKs
+
+Clickstream have SDKs for **[iOS](https://source.golabs.io/mobile/clickstream-ios-sdk)** and **[Android](https://source.golabs.io/mobile/devx/android-framework/clickstream-android-sdk)** platforms for mobile projects.
 
 ## Issues
 
-Submit your question and issues [here](https://github.com/gojekfarm/clickstream-web/issues)
+Submit your question and issues [here](https://github.com/gojekfarm/clickstream-web/issues).
 
 ## License
 
 ```
+Copyright 2022 GOJEK
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at

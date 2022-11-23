@@ -84,6 +84,11 @@ const clckstrm = new Clickstream({
 
 // call on some event such as user click.
 document.querySelector("#some-button").addEventListener("click", () => {
-  clckstrm.track(payload)
+  try {
+    await clckstrm.track(payload)
+  } catch(err) {
+    // handle error
+    console.log(err)
+  }
 })
 ```

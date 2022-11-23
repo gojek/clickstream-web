@@ -1,6 +1,6 @@
 # How to guides
 
-You can refer these for step by step walkthrough of a specific feature or action.
+You can refer these for step by step walk-through of a specific feature or action.
 
 ### [Send QoS0 event](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/send-qos0-event.md)
 
