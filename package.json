@@ -23,7 +23,7 @@
     "test:jest": "jest --watch",
     "build": "rollup --config --environment PRODUCTION && npm run build:types",
     "build:types": "npx tsc",
-    "release": "standard-version",
+    "release": "npm run build && standard-version",
     "prepare": "husky install"
   },
   "repository": {
