@@ -7,15 +7,13 @@ const logPrefix = "Network:"
 
 /**
  * Gives timestamp object as google timestamp format
- * @returns timestamp object containing seconds and nanos
+ * @returns timestamp object containing seconds
  */
 const getTimestamp = () => {
   const date = new Date()
   const seconds = Math.floor(date.getTime() / 1000)
-  const fraction = date.toISOString().split(".")[1]
-  const nanos = fraction.slice(0, fraction.length - 1)
 
-  return { seconds, nanos }
+  return { seconds }
 }
 
 export default class Transport {
@@ -36,7 +34,7 @@ export default class Transport {
 
   #createRequest(batch) {
     const reqGuid = this.#id.uuidv4()
-    const { seconds, nanos } = getTimestamp()
+    const { seconds } = getTimestamp()
 
     logger.info(logPrefix, "generated reqGuid", reqGuid)
     logger.info(logPrefix, "generated timestamp(seconds)", seconds)
@@ -63,7 +61,6 @@ export default class Transport {
       reqGuid,
       sentTime: {
         seconds,
-        nanos,
       },
       events: [...encodedBatch],
     })
