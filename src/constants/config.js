@@ -1,6 +1,6 @@
 /**
  * @typedef {object} EventConfig - Event configuration
- * @property {{instant: string[]}} classification - event classification
+ * @property {{instant: string[]}=} classification - event classification
  * @property {string=} group - product group name
  */
 
