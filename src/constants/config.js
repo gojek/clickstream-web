@@ -6,7 +6,7 @@
 
 /**
  * @typedef {object} BatchConfig - Batch configuration
- * @property {number=} maxTimeBetweenTwoBatches - Maximum wait time betweeen two batches
+ * @property {number=} maxTimeBetweenTwoBatches - Maximum wait time between two batches
  * @property {number=} maxBatchSize - Maximum size of a batch
  * @property {string=} dbName - name for indexedDB
  */
@@ -47,7 +47,7 @@ export const defaultConfig = {
   },
   network: {
     url: "",
-    headers: {},
+    headers: new Headers({}),
     // max number of retries before pausing
     maxRetries: 5,
     // gap between two retries (mSec)

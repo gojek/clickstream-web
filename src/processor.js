@@ -1,4 +1,3 @@
-// @ts-check
 import { EVENT_TYPE } from "./constants/index.js"
 import { logger } from "./logger.js"
 

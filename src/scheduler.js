@@ -1,4 +1,3 @@
-// @ts-check
 import { CUSTOM_EVENT, TICK_TIME } from "./constants/index.js"
 import { logger } from "./logger.js"
 
@@ -68,7 +67,9 @@ export default class Scheduler {
       this.stop()
       logger.info(logPrefix, "scheduler is stopped")
       logger.info(logPrefix, "flushing all events")
-      await this.#flush()
+      if (this.#store.isOpen()) {
+        await this.#flush()
+      }
       this.#removeListeners()
     } catch (err) {
       return Promise.reject(err)
@@ -206,12 +207,14 @@ export default class Scheduler {
       this.#waitTime += 1
       this.#fill()
 
-      if (this.#batchSize(this.#batch) >= this.#config.maxBatchSize) {
+      const batchSize = this.#batchSize(this.#batch)
+
+      if (batchSize >= this.#config.maxBatchSize) {
         this.#emit()
         logger.info(
           logPrefix,
           "this batch of size",
-          this.#batchSize(this.#batchSize),
+          batchSize,
           "batch has reached max size threshold of",
           this.#config.maxBatchSize
         )

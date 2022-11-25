@@ -1,4 +1,3 @@
-// @ts-check
 import Transport from "./transport.js"
 import Processor from "./processor.js"
 import Scheduler from "./scheduler.js"
@@ -267,8 +266,10 @@ export default class Clickstream {
     try {
       await this.#scheduler.free()
       logger.info(logPrefix, "scheduler resources are released")
-      await this.#store.delete()
-      logger.info(logPrefix, "store is deleted")
+      if (this.#store.isOpen()) {
+        await this.#store.delete()
+        logger.info(logPrefix, "store is deleted")
+      }
       logger.info(logPrefix, "cleanup is done")
     } catch (error) {
       return Promise.reject(

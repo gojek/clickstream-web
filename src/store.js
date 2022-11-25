@@ -1,4 +1,3 @@
-// @ts-check
 const STORE = "events"
 import { logger } from "./logger.js"
 

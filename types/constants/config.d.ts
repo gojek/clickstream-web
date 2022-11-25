@@ -5,7 +5,7 @@
  */
 /**
  * @typedef {object} BatchConfig - Batch configuration
- * @property {number=} maxTimeBetweenTwoBatches - Maximum wait time betweeen two batches
+ * @property {number=} maxTimeBetweenTwoBatches - Maximum wait time between two batches
  * @property {number=} maxBatchSize - Maximum size of a batch
  * @property {string=} dbName - name for indexedDB
  */
@@ -47,7 +47,7 @@ export type EventConfig = {
  */
 export type BatchConfig = {
     /**
-     * - Maximum wait time betweeen two batches
+     * - Maximum wait time between two batches
      */
     maxTimeBetweenTwoBatches?: number | undefined;
     /**
