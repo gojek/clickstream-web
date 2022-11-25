@@ -31,7 +31,7 @@ try {
   await clckstrm.track(payload)
 } catch (err) {
   // handle error
-  if (err.code === "trackingError") {
+  if (err.code === errorCodes.TRACKING_ERROR) {
     clckstrm.resume()
   } else {
     console.log(err.message, err.cause)
