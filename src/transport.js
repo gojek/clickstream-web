@@ -2,6 +2,7 @@ import { CUSTOM_EVENT, EVENT_TYPE } from "./constants/index.js"
 import { NetworkError } from "./error.js"
 import { SendEventRequest, SendEventResponse, Event } from "./protos/raccoon.js"
 import { logger } from "./logger.js"
+import { readAsBuffer } from "./blob.js"
 
 const logPrefix = "Network:"
 
@@ -102,25 +103,6 @@ export default class Transport {
     }
   }
 
-  async #readAsBuffer(blob) {
-    if (blob.arrayBuffer) {
-      return await blob.arrayBuffer()
-    }
-
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader()
-
-      reader.onloadend = () => {
-        if (reader.readyState === 2) {
-          return resolve(reader.result)
-        }
-      }
-      reader.onerror = (err) => reject(err)
-
-      reader.readAsArrayBuffer(blob)
-    })
-  }
-
   async #makeRequest(request, { retry }) {
     const headers = new Headers(this.#config.headers)
     headers.append("Content-Type", "application/proto")
@@ -147,7 +129,7 @@ export default class Transport {
       if (this.#store.isOpen()) {
         const blob = await response.blob()
 
-        const buffer = await this.#readAsBuffer(blob)
+        const buffer = await readAsBuffer(blob)
 
         const uInt = new Uint8Array(buffer)
         const res = SendEventResponse.decode(uInt)
