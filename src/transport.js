@@ -102,6 +102,25 @@ export default class Transport {
     }
   }
 
+  async #readAsBuffer(blob) {
+    if (blob.arrayBuffer) {
+      return await blob.arrayBuffer()
+    }
+
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+
+      reader.onloadend = () => {
+        if (reader.readyState === 2) {
+          return resolve(reader.result)
+        }
+      }
+      reader.onerror = (err) => reject(err)
+
+      reader.readAsArrayBuffer(blob)
+    })
+  }
+
   async #makeRequest(request, { retry }) {
     const headers = new Headers(this.#config.headers)
     headers.append("Content-Type", "application/proto")
@@ -127,7 +146,9 @@ export default class Transport {
       logger.info(logPrefix, "received response from raccoon ")
       if (this.#store.isOpen()) {
         const blob = await response.blob()
-        const buffer = await blob.arrayBuffer()
+
+        const buffer = await this.#readAsBuffer(blob)
+
         const uInt = new Uint8Array(buffer)
         const res = SendEventResponse.decode(uInt)
 
