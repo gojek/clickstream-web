@@ -8,6 +8,8 @@ You can refer these for step by step walk-through of a specific feature or actio
 
 ### [Send event in node js runtimes](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/send-event-in-nodejs-runtime.md)
 
+### [send event in iOS 12 - 14](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/send-event-in-ios-12-14.md)
+
 ### [Control retry mechanism](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/control-retry-mechanism.md)
 
 ### [Enable debugging](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/enable-debugging.md)
