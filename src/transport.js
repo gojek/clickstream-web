@@ -2,6 +2,7 @@ import { CUSTOM_EVENT, EVENT_TYPE } from "./constants/index.js"
 import { NetworkError } from "./error.js"
 import { SendEventRequest, SendEventResponse, Event } from "./protos/raccoon.js"
 import { logger } from "./logger.js"
+import { readAsBuffer } from "./blob.js"
 
 const logPrefix = "Network:"
 
@@ -127,7 +128,9 @@ export default class Transport {
       logger.info(logPrefix, "received response from raccoon ")
       if (this.#store.isOpen()) {
         const blob = await response.blob()
-        const buffer = await blob.arrayBuffer()
+
+        const buffer = await readAsBuffer(blob)
+
         const uInt = new Uint8Array(buffer)
         const res = SendEventResponse.decode(uInt)
 
