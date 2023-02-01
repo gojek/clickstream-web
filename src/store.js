@@ -56,6 +56,10 @@ export default class Store {
         this.#isOpen = true
         resolve("success")
         logger.info(logPrefix, "store is open with name", this.#name)
+
+        this.#db.addEventListener("close", () => {
+          logger.info(logPrefix, "database connection is closed")
+        })
       }
 
       request.onupgradeneeded = (event) => {
@@ -93,14 +97,19 @@ export default class Store {
    */
   read() {
     return new Promise((resolve, reject) => {
-      const objectStore = this.#db.transaction(STORE).objectStore(STORE)
+      try {
+        const objectStore = this.#db.transaction(STORE).objectStore(STORE)
 
-      objectStore.getAll().onsuccess = (event) => {
-        resolve(event.target.result)
-      }
+        objectStore.getAll().onsuccess = (event) => {
+          resolve(event.target.result)
+        }
 
-      objectStore.getAll().onerror = (event) => {
-        reject(event.target.error)
+        objectStore.getAll().onerror = (event) => {
+          reject(event.target.error)
+        }
+      } catch (err) {
+        this.#isOpen = false
+        logger.error(logPrefix, err)
       }
     })
   }
@@ -144,20 +153,25 @@ export default class Store {
         events = [events]
       }
 
-      const transaction = this.#db.transaction([STORE], "readwrite")
-      const objectStore = transaction.objectStore(STORE)
+      try {
+        const transaction = this.#db.transaction([STORE], "readwrite")
+        const objectStore = transaction.objectStore(STORE)
 
-      transaction.oncomplete = () => {
-        resolve("success")
+        transaction.oncomplete = () => {
+          resolve("success")
+        }
+
+        transaction.onerror = (event) => {
+          reject(event.target.error)
+        }
+
+        events.forEach((event) => {
+          objectStore.add(event)
+        })
+      } catch (err) {
+        this.#isOpen = false
+        logger.error(logPrefix, err)
       }
-
-      transaction.onerror = (event) => {
-        reject(event.target.error)
-      }
-
-      events.forEach((event) => {
-        objectStore.add(event)
-      })
     })
   }
 
@@ -189,20 +203,25 @@ export default class Store {
    */
   remove(/** @type {Event[]} */ events) {
     return new Promise((resolve, reject) => {
-      const transaction = this.#db.transaction([STORE], "readwrite")
-      const objectStore = transaction.objectStore(STORE)
+      try {
+        const transaction = this.#db.transaction([STORE], "readwrite")
+        const objectStore = transaction.objectStore(STORE)
 
-      transaction.oncomplete = () => {
-        resolve("success")
+        transaction.oncomplete = () => {
+          resolve("success")
+        }
+
+        transaction.onerror = (event) => {
+          reject(event.target.error)
+        }
+
+        events.forEach((event) => {
+          objectStore.delete(event.eventGuid)
+        })
+      } catch (err) {
+        this.#isOpen = false
+        logger.error(logPrefix, err)
       }
-
-      transaction.onerror = (event) => {
-        reject(event.target.error)
-      }
-
-      events.forEach((event) => {
-        objectStore.delete(event.eventGuid)
-      })
     })
   }
 
