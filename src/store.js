@@ -1,6 +1,7 @@
-const STORE = "events"
+import { DatabaseError } from "./error.js"
 import { logger } from "./logger.js"
 
+const STORE = "events"
 const logPrefix = "Store:"
 
 /**
@@ -56,6 +57,10 @@ export default class Store {
         this.#isOpen = true
         resolve("success")
         logger.info(logPrefix, "store is open with name", this.#name)
+
+        this.#db.addEventListener("close", () => {
+          logger.info(logPrefix, "database connection is closed")
+        })
       }
 
       request.onupgradeneeded = (event) => {
@@ -93,14 +98,19 @@ export default class Store {
    */
   read() {
     return new Promise((resolve, reject) => {
-      const objectStore = this.#db.transaction(STORE).objectStore(STORE)
+      try {
+        const objectStore = this.#db.transaction(STORE).objectStore(STORE)
 
-      objectStore.getAll().onsuccess = (event) => {
-        resolve(event.target.result)
-      }
+        objectStore.getAll().onsuccess = (event) => {
+          resolve(event.target.result)
+        }
 
-      objectStore.getAll().onerror = (event) => {
-        reject(event.target.error)
+        objectStore.getAll().onerror = (event) => {
+          reject(event.target.error)
+        }
+      } catch (err) {
+        this.#isOpen = false
+        logger.error(logPrefix, new DatabaseError(err.message, { cause: err }))
       }
     })
   }
@@ -113,22 +123,34 @@ export default class Store {
   readByReqGuid(reqGuid) {
     return new Promise((resolve) => {
       const events = []
-      const objectStore = this.#db
-        .transaction([STORE], "readwrite")
-        .objectStore(STORE)
+      try {
+        const objectStore = this.#db
+          .transaction([STORE], "readwrite")
+          .objectStore(STORE)
 
-      const index = objectStore.index("reqGuid")
+        const index = objectStore.index("reqGuid")
 
-      index.openCursor().onsuccess = (event) => {
-        const cursor = event.target.result
-        if (cursor) {
-          if (cursor.value.reqGuid === reqGuid) {
-            events.push(cursor.value)
+        index.openCursor().onsuccess = (event) => {
+          try {
+            const cursor = event.target.result
+            if (cursor) {
+              if (cursor.value.reqGuid === reqGuid) {
+                events.push(cursor.value)
+              }
+              cursor.continue()
+            } else {
+              resolve(events)
+            }
+          } catch (err) {
+            logger.error(
+              logPrefix,
+              new DatabaseError(err.message, { cause: err })
+            )
           }
-          cursor.continue()
-        } else {
-          resolve(events)
         }
+      } catch (err) {
+        this.#isOpen = false
+        logger.error(logPrefix, new DatabaseError(err.message, { cause: err }))
       }
     })
   }
@@ -144,20 +166,32 @@ export default class Store {
         events = [events]
       }
 
-      const transaction = this.#db.transaction([STORE], "readwrite")
-      const objectStore = transaction.objectStore(STORE)
+      try {
+        const transaction = this.#db.transaction([STORE], "readwrite")
+        const objectStore = transaction.objectStore(STORE)
 
-      transaction.oncomplete = () => {
-        resolve("success")
+        transaction.oncomplete = () => {
+          resolve("success")
+        }
+
+        transaction.onerror = (event) => {
+          reject(event.target.error)
+        }
+
+        try {
+          events.forEach((event) => {
+            objectStore.add(event)
+          })
+        } catch (err) {
+          logger.error(
+            logPrefix,
+            new DatabaseError(err.message, { cause: err })
+          )
+        }
+      } catch (err) {
+        this.#isOpen = false
+        logger.error(logPrefix, new DatabaseError(err.message, { cause: err }))
       }
-
-      transaction.onerror = (event) => {
-        reject(event.target.error)
-      }
-
-      events.forEach((event) => {
-        objectStore.add(event)
-      })
     })
   }
 
@@ -172,14 +206,23 @@ export default class Store {
     /** @type {string} */ key,
     /** @type {string} */ val
   ) {
-    const objectStore = this.#db
-      .transaction([STORE], "readwrite")
-      .objectStore(STORE)
+    try {
+      const objectStore = this.#db
+        .transaction([STORE], "readwrite")
+        .objectStore(STORE)
 
-    events.forEach((event) => {
-      event[key] = val
-      objectStore.put(event)
-    })
+      try {
+        events.forEach((event) => {
+          event[key] = val
+          objectStore.put(event)
+        })
+      } catch (err) {
+        logger.error(logPrefix, new DatabaseError(err.message, { cause: err }))
+      }
+    } catch (err) {
+      this.#isOpen = false
+      logger.error(logPrefix, new DatabaseError(err.message, { cause: err }))
+    }
   }
 
   /**
@@ -189,20 +232,32 @@ export default class Store {
    */
   remove(/** @type {Event[]} */ events) {
     return new Promise((resolve, reject) => {
-      const transaction = this.#db.transaction([STORE], "readwrite")
-      const objectStore = transaction.objectStore(STORE)
+      try {
+        const transaction = this.#db.transaction([STORE], "readwrite")
+        const objectStore = transaction.objectStore(STORE)
 
-      transaction.oncomplete = () => {
-        resolve("success")
+        transaction.oncomplete = () => {
+          resolve("success")
+        }
+
+        transaction.onerror = (event) => {
+          reject(event.target.error)
+        }
+
+        try {
+          events.forEach((event) => {
+            objectStore.delete(event.eventGuid)
+          })
+        } catch (err) {
+          logger.error(
+            logPrefix,
+            new DatabaseError(err.message, { cause: err })
+          )
+        }
+      } catch (err) {
+        this.#isOpen = false
+        logger.error(logPrefix, new DatabaseError(err.message, { cause: err }))
       }
-
-      transaction.onerror = (event) => {
-        reject(event.target.error)
-      }
-
-      events.forEach((event) => {
-        objectStore.delete(event.eventGuid)
-      })
     })
   }
 
