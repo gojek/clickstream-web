@@ -1,6 +1,7 @@
-const STORE = "events"
+import { DatabaseError } from "./error.js"
 import { logger } from "./logger.js"
 
+const STORE = "events"
 const logPrefix = "Store:"
 
 /**
@@ -109,7 +110,7 @@ export default class Store {
         }
       } catch (err) {
         this.#isOpen = false
-        logger.error(logPrefix, err)
+        logger.error(logPrefix, new DatabaseError(err.message, { cause: err }))
       }
     })
   }
@@ -141,12 +142,15 @@ export default class Store {
               resolve(events)
             }
           } catch (err) {
-            logger.error(logPrefix, err)
+            logger.error(
+              logPrefix,
+              new DatabaseError(err.message, { cause: err })
+            )
           }
         }
       } catch (err) {
         this.#isOpen = false
-        logger.error(logPrefix, err)
+        logger.error(logPrefix, new DatabaseError(err.message, { cause: err }))
       }
     })
   }
@@ -179,11 +183,14 @@ export default class Store {
             objectStore.add(event)
           })
         } catch (err) {
-          logger.error(logPrefix, err)
+          logger.error(
+            logPrefix,
+            new DatabaseError(err.message, { cause: err })
+          )
         }
       } catch (err) {
         this.#isOpen = false
-        logger.error(logPrefix, err)
+        logger.error(logPrefix, new DatabaseError(err.message, { cause: err }))
       }
     })
   }
@@ -210,10 +217,11 @@ export default class Store {
           objectStore.put(event)
         })
       } catch (err) {
-        logger.error(logPrefix, err)
+        logger.error(logPrefix, new DatabaseError(err.message, { cause: err }))
       }
     } catch (err) {
       this.#isOpen = false
+      logger.error(logPrefix, new DatabaseError(err.message, { cause: err }))
     }
   }
 
@@ -241,11 +249,14 @@ export default class Store {
             objectStore.delete(event.eventGuid)
           })
         } catch (err) {
-          logger.error(logPrefix, err)
+          logger.error(
+            logPrefix,
+            new DatabaseError(err.message, { cause: err })
+          )
         }
       } catch (err) {
         this.#isOpen = false
-        logger.error(logPrefix, err)
+        logger.error(logPrefix, new DatabaseError(err.message, { cause: err }))
       }
     })
   }
