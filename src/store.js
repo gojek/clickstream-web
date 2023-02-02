@@ -122,22 +122,31 @@ export default class Store {
   readByReqGuid(reqGuid) {
     return new Promise((resolve) => {
       const events = []
-      const objectStore = this.#db
-        .transaction([STORE], "readwrite")
-        .objectStore(STORE)
+      try {
+        const objectStore = this.#db
+          .transaction([STORE], "readwrite")
+          .objectStore(STORE)
 
-      const index = objectStore.index("reqGuid")
+        const index = objectStore.index("reqGuid")
 
-      index.openCursor().onsuccess = (event) => {
-        const cursor = event.target.result
-        if (cursor) {
-          if (cursor.value.reqGuid === reqGuid) {
-            events.push(cursor.value)
+        index.openCursor().onsuccess = (event) => {
+          try {
+            const cursor = event.target.result
+            if (cursor) {
+              if (cursor.value.reqGuid === reqGuid) {
+                events.push(cursor.value)
+              }
+              cursor.continue()
+            } else {
+              resolve(events)
+            }
+          } catch (err) {
+            logger.error(logPrefix, err)
           }
-          cursor.continue()
-        } else {
-          resolve(events)
         }
+      } catch (err) {
+        this.#isOpen = false
+        logger.error(logPrefix, err)
       }
     })
   }
@@ -165,9 +174,13 @@ export default class Store {
           reject(event.target.error)
         }
 
-        events.forEach((event) => {
-          objectStore.add(event)
-        })
+        try {
+          events.forEach((event) => {
+            objectStore.add(event)
+          })
+        } catch (err) {
+          logger.error(logPrefix, err)
+        }
       } catch (err) {
         this.#isOpen = false
         logger.error(logPrefix, err)
@@ -186,14 +199,22 @@ export default class Store {
     /** @type {string} */ key,
     /** @type {string} */ val
   ) {
-    const objectStore = this.#db
-      .transaction([STORE], "readwrite")
-      .objectStore(STORE)
+    try {
+      const objectStore = this.#db
+        .transaction([STORE], "readwrite")
+        .objectStore(STORE)
 
-    events.forEach((event) => {
-      event[key] = val
-      objectStore.put(event)
-    })
+      try {
+        events.forEach((event) => {
+          event[key] = val
+          objectStore.put(event)
+        })
+      } catch (err) {
+        logger.error(logPrefix, err)
+      }
+    } catch (err) {
+      this.#isOpen = false
+    }
   }
 
   /**
@@ -215,9 +236,13 @@ export default class Store {
           reject(event.target.error)
         }
 
-        events.forEach((event) => {
-          objectStore.delete(event.eventGuid)
-        })
+        try {
+          events.forEach((event) => {
+            objectStore.delete(event.eventGuid)
+          })
+        } catch (err) {
+          logger.error(logPrefix, err)
+        }
       } catch (err) {
         this.#isOpen = false
         logger.error(logPrefix, err)
