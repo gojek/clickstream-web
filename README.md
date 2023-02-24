@@ -29,83 +29,82 @@ Two types of events can be sent using Clickstream Web
 
 Every event is treated as a QoS1 event by default and one can classify the QoS0 events using `classification` config.
 
-#### Steps
+### Steps
 
 1. **Import SDK and proto package**
 
-```js
-import { Clickstream } from "@gojek/clickstream-web"
+   ```js
+   import { Clickstream } from "@gojek/clickstream-web"
 
-// import the proto from a package that contains your protos.
-import { proto } from "protobufjs-package"
-```
+   // import the proto from a package that contains your protos.
+   import { proto } from "protobufjs-package"
+   ```
 
 2. **Initialize Clickstream**
 
-Clickstream accepts options to override the default behavior. It supports `event`, `batch`, `network` & `crypto` configurations.
+   Clickstream accepts options to override the default behavior. It supports `event`, `batch`, `network` & `crypto` configurations.
 
-```js
-import { Clickstream } from "@gojek/clickstream-web"
+   ```js
+   import { Clickstream } from "@gojek/clickstream-web"
 
-const clckstrm = new Clickstream({
-  network: {
-    url: new URL("https://example.org"),
-    headers: new Headers({
-      Authorization: "Basic <secret-key>",
-    }),
-  },
-})
-```
+   const clckstrm = new Clickstream({
+     network: {
+       url: new URL("https://example.org"),
+       headers: new Headers({
+         Authorization: "Basic <secret-key>",
+       }),
+     },
+   })
+   ```
 
-Following network options are mandatory to pass while initialising -
+   Following network options are mandatory to pass while initialising -
 
-- `url` - [Raccoon](https://odpf.github.io/raccoon/) host url, instance of [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL).
-- `headers` - Request headers, instance of [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Headers).
+   - `url` - [Raccoon](https://odpf.github.io/raccoon/) host url, instance of [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL).
+   - `headers` - Request headers, instance of [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Headers).
 
 3. **Dispatch an event**
 
-```js
-import { Clickstream } from "@gojek/clickstream-web"
+   ```js
+   import { Clickstream } from "@gojek/clickstream-web"
 
-import { proto } from "protobufjs-package"
+   import { proto } from "protobufjs-package"
 
-// fill in the data as per proto definition
-const payload = proto.create({
-  eventName: "test-event",
-  properties: {
-    test: 1,
-  },
-})
+   // fill in the data as per proto definition
+   const payload = proto.create({
+     eventName: "test-event",
+     properties: {
+       test: 1,
+     },
+   })
 
-// initialize
-const clckstrm = new Clickstream({
-  network: {
-    url: new URL("https://example.org"),
-    headers: new Headers({
-      Authorization: "Basic <secret-key>",
-    }),
-  },
-})
+   // initialize
+   const clckstrm = new Clickstream({
+     network: {
+       url: new URL("https://example.org"),
+       headers: new Headers({
+         Authorization: "Basic <secret-key>",
+       }),
+     },
+   })
 
-// call on some event such as user click.
-document.querySelector("#some-button").addEventListener("click", () => {
-  try {
-    await clckstrm.track(payload)
-  } catch(err) {
-    // handle error
-    console.log(err)
-  }
-})
-```
+   // call on some event such as user click.
+   document.querySelector("#some-button").addEventListener("click", () => {
+     try {
+       await clckstrm.track(payload)
+     } catch(err) {
+       // handle error
+       console.log(err)
+     }
+   })
+   ```
 
 ## Methods
 
 ### track
 
-Dispatches a new event asynchronously. Processes the event and registers them in the system.
-It doesn't take network request into account, success of the .track() doesn't that event is sent and stored at backend.
-In case of failure it rejects the promise with error, and in that case event is not registered in the system.
-Errors can be of different type, represented by the [error codes](https://github.com/gojekfarm/clickstream-web/blob/main/src/error.js).
+Dispatches a new event asynchronously. Processes the event and returns a Promise. If the promise resolves, the SDK will eventually send the event(s) via network requests. If the promise rejects with an error, the event(s) are not registered in the system.
+
+Errors can be of different type, represented by these [error codes](https://github.com/gojekfarm/clickstream-web/blob/main/src/error.js).
 
 ```js
 try {
@@ -118,7 +117,7 @@ try {
 
 ### pause
 
-Pauses the tracking. New `.track()` method calls are ignored, existing events in the system are still processed.
+Pauses the tracking. Subsequent `.track()` method calls are ignored, existing events in the system are still processed.
 Tracking can be resumed by calling `.resume()` method.
 
 ```js
@@ -127,7 +126,7 @@ clckstrm.pause()
 
 ### resume
 
-Resumes the tracking if it is paused by calling `.pause()` method, has no effect otherwise.
+Resumes the tracking if it was paused by calling `.pause()` method previously, otherwise has no effect.
 
 ```js
 clckstrm.resume()
@@ -136,10 +135,10 @@ clckstrm.resume()
 ### free
 
 Frees up all the resource used by the Clickstream instance asynchronously.
-Clears the timeouts and intervals used & removes all the event listeners.
-Flushes all the existing events in the system before deleting the indexedDB database in use.
+Clears all resources like timers and event listeners.
+Flushes all existing events in the system before deleting the IndexedDB database in use.
 
-It has no side effect on the working oh the SDK, calling `.track()` method again will re-create all the timeout, interval and database for event tracking.
+Calling `.track()` after `.free()` will reallocate all resources automatically.
 
 Returns errors with message and code on failure.
 
