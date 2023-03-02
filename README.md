@@ -57,10 +57,30 @@ const clckstrm = new Clickstream({
 })
 ```
 
-Following network options are mandatory to pass while initialising -
+Following network options are mandatory to pass while initializing -
 
 - `url` - [Raccoon](https://odpf.github.io/raccoon/) host url, instance of [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL).
 - `headers` - Request headers, instance of [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Headers).
+
+> 🔺 **PITFALL:** Make sure to initialize the Clickstream Web SDK at top level/module level to avoid unintended multiple initializations. Placing initialization code inside a Component/Function can cause multiple initialization as they can be called or rendered multiple times.
+> In React apps, even if the component is used only once, [Strict Mode](https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects) can cause the component to be called twice and hence multiple Clickstream initializations.
+> See this [guide](https://github.com/gojek/clickstream-web/blob/main/docs/how-to-guides/use-multiple-instances.md) if your intention is to use multiple Clickstream instance.
+
+Safe and unsafe place for initialization -
+
+```js
+import { Clickstream } from "@gojek/clickstream-web"
+
+// safe place to initialization
+const clckstrm = new Clickstream({...})
+
+
+export const App() {
+  // UNSAFE place to initialization
+  const clckstrm = new Clickstream({...})
+  ...
+}
+```
 
 3. **Dispatch an event**
 
@@ -97,6 +117,8 @@ document.querySelector("#some-button").addEventListener("click", () => {
   }
 })
 ```
+
+> 🔺 **PITFALL:** If you dispatch an event at component root level/page load, React [Strict Mode]() can cause the events to be fired twice in development mode, causing duplicate events to be sent to Clickstream backend. Although this won't be a problem in production mode.
 
 ## Methods
 
