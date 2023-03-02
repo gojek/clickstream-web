@@ -14,7 +14,7 @@ This architecture allows us to perform iterations where we can modify the Proces
 
 ## Event Flow
 
-Event flows through various parts of the clickstream system, when the event is generated from end user it is sent to Clickstream Web SDK which procesess the event and send that to Clickstream backend service [Raccoon](https://odpf.github.io/raccoon/). Raccoon stores the events in kafka topics, these events can be consumed using any downstream application as per the use case.
+Event flows through various parts of the clickstream system, when the event is generated from end user it is sent to Clickstream Web SDK which processes the event and send that to Clickstream backend service [Raccoon](https://odpf.github.io/raccoon/). Raccoon stores the events in Kafka topics, these events can be consumed using any downstream application as per the use case.
 
 ![Clickstream web SDK](https://user-images.githubusercontent.com/14230239/195533334-ed8a662d-8524-41af-9b67-57b2761d0748.png)
 
