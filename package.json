@@ -28,7 +28,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gojekfarm/clickstream-web.git"
+    "url": "git+https://github.com/gojek/clickstream-web.git"
   },
   "keywords": [
     "clickstream",
@@ -37,9 +37,9 @@
   "author": "Ashish Mishra <b.s.ashish26@gmail.com>",
   "license": "apache-2.0",
   "bugs": {
-    "url": "https://github.com/gojekfarm/clickstream-web/issues"
+    "url": "https://github.com/gojek/clickstream-web/issues"
   },
-  "homepage": "https://github.com/gojekfarm/clickstream-web#readme",
+  "homepage": "https://github.com/gojek/clickstream-web#readme",
   "ava": {
     "files": [
       "test/**/*",

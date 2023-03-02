@@ -1,6 +1,6 @@
 # Handling Errors
 
-SDk throws different type of errors with `message`, `code` & `cause`. You can see full list of errors [here](https://github.com/gojekfarm/clickstream-web/blob/main/src/error.js). The SDK exports all the error codes as `errorCodes` named export.
+SDk throws different type of errors with `message`, `code` & `cause`. You can see full list of errors [here](https://github.com/gojek/clickstream-web/blob/main/src/error.js). The SDK exports all the error codes as `errorCodes` named export.
 
 ## Constituents
 
