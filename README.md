@@ -105,7 +105,7 @@ document.querySelector("#some-button").addEventListener("click", () => {
 Dispatches a new event asynchronously. Processes the event and registers them in the system.
 It doesn't take network request into account, success of the .track() doesn't that event is sent and stored at backend.
 In case of failure it rejects the promise with error, and in that case event is not registered in the system.
-Errors can be of different type, represented by the [error codes](https://github.com/gojekfarm/clickstream-web/blob/main/src/error.js).
+Errors can be of different type, represented by the [error codes](https://github.com/gojek/clickstream-web/blob/main/src/error.js).
 
 ```js
 try {
@@ -213,21 +213,21 @@ try {
 
 ## Documentation
 
-- ### [Getting Started](https://github.com/gojekfarm/clickstream-web/blob/main/docs/getting-started.md)
+- ### [Getting Started](https://github.com/gojek/clickstream-web/blob/main/docs/getting-started.md)
 
-- ### [How To Guide](https://github.com/gojekfarm/clickstream-web/blob/main/docs/how-to-guides/readme.md)
+- ### [How To Guide](https://github.com/gojek/clickstream-web/blob/main/docs/how-to-guides/readme.md)
 
-- ### [API Reference](https://github.com/gojekfarm/clickstream-web/blob/main/docs/reference/readme.md)
+- ### [API Reference](https://github.com/gojek/clickstream-web/blob/main/docs/reference/readme.md)
 
-- ### [Browser Compatibility](https://github.com/gojekfarm/clickstream-web/blob/main/docs/browser-compatibility.md)
+- ### [Browser Compatibility](https://github.com/gojek/clickstream-web/blob/main/docs/browser-compatibility.md)
 
-- ### [Limitation](https://github.com/gojekfarm/clickstream-web/blob/main/docs/limitations.md)
+- ### [Limitation](https://github.com/gojek/clickstream-web/blob/main/docs/limitations.md)
 
-- ### [Architecture](https://github.com/gojekfarm/clickstream-web/blob/main/docs/architecture.md)
+- ### [Architecture](https://github.com/gojek/clickstream-web/blob/main/docs/architecture.md)
 
 ## Contribution Guidelines
 
-See the [guidelines](https://github.com/gojekfarm/clickstream-web/blob/main//CONTRIBUTION.md)
+See the [guidelines](https://github.com/gojek/clickstream-web/blob/main//CONTRIBUTION.md)
 
 ## Sibling SDKs
 
@@ -235,7 +235,7 @@ Clickstream have SDKs for **[iOS](https://source.golabs.io/mobile/clickstream-io
 
 ## Issues
 
-Submit your question and issues [here](https://github.com/gojekfarm/clickstream-web/issues).
+Submit your question and issues [here](https://github.com/gojek/clickstream-web/issues).
 
 ## License
 

@@ -7,7 +7,7 @@ Clickstream Web SDK exposes following public methods.
 Dispatches a new event asynchronously. Processes the event and registers them in the system.
 It doesn't take network request into account, success of the .track() doesn't mean that event is sent and stored at backend.
 In case of failure it rejects the promise with error, and in that case event is not registered in the system.
-Errors can be of different type, represented by the [error codes](https://github.com/gojekfarm/clickstream-web/blob/main/src/error.js).
+Errors can be of different type, represented by the [error codes](https://github.com/gojek/clickstream-web/blob/main/src/error.js).
 
 #### **Arguments**
 
