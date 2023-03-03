@@ -1,16 +1,20 @@
-# Use multiple Clickstream instance in single application
+# Use multiple Clickstream instance
 
-Using multiple instance can have some unintended behavior such as “duplicate events being fired”.
+Using multiple Clickstream instance in a single application can have some unintended behavior such as “duplicate events being fired”.
 
-**Few aspects to know before using multiple instances -**
+## Background
 
-1. Each clickstream instance runs an interval for batching which keeps running periodically.
+Before using multiple instances, you should be aware of a few behavioral aspects.
 
-2. Clickstream uses indexedDB as storage on client side, each instance is initialized with a default storage name which is same for all the instances.
+1. Each clickstream instance runs an independent interval for batching which keeps running periodically.
 
-**Suggested ways to use multiple instances -**
+2. Clickstream uses [indexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) as storage on client side, each instance is initialized with a default database name which is same for all the instances.
 
-1. If the objective is to initialize multiple non concurrent instances, make sure to call [free](https://github.com/gojek/clickstream-web/blob/main/docs/reference/methods.md#free) method on the first instance before making a new instance.
+## Suggestions
+
+Here are some suggested way to use multiple instances depending on the use-case.
+
+1. If the objective is to initialize multiple non concurrent instances, make sure to call [free](https://github.com/gojek/clickstream-web/blob/main/docs/reference/methods.md#free) method on the first instance before creating a new instance.
 
 ```js
 // Sample code
