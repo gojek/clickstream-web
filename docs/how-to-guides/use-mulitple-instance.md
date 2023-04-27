@@ -1,6 +1,6 @@
 # Use multiple Clickstream instance
 
-Using multiple Clickstream instance in a single application can have some unintended behavior such as “duplicate events being fired”.
+Using multiple Clickstream instances in a single application can have some unintended behavior such as “duplicate events being fired”.
 
 ## Background
 
