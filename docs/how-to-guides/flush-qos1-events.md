@@ -17,19 +17,39 @@ If you are using React, you can attach the event listener inside the useEffect a
 ```js
 import React from "react"
 
-const App = () => {
-  useEffect(() => {
-    document.addEventListener("visibilitychange", async () => {
-      if (document.visibilityState === "hidden") {
-        await clickstream.free();
-      }
-    });
+const clckstrm = new Clickstream({...})
 
-    return () => {
-      document.removeEventListener("visibilitychange", () => {});
-    };
-  }, []);
+export default App() {
+    useEffect(() => {
+        document.addEventListener("visibilitychange", async () => {
+          if (document.visibilityState === "hidden") {
+            await clickstream.free();
+          }
+        });
 
-  return (...)
+        return () => {
+          document.removeEventListener("visibilitychange", () => {});
+        };
+    }, []);
+
+    return (...)
+}
+```
+
+## Avoid long batching duration
+
+You can reduce the wait time for batches by reducing the [maxBatchSize](https://github.com/gojek/clickstream-web/blob/main/docs/reference/options.md#maxbatchsize) threshold and setting it to very low value like 8.
+
+```js
+import React from "react"
+
+const clckstrm = new Clickstream({
+    batch: {
+        maxBatchSize: 8
+    }
+})
+
+export default App() {
+    return (...)
 }
 ```
