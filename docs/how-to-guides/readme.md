@@ -14,4 +14,4 @@ You can refer these for step by step walk-through of a specific feature or actio
 
 ### [Enable debugging](https://github.com/gojek/clickstream-web/blob/main/docs/how-to-guides/enable-debugging.md)
 
-### [Use multiple Clickstream instances](https://github.com/gojek/clickstream-web/blob/main/docs/how-to-guides/use-multiple-instances.md)
+### [Use multiple Clickstream instances](https://github.com/gojek/clickstream-web/blob/main/docs/how-to-guides/use-multiple-instance.md)

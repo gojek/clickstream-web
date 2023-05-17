@@ -64,7 +64,7 @@ Following network options are mandatory to pass while initializing -
 
 > 🔺 **PITFALL:** Make sure to initialize the Clickstream Web SDK at top level/module level to avoid unintended multiple initializations. Placing initialization code inside a Component/Function can cause multiple initialization as they can be called or rendered multiple times.
 > In React apps, even if the component is used only once, [Strict Mode](https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects) can cause the component to be called twice and hence multiple Clickstream initializations.
-> See this [guide](https://github.com/gojek/clickstream-web/blob/main/docs/how-to-guides/use-multiple-instances.md) if your intention is to use multiple Clickstream instance.
+> See this [guide](https://github.com/gojek/clickstream-web/blob/main/docs/how-to-guides/use-multiple-instance.md) if your intention is to use multiple Clickstream instance.
 
 Safe and unsafe place for initialization -
 
