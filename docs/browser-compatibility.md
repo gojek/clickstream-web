@@ -4,21 +4,21 @@ The SDK will target all major evergreen desktop & mobile browsers. Minimum compa
 
 ## Supported
 
-- Chrome - >= 24
+- Chrome - >=71
 
-- Firefox - >=21
+- Firefox - >=65
 
-- Safari - >=8
+- Safari - >=14
 
-- Edge - >=12
+- Edge - >=79
 
-- Safari on iOS - >=8
+- Chrome for Android - >=71
 
-- Chrome for Android - >=25
+- Safari on iOS - >=14
 
-- WebView Android - >=37
+- Firefox for Android - >=65
 
-- Firefox for Android - >=25
+- WebView Android - >=71
 
 ## Unsupported
 
