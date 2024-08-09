@@ -17,5 +17,6 @@ describe("clickstream", () => {
     expect(clckstrm.pause).toBeDefined()
     expect(clckstrm.resume).toBeDefined()
     expect(clckstrm.free).toBeDefined()
+    expect(clckstrm.forceFree).toBeDefined()
   })
 })
