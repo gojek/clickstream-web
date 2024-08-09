@@ -280,4 +280,29 @@ export default class Clickstream {
       )
     }
   }
+
+  /**
+   * frees up all the resource used by the Clickstream instance asynchronously and does not delete the database.
+   *
+   * clears the timeouts and intervals used.
+   * removes all the event listeners.
+   * flushes all the existing events in the system.
+   *
+   * It has no side effect on the working oh the SDK.
+   * calling .track() method again will re-create all the timeouts, interval and database for event tracking.
+   */
+  async forceFree() {
+    try {
+      await this.#scheduler.free()
+      logger.info(logPrefix, "scheduler resources are released")
+      logger.info(logPrefix, "force cleanup is done. db is not deleted.")
+    } catch (error) {
+      return Promise.reject(
+        new ClickstreamError(error.message, {
+          name: errorNames.CLEANUP_ERROR,
+          code: errorCodes.CLEANUP_ERROR,
+        })
+      )
+    }
+  }
 }
