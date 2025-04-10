@@ -17,6 +17,19 @@ export default class Clickstream {
      */
     track(payload: object): Promise<never>;
     /**
+     * Dispatches a new event asynchronously.
+     *
+     * It processes the event and registers them in the system.
+     * It doesn't take network request into account, success of the .track() doesn't mean that event is sent and stored at backend.
+     *
+     * In case of failure it rejects the promise with error, and in that case event is not registered in the system.
+     *
+     * @param payload - JavaScript proto instance
+     * @param type - Proto name
+     * @returns Promise
+     */
+    trackBinary(payload: object, type: string): Promise<never>;
+    /**
      * Pauses the tracking.
      *
      * New .track() method calls are ignored, existing events in the system are still processed.
@@ -39,6 +52,17 @@ export default class Clickstream {
      * calling .track() method again will re-create all the timeouts, interval and database for event tracking.
      */
     free(): Promise<never>;
+    /**
+     * frees up all the resource used by the Clickstream instance asynchronously and does not delete the database.
+     *
+     * clears the timeouts and intervals used.
+     * removes all the event listeners.
+     * flushes all the existing events in the system.
+     *
+     * It has no side effect on the working oh the SDK.
+     * calling .track() method again will re-create all the timeouts, interval and database for event tracking.
+     */
+    forceFree(): Promise<never>;
     #private;
 }
 //# sourceMappingURL=clickstream.d.ts.map

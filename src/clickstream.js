@@ -212,6 +212,7 @@ export default class Clickstream {
     const { type, event } = this.#processor.process(payload)
 
     logger.info(logPrefix, "event type is set to", type)
+    logger.info(logPrefix, "event payload is", event)
 
     try {
       if (type === EVENT_TYPE.REALTIME) {
@@ -225,6 +226,70 @@ export default class Clickstream {
         logger.info(logPrefix, "event is sent to transport layer")
         this.#transport.send([event])
       }
+    } catch (error) {
+      return Promise.reject(
+        new ClickstreamError(error.message, { cause: error })
+      )
+    }
+  }
+
+  /**
+   * Dispatches a new event asynchronously.
+   *
+   * It processes the event and registers them in the system.
+   * It doesn't take network request into account, success of the .track() doesn't mean that event is sent and stored at backend.
+   *
+   * In case of failure it rejects the promise with error, and in that case event is not registered in the system.
+   *
+   * @param payload - JavaScript proto instance
+   * @param type - Proto name
+   * @returns Promise
+   */
+  async trackBinary(/** @type {object} */ payload, /** @type {string} */ type) {
+    if (!this.#tracking) {
+      return Promise.reject(
+        new ClickstreamError(
+          "Tracking is paused, call .resume() method to resume tracking",
+          { code: errorCodes.TRACKING_ERROR }
+        )
+      )
+    }
+
+    if (this.#isRealTimeEventsSupported && !this.#scheduler.isRunning()) {
+      this.#scheduler.start()
+      logger.info(logPrefix, "restarted scheduler")
+    }
+
+    if (this.#isRealTimeEventsSupported && !this.#store?.isOpen()) {
+      try {
+        await this.#store.open()
+      } catch (error) {
+        return Promise.reject(
+          new DatabaseError(error.message, { cause: error })
+        )
+      }
+    }
+
+    const event = this.#processor.processBinary(payload, type)
+    logger.info(logPrefix, "event payload is", payload)
+    logger.info(logPrefix, "event is", event)
+    logger.info(logPrefix, "event is created with eventGuid", event.eventGuid)
+
+    logger.info(logPrefix, "event type is set to", event.eventType)
+
+    try {
+      await this.#store.write(event)
+      logger.info(
+        logPrefix,
+        "event is stored in the store with eventGuid",
+        event.eventGuid
+      )
+
+      // else if (type === EVENT_TYPE.INSTANT) {
+      //   logger.info(logPrefix, "event is sent to transport layer")
+      //   // @ts-ignore
+      //   this.#transport.send([{ data: payload, type }])
+      // }
     } catch (error) {
       return Promise.reject(
         new ClickstreamError(error.message, { cause: error })

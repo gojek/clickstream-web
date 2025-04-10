@@ -100,4 +100,20 @@ export default class Processor {
       event,
     }
   }
+
+  processBinary(/** @type {Uint8Array} */ data, /** @type {string} */ type) {
+    const eventGuid = this.#id.uuidv4()
+    const event = {
+      data,
+      eventType: EVENT_TYPE.REALTIME,
+      type,
+      eventGuid,
+      reqGuid: "",
+    }
+
+    logger.info(logPrefix, "created a new event")
+    logger.debug(logPrefix, "new event data", event)
+    logger.debug(logPrefix, "eventguid", event.eventGuid)
+    return event
+  }
 }

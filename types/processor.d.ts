@@ -15,6 +15,13 @@ export default class Processor {
         type: string;
         event: import("./store.js").Event;
     };
+    processBinary(data: Uint8Array, type: string): {
+        data: Uint8Array;
+        eventType: string;
+        type: string;
+        eventGuid: any;
+        reqGuid: string;
+    };
     #private;
 }
 //# sourceMappingURL=processor.d.ts.map

@@ -52,6 +52,8 @@ export default class Transport {
 
     const encodedBatch = batch.map((payload) => {
       const { data, type } = payload
+      console.log("data", data)
+      console.log("type", type)
       return Event.create({
         eventBytes: data,
         type,
